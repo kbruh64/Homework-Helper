@@ -428,7 +428,7 @@
   footer a { color: inherit; text-decoration: none; }
   footer a:hover { color: var(--ink); }
 
-  /* Mascot — Kiwi the parrot */
+  /* Mascot — Poly the parrot */
   .mascot {
     position: fixed;
     right: 1.5rem; bottom: 1.5rem;
@@ -483,8 +483,8 @@
   .mascot-bubble button:active { transform: scale(0.96); }
 
   .mascot-btn {
-    width: 104px; height: 104px;
-    border-radius: 28px;
+    width: 72px; height: 72px;
+    border-radius: 20px;
     background: linear-gradient(180deg, #fffdf5, #fff5e3);
     border: 1px solid var(--line);
     box-shadow: var(--shadow-card), 0 0 0 4px rgba(240, 195, 58, 0.08);
@@ -507,7 +507,7 @@
   .mascot-btn:hover::before { opacity: 1; }
 
   .parrot {
-    width: 84px; height: 84px;
+    width: 56px; height: 56px;
     display: block;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
@@ -532,8 +532,8 @@
   }
   @media (max-width: 600px) {
     .mascot { right: 1rem; bottom: 1rem; }
-    .mascot-btn { width: 84px; height: 84px; border-radius: 22px; }
-    .parrot { width: 64px; height: 64px; }
+    .mascot-btn { width: 60px; height: 60px; border-radius: 16px; }
+    .parrot { width: 46px; height: 46px; }
     .mascot-bubble { max-width: calc(100vw - 5rem); }
   }
 
@@ -724,14 +724,14 @@
   <!-- Mascot -->
   <div class="mascot" id="mascot">
     <div class="mascot-bubble" id="mascot-bubble" role="dialog" aria-live="polite">
-      <strong>Kiwi says</strong>
-      <span id="mascot-text">Hi! I&rsquo;m Kiwi. Stuck on a problem? Try telling me the first step you&rsquo;d take — even a guess is a start.</span>
+      <strong>Poly says</strong>
+      <span id="mascot-text">Hi! I&rsquo;m Poly. Stuck on a problem? Try telling me the first step you&rsquo;d take — even a guess is a start.</span>
       <div class="tip-actions">
         <button id="mascot-next" type="button">Another tip</button>
         <button id="mascot-close" type="button">Close</button>
       </div>
     </div>
-    <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Kiwi the parrot">
+    <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Poly the parrot">
       <svg class="parrot" id="parrot" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
     </button>
   </div>
