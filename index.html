@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pebble — homework that thinks with you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f9fafb;
+    --surface: #ffffff;
+    --ink: #0f1115;
+    --ink-soft: #4b5563;
+    --ink-mute: #6b7280;
+    --line: rgba(15, 17, 21, 0.08);
+    --line-strong: rgba(15, 17, 21, 0.12);
+    --accent: #2f6f4e;
+    --accent-soft: #e7f0ea;
+    --shadow-soft: 0 20px 40px -18px rgba(15, 17, 21, 0.10);
+    --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 12px 30px -16px rgba(15, 17, 21, 0.10);
+    --r-lg: 2.5rem;
+    --r-md: 1.25rem;
+    --r-sm: 0.75rem;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Geist', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .mono { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 1.25rem; }
+
+  /* Nav */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 1.25rem;
+    max-width: 1280px; margin: 0 auto;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 0.625rem;
+    font-weight: 600; letter-spacing: -0.01em; font-size: 1.0625rem;
+  }
+  .brand-dot {
+    width: 28px; height: 28px; border-radius: 9px;
+    background: var(--ink); position: relative;
+    display: grid; place-items: center;
+  }
+  .brand-dot::after {
+    content: ""; width: 10px; height: 10px; border-radius: 999px;
+    background: var(--accent);
+  }
+  .nav-links { display: flex; gap: 1.75rem; font-size: 0.9375rem; color: var(--ink-soft); }
+  .nav-links a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    background: var(--ink); color: #fafafa;
+    padding: 0.625rem 1.125rem; border-radius: 999px;
+    font-size: 0.9375rem; font-weight: 500;
+    text-decoration: none; transition: transform 0.15s ease;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+  .nav-cta:active { transform: translateY(0); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* Hero — asymmetric, left-aligned, split */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3.5rem;
+    padding: 3rem 0 5.5rem;
+    align-items: center;
+    min-height: calc(100dvh - 100px);
+  }
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 2.5rem; min-height: auto; padding: 2rem 0 3.5rem; }
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.375rem 0.75rem 0.375rem 0.5rem;
+    font-size: 0.8125rem; color: var(--ink-soft);
+    margin-bottom: 1.5rem;
+  }
+  .eyebrow-dot {
+    width: 7px; height: 7px; border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: normal; color: var(--accent);
+    font-weight: 600;
+  }
+  .lede {
+    font-size: 1.0625rem;
+    color: var(--ink-soft);
+    max-width: 52ch;
+    margin: 0 0 2rem;
+  }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.875rem 1.375rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: transform 0.15s ease, background 0.2s;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--ink); color: #fafafa; }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0) scale(0.98); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+  .btn-ghost:hover { background: var(--surface); }
+
+  .meta-row {
+    display: flex; gap: 2rem; margin-top: 3rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem; max-width: 28rem;
+  }
+  .meta-row > div { display: flex; flex-direction: column; gap: 0.125rem; }
+  .meta-row .num { font-size: 1.375rem; font-weight: 600; letter-spacing: -0.02em; }
+  .meta-row .lbl { font-size: 0.8125rem; color: var(--ink-mute); }
+
+  /* Hero visual — chat preview card */
+  .hero-visual {
+    position: relative;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+    padding: 1.5rem;
+    overflow: hidden;
+  }
+  .hero-visual::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 100% 0%, rgba(47, 111, 78, 0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 0% 100%, rgba(47, 111, 78, 0.06), transparent 60%);
+    pointer-events: none;
+  }
+  .chat-head {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1rem; margin-bottom: 1.25rem; position: relative;
+  }
+  .chat-head .who { display: flex; align-items: center; gap: 0.625rem; }
+  .avatar-pebble {
+    width: 32px; height: 32px; border-radius: 12px;
+    background: var(--accent); position: relative;
+    display: grid; place-items: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .avatar-pebble::after, .avatar-pebble::before {
+    content: ""; width: 5px; height: 5px; border-radius: 999px;
+    background: #fafafa; position: absolute; top: 11px;
+  }
+  .avatar-pebble::before { left: 9px; }
+  .avatar-pebble::after { right: 9px; }
+  .chat-head .who-text { display: flex; flex-direction: column; }
+  .chat-head .who-text strong { font-size: 0.9375rem; font-weight: 600; }
+  .chat-head .who-text span { font-size: 0.75rem; color: var(--ink-mute); }
+  .live-dot {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem; color: var(--ink-mute);
+  }
+  .live-dot::before {
+    content: ""; width: 7px; height: 7px; border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+    animation: breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 4px var(--accent-soft); }
+    50% { box-shadow: 0 0 0 8px rgba(231, 240, 234, 0.5); }
+  }
+  .msg {
+    border-radius: var(--r-md);
+    padding: 0.875rem 1rem;
+    font-size: 0.9375rem;
+    margin-bottom: 0.625rem;
+    max-width: 88%;
+    line-height: 1.45;
+  }
+  .msg-bot {
+    background: var(--accent-soft);
+    color: #1a3d2c;
+  }
+  .msg-user {
+    background: var(--bg);
+    color: var(--ink);
+    margin-left: auto;
+    border: 1px solid var(--line);
+  }
+  .chip-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+  .chip {
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform 0.12s ease, background 0.2s;
+  }
+  .chip:hover { background: var(--accent-soft); transform: translateY(-1px); }
+  .chip:active { transform: translateY(0) scale(0.98); }
+
+  /* Section header */
+  .section { padding: 5rem 0; border-top: 1px solid var(--line); }
+  .section-head {
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 3rem;
+    margin-bottom: 3rem; align-items: end;
+  }
+  @media (max-width: 800px) { .section-head { grid-template-columns: 1fr; gap: 1rem; } }
+  .section-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    margin: 0;
+    max-width: 22ch;
+  }
+  .section-head p {
+    color: var(--ink-soft); margin: 0;
+    font-size: 1rem;
+    max-width: 52ch;
+  }
+
+  /* Bento grid — asymmetric */
+  .bento {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+  @media (max-width: 900px) { .bento { grid-template-columns: 1fr; } }
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+    min-height: 260px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .tile-feature { grid-column: span 1; grid-row: span 2; min-height: 540px; }
+  @media (max-width: 900px) { .tile-feature { grid-row: auto; min-height: 320px; } }
+  .tile h3 {
+    font-size: 1.25rem; font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5rem;
+  }
+  .tile p { color: var(--ink-soft); margin: 0; font-size: 0.9375rem; max-width: 36ch; }
+  .tile-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem; color: var(--ink-mute);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Tile graphics */
+  .ladder { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
+  .ladder-step {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    font-size: 0.875rem;
+    background: var(--bg);
+  }
+  .ladder-step .num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem; color: var(--ink-mute);
+    min-width: 1.25rem;
+  }
+  .ladder-step.active {
+    background: var(--accent-soft);
+    border-color: rgba(47, 111, 78, 0.2);
+    color: #1a3d2c;
+  }
+
+  .pulse-vis {
+    display: flex; align-items: end; gap: 0.375rem;
+    height: 80px; margin-top: 1.25rem;
+  }
+  .pulse-vis span {
+    flex: 1; background: var(--accent-soft);
+    border-radius: 0.375rem;
+    animation: bar 2.4s ease-in-out infinite;
+  }
+  .pulse-vis span:nth-child(1) { height: 40%; animation-delay: 0s; }
+  .pulse-vis span:nth-child(2) { height: 75%; animation-delay: 0.15s; }
+  .pulse-vis span:nth-child(3) { height: 55%; animation-delay: 0.3s; }
+  .pulse-vis span:nth-child(4) { height: 88%; animation-delay: 0.45s; background: var(--accent); }
+  .pulse-vis span:nth-child(5) { height: 60%; animation-delay: 0.6s; }
+  @keyframes bar {
+    0%, 100% { transform: scaleY(0.85); }
+    50% { transform: scaleY(1.05); }
+  }
+
+  .streak {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+    margin-top: 1.25rem;
+  }
+  .streak div {
+    aspect-ratio: 1; border-radius: 6px;
+    background: var(--bg); border: 1px solid var(--line);
+  }
+  .streak div.on { background: var(--accent); border-color: var(--accent); }
+  .streak div.soft { background: var(--accent-soft); border-color: rgba(47,111,78,0.2); }
+
+  /* How it works — split */
+  .steps {
+    display: grid; gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 6rem 1fr 1fr;
+    gap: 2.5rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  @media (max-width: 800px) { .step { grid-template-columns: 1fr; gap: 0.5rem; } }
+  .step .step-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.875rem;
+    color: var(--ink-mute);
+  }
+  .step h4 {
+    font-size: 1.25rem; font-weight: 600;
+    letter-spacing: -0.015em; margin: 0 0 0.375rem;
+  }
+  .step p { color: var(--ink-soft); margin: 0; max-width: 48ch; font-size: 0.9375rem; }
+
+  /* Voices section */
+  .voices {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  @media (max-width: 800px) { .voices { grid-template-columns: 1fr; } }
+  .voice {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 2rem;
+  }
+  .voice blockquote {
+    font-size: 1.0625rem; line-height: 1.5;
+    margin: 0 0 1.5rem;
+    letter-spacing: -0.005em;
+  }
+  .voice .who-line {
+    display: flex; align-items: center; gap: 0.75rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+  }
+  .who-pic {
+    width: 36px; height: 36px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #5a9a78);
+    display: grid; place-items: center;
+    color: #fafafa; font-weight: 600; font-size: 0.875rem;
+    letter-spacing: -0.02em;
+  }
+  .voice strong { font-size: 0.9375rem; font-weight: 500; display: block; }
+  .voice span { font-size: 0.8125rem; color: var(--ink-mute); }
+
+  /* Closer */
+  .closer {
+    background: var(--ink); color: #fafafa;
+    border-radius: var(--r-lg);
+    padding: 4rem 3rem;
+    margin: 3rem 0 5rem;
+    display: grid; grid-template-columns: 1.3fr 1fr; gap: 3rem;
+    align-items: center;
+    position: relative; overflow: hidden;
+  }
+  @media (max-width: 800px) { .closer { grid-template-columns: 1fr; padding: 2.5rem 1.75rem; } }
+  .closer::before {
+    content: ""; position: absolute; right: -10%; top: -50%;
+    width: 60%; height: 200%;
+    background: radial-gradient(ellipse, rgba(47,111,78,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .closer h2 { color: #fafafa; max-width: 18ch; }
+  .closer p { color: rgba(250,250,250,0.65); max-width: 36ch; margin: 0 0 1.75rem; font-size: 0.9375rem; }
+  .closer .btn-primary { background: var(--accent); color: #fafafa; }
+  .closer .btn-ghost { color: #fafafa; border-color: rgba(250,250,250,0.2); }
+  .closer .btn-ghost:hover { background: rgba(250,250,250,0.05); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2.5rem 0;
+    color: var(--ink-mute);
+    font-size: 0.8125rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  footer .links { display: flex; gap: 1.5rem; }
+  footer a { color: inherit; text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* Mascot — Kiwi the parrot */
+  .mascot {
+    position: fixed;
+    right: 1.5rem; bottom: 1.5rem;
+    z-index: 50;
+    display: flex; flex-direction: column; align-items: flex-end;
+    gap: 0.75rem;
+  }
+  .mascot-bubble {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 1.25rem;
+    padding: 0.875rem 1.125rem;
+    max-width: 17rem;
+    font-size: 0.875rem;
+    color: var(--ink);
+    box-shadow: var(--shadow-card);
+    line-height: 1.4;
+    position: relative;
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mascot-bubble.on {
+    opacity: 1; transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .mascot-bubble::after {
+    content: ""; position: absolute;
+    right: 1.5rem; bottom: -7px;
+    width: 12px; height: 12px;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transform: rotate(45deg);
+  }
+  .mascot-bubble strong { display: block; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.8125rem; color: var(--accent); letter-spacing: -0.005em; }
+  .mascot-bubble .tip-actions {
+    display: flex; gap: 0.5rem; margin-top: 0.75rem;
+  }
+  .mascot-bubble button {
+    font: inherit; cursor: pointer;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.75rem;
+    color: var(--ink);
+    transition: background 0.2s, transform 0.12s ease;
+  }
+  .mascot-bubble button:hover { background: var(--accent-soft); }
+  .mascot-bubble button:active { transform: scale(0.96); }
+
+  .mascot-btn {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    padding: 0;
+    display: grid; place-items: center;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .mascot-btn:hover { transform: translateY(-2px); }
+  .mascot-btn:active { transform: translateY(0) scale(0.96); }
+  .mascot-btn::before {
+    content: ""; position: absolute;
+    inset: -4px; border-radius: 50%;
+    background: var(--accent-soft);
+    z-index: -1; opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .mascot-btn:hover::before { opacity: 1; }
+
+  .parrot { width: 52px; height: 52px; display: block; animation: parrot-bob 3.2s ease-in-out infinite; transform-origin: 50% 80%; }
+  @keyframes parrot-bob {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-3px) rotate(2deg); }
+  }
+  .parrot .wing { transform-origin: 38px 32px; animation: wing 2.4s ease-in-out infinite; }
+  @keyframes wing {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-12deg); }
+  }
+  .parrot .eye-shine { animation: blink 4.8s infinite; transform-origin: 30px 26px; }
+  @keyframes blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+  }
+  .parrot .tail-feather { transform-origin: 50px 56px; animation: tail 3.2s ease-in-out infinite; }
+  @keyframes tail {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(4deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .parrot, .parrot .wing, .parrot .eye-shine, .parrot .tail-feather { animation: none; }
+  }
+  @media (max-width: 600px) {
+    .mascot { right: 1rem; bottom: 1rem; }
+    .mascot-btn { width: 60px; height: 60px; }
+    .parrot { width: 42px; height: 42px; }
+    .mascot-bubble { max-width: calc(100vw - 5rem); }
+  }
+
+  /* Subtle grain (fixed, no scroll cost) */
+  .grain {
+    position: fixed; inset: 0; pointer-events: none;
+    opacity: 0.025; z-index: 1;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav>
+  <div class="brand">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </div>
+  <div class="nav-links">
+    <a href="topics.html">Topics</a>
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+  </div>
+  <a href="#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <span class="eyebrow"><span class="eyebrow-dot"></span> Built for grades 3 and 4</span>
+      <h1>Math homework that <em>thinks with them</em>, not for them.</h1>
+      <p class="lede">Pebble is a small, patient tutor that asks better questions before it gives any answer. Kids stop copying. They start understanding.</p>
+      <div class="cta-row">
+        <a href="#start" class="btn btn-primary">Try a problem</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+      <div class="meta-row">
+        <div><span class="num">7</span><span class="lbl">hint levels before any answer</span></div>
+        <div><span class="num">14<span class="mono" style="font-size:0.875rem">m</span></span><span class="lbl">average session</span></div>
+        <div><span class="num">63.4<span class="mono" style="font-size:0.875rem">%</span></span><span class="lbl">solved without an answer</span></div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="chat-head">
+        <div class="who">
+          <span class="avatar-pebble" aria-hidden="true"></span>
+          <div class="who-text"><strong>Pebble</strong><span>here to help, never to judge</span></div>
+        </div>
+        <div class="live-dot">listening</div>
+      </div>
+
+      <div class="msg msg-user mono" style="font-size:0.875rem;">2 / 3 + 1 / 6 = ?</div>
+      <div class="msg msg-bot">Nice — fractions! Before we add, what do the bottom numbers need to be?</div>
+      <div class="msg msg-user">the same?</div>
+      <div class="msg msg-bot">Exactly. So what could we change 1/3 into so its bottom is 6?</div>
+      <div class="chip-row">
+        <span class="chip">I&rsquo;m stuck</span>
+        <span class="chip">show a similar one</span>
+        <span class="chip">read it to me</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENTO -->
+  <section class="section" id="features">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">What makes Pebble different</div>
+        <h2>A tutor that holds back the answer.</h2>
+      </div>
+      <p>Most tools either answer instantly or just track what&rsquo;s due. Pebble works the way a good teacher does — small questions, small wins, then the leap.</p>
+    </div>
+
+    <div class="bento">
+      <article class="tile tile-feature">
+        <div>
+          <div class="tile-num">01 — Hint ladder</div>
+          <h3>Seven gentle steps before the solution.</h3>
+          <p>Each wrong attempt unlocks one notch lower on the ladder. The full answer only appears if every other path is exhausted.</p>
+        </div>
+        <div class="ladder" aria-hidden="true">
+          <div class="ladder-step"><span class="num">01</span> Read the question again</div>
+          <div class="ladder-step active"><span class="num">02</span> What do you already know?</div>
+          <div class="ladder-step"><span class="num">03</span> What is the very first step?</div>
+          <div class="ladder-step"><span class="num">04</span> Try drawing it out</div>
+          <div class="ladder-step"><span class="num">05</span> Here&rsquo;s a similar problem</div>
+        </div>
+      </article>
+
+      <article class="tile">
+        <div>
+          <div class="tile-num">02 — Live read</div>
+          <h3>Spots stuck vs. guessing.</h3>
+          <p>Reads the rhythm of attempts. Slow, repeated tries get a hint. Wild guesses get a pause and a re-read.</p>
+        </div>
+        <div class="pulse-vis" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </article>
+
+      <article class="tile">
+        <div>
+          <div class="tile-num">03 — Streaks that matter</div>
+          <h3>Effort, not speed.</h3>
+          <p>Streaks count showing up, not finishing fastest. A miss never resets it.</p>
+        </div>
+        <div class="streak" aria-hidden="true">
+          <div class="on"></div><div class="on"></div><div class="on"></div>
+          <div class="soft"></div><div class="on"></div><div class="on"></div><div></div>
+        </div>
+      </article>
+
+      <article class="tile">
+        <div>
+          <div class="tile-num">04 — Reading-grade tuned</div>
+          <h3>Sentences a third-grader can read.</h3>
+          <p>Average eight words. Active voice. No "calculate." No "determine." Just kid words that move the work forward.</p>
+        </div>
+      </article>
+
+      <article class="tile">
+        <div>
+          <div class="tile-num">05 — Parent digest</div>
+          <h3>A weekly note, not a dashboard.</h3>
+          <p>One paragraph on Friday. What clicked, what tripped, what to ask about at dinner.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="section-head">
+      <div>
+        <div class="section-tag">How a session goes</div>
+        <h2>Five minutes from stuck to "oh, I see."</h2>
+      </div>
+      <p>No setup, no log-ins for the kid, no quiz to prove they need it. They open it, type the problem, and Pebble takes it from there.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">001</div>
+        <div>
+          <h4>They type the problem.</h4>
+          <p>Or take a photo, or paste it in. Pebble reads it back in plain language to confirm.</p>
+        </div>
+        <div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">002</div>
+        <div>
+          <h4>Pebble asks first.</h4>
+          <p>"What do you think the first step is?" — every session starts the same way. The student does the first move, even if it&rsquo;s tiny.</p>
+        </div>
+        <div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">003</div>
+        <div>
+          <h4>Hints walk down.</h4>
+          <p>Wrong tries unlock smaller hints. Right tries get specific praise — what they did, not just that they did it.</p>
+        </div>
+        <div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">004</div>
+        <div>
+          <h4>The win lands.</h4>
+          <p>When the answer comes, Pebble offers a similar one to lock it in. No badge for being fast — only for finishing the thinking.</p>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSER -->
+  <section class="closer" id="start">
+    <div>
+      <h2>Sit down with Pebble for one problem.</h2>
+      <p>No account. No download. Type one math problem and see what a hint instead of an answer feels like.</p>
+      <div class="cta-row">
+        <a href="#" class="btn btn-primary">Try one now</a>
+        <a href="#" class="btn btn-ghost">Read the research</a>
+      </div>
+    </div>
+    <div></div>
+  </section>
+
+  <!-- Mascot -->
+  <div class="mascot" id="mascot">
+    <div class="mascot-bubble" id="mascot-bubble" role="dialog" aria-live="polite">
+      <strong>Kiwi says</strong>
+      <span id="mascot-text">Hi! I&rsquo;m Kiwi. Stuck on a problem? Try telling me the first step you&rsquo;d take — even a guess is a start.</span>
+      <div class="tip-actions">
+        <button id="mascot-next" type="button">Another tip</button>
+        <button id="mascot-close" type="button">Close</button>
+      </div>
+    </div>
+    <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Kiwi the parrot">
+      <svg class="parrot" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Tail feathers -->
+        <g class="tail-feather">
+          <path d="M 48 54 Q 64 60 66 72 Q 56 70 50 64 Z" fill="#2f6f4e" />
+          <path d="M 52 56 Q 68 56 70 68 Q 60 66 54 60 Z" fill="#3d8a62" />
+        </g>
+        <!-- Body -->
+        <ellipse cx="36" cy="46" rx="20" ry="22" fill="#2f6f4e" />
+        <!-- Belly -->
+        <ellipse cx="32" cy="50" rx="12" ry="14" fill="#e7f0ea" />
+        <!-- Wing -->
+        <path class="wing" d="M 38 32 Q 52 36 50 54 Q 42 54 36 48 Z" fill="#1f4f37" />
+        <path class="wing" d="M 40 36 Q 48 40 46 50 Q 41 50 38 46 Z" fill="#2f6f4e" opacity="0.6" />
+        <!-- Head -->
+        <circle cx="32" cy="26" r="14" fill="#2f6f4e" />
+        <!-- Cheek patch -->
+        <circle cx="26" cy="30" r="3.5" fill="#d4593a" opacity="0.85" />
+        <!-- Beak -->
+        <path d="M 18 26 Q 12 28 16 32 Q 20 31 22 28 Z" fill="#f0a046" />
+        <path d="M 18 28 Q 14 29 16 32 Q 19 31 21 29 Z" fill="#d68a36" />
+        <!-- Eye -->
+        <circle cx="30" cy="24" r="3.5" fill="#0f1115" />
+        <circle class="eye-shine" cx="30.8" cy="22.8" r="1.2" fill="#fafafa" />
+        <!-- Head feather tuft -->
+        <path d="M 32 12 Q 36 8 38 14 Q 34 14 32 16 Z" fill="#d4593a" />
+        <!-- Feet -->
+        <path d="M 30 66 L 30 72 M 27 72 L 33 72" stroke="#f0a046" stroke-width="2" stroke-linecap="round" fill="none" />
+        <path d="M 40 66 L 40 72 M 37 72 L 43 72" stroke="#f0a046" stroke-width="2" stroke-linecap="round" fill="none" />
+      </svg>
+    </button>
+  </div>
+  <script>
+    (function () {
+      const tips = [
+        "Stuck on a problem? Try telling me the first step you'd take — even a guess is a start.",
+        "Wrong answers are not bad news. They tell us exactly which part to look at next.",
+        "Try drawing the problem. A quick sketch unlocks more answers than you'd think.",
+        "Read the question out loud. Slow reading catches what fast reading misses.",
+        "Don't memorize — understand. The fact will stick once the reason does."
+      ];
+      let i = 0;
+      const btn = document.getElementById('mascot-btn');
+      const bubble = document.getElementById('mascot-bubble');
+      const text = document.getElementById('mascot-text');
+      const nextBtn = document.getElementById('mascot-next');
+      const closeBtn = document.getElementById('mascot-close');
+      const toggle = () => bubble.classList.toggle('on');
+      btn.addEventListener('click', toggle);
+      closeBtn.addEventListener('click', () => bubble.classList.remove('on'));
+      nextBtn.addEventListener('click', () => {
+        i = (i + 1) % tips.length;
+        text.textContent = tips[i];
+      });
+    })();
+  </script>
+
+  <footer>
+    <div>Made for kids who deserve a patient helper.</div>
+    <div class="links">
+      <a href="#">Privacy</a>
+      <a href="#">For teachers</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+</main>
+</body>
+</html>
