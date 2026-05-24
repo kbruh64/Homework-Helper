@@ -483,55 +483,57 @@
   .mascot-bubble button:active { transform: scale(0.96); }
 
   .mascot-btn {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    background: var(--surface);
+    width: 104px; height: 104px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #fffdf5, #fff5e3);
     border: 1px solid var(--line);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-card), 0 0 0 4px rgba(240, 195, 58, 0.08);
     cursor: pointer;
     padding: 0;
     display: grid; place-items: center;
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
+    image-rendering: pixelated;
   }
-  .mascot-btn:hover { transform: translateY(-2px); }
+  .mascot-btn:hover { transform: translateY(-3px); }
   .mascot-btn:active { transform: translateY(0) scale(0.96); }
   .mascot-btn::before {
     content: ""; position: absolute;
-    inset: -4px; border-radius: 50%;
-    background: var(--accent-soft);
+    inset: -6px; border-radius: 34px;
+    background: linear-gradient(135deg, rgba(217, 75, 58, 0.25), rgba(58, 114, 208, 0.25), rgba(76, 181, 199, 0.25));
     z-index: -1; opacity: 0;
     transition: opacity 0.2s;
   }
   .mascot-btn:hover::before { opacity: 1; }
 
-  .parrot { width: 52px; height: 52px; display: block; animation: parrot-bob 3.2s ease-in-out infinite; transform-origin: 50% 80%; }
+  .parrot {
+    width: 84px; height: 84px;
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    shape-rendering: crispEdges;
+    animation: parrot-bob 1.4s steps(2) infinite;
+    transform-origin: 50% 90%;
+  }
   @keyframes parrot-bob {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(-3px) rotate(2deg); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
   }
-  .parrot .wing { transform-origin: 38px 32px; animation: wing 2.4s ease-in-out infinite; }
-  @keyframes wing {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(-12deg); }
+  .parrot .blink {
+    animation: blink 4.2s infinite;
+    transform-origin: center;
   }
-  .parrot .eye-shine { animation: blink 4.8s infinite; transform-origin: 30px 26px; }
   @keyframes blink {
-    0%, 92%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
-  }
-  .parrot .tail-feather { transform-origin: 50px 56px; animation: tail 3.2s ease-in-out infinite; }
-  @keyframes tail {
-    0%, 100% { transform: rotate(-3deg); }
-    50% { transform: rotate(4deg); }
+    0%, 94%, 100% { opacity: 1; }
+    96%, 98% { opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .parrot, .parrot .wing, .parrot .eye-shine, .parrot .tail-feather { animation: none; }
+    .parrot, .parrot .blink { animation: none; }
   }
   @media (max-width: 600px) {
     .mascot { right: 1rem; bottom: 1rem; }
-    .mascot-btn { width: 60px; height: 60px; }
-    .parrot { width: 42px; height: 42px; }
+    .mascot-btn { width: 84px; height: 84px; border-radius: 22px; }
+    .parrot { width: 64px; height: 64px; }
     .mascot-bubble { max-width: calc(100vw - 5rem); }
   }
 
@@ -569,11 +571,6 @@
       <div class="cta-row">
         <a href="#start" class="btn btn-primary">Try a problem</a>
         <a href="#how" class="btn btn-ghost">See how it works</a>
-      </div>
-      <div class="meta-row">
-        <div><span class="num">7</span><span class="lbl">hint levels before any answer</span></div>
-        <div><span class="num">14<span class="mono" style="font-size:0.875rem">m</span></span><span class="lbl">average session</span></div>
-        <div><span class="num">63.4<span class="mono" style="font-size:0.875rem">%</span></span><span class="lbl">solved without an answer</span></div>
       </div>
     </div>
 
@@ -735,38 +732,54 @@
       </div>
     </div>
     <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Kiwi the parrot">
-      <svg class="parrot" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- Tail feathers -->
-        <g class="tail-feather">
-          <path d="M 48 54 Q 64 60 66 72 Q 56 70 50 64 Z" fill="#2f6f4e" />
-          <path d="M 52 56 Q 68 56 70 68 Q 60 66 54 60 Z" fill="#3d8a62" />
-        </g>
-        <!-- Body -->
-        <ellipse cx="36" cy="46" rx="20" ry="22" fill="#2f6f4e" />
-        <!-- Belly -->
-        <ellipse cx="32" cy="50" rx="12" ry="14" fill="#e7f0ea" />
-        <!-- Wing -->
-        <path class="wing" d="M 38 32 Q 52 36 50 54 Q 42 54 36 48 Z" fill="#1f4f37" />
-        <path class="wing" d="M 40 36 Q 48 40 46 50 Q 41 50 38 46 Z" fill="#2f6f4e" opacity="0.6" />
-        <!-- Head -->
-        <circle cx="32" cy="26" r="14" fill="#2f6f4e" />
-        <!-- Cheek patch -->
-        <circle cx="26" cy="30" r="3.5" fill="#d4593a" opacity="0.85" />
-        <!-- Beak -->
-        <path d="M 18 26 Q 12 28 16 32 Q 20 31 22 28 Z" fill="#f0a046" />
-        <path d="M 18 28 Q 14 29 16 32 Q 19 31 21 29 Z" fill="#d68a36" />
-        <!-- Eye -->
-        <circle cx="30" cy="24" r="3.5" fill="#0f1115" />
-        <circle class="eye-shine" cx="30.8" cy="22.8" r="1.2" fill="#fafafa" />
-        <!-- Head feather tuft -->
-        <path d="M 32 12 Q 36 8 38 14 Q 34 14 32 16 Z" fill="#d4593a" />
-        <!-- Feet -->
-        <path d="M 30 66 L 30 72 M 27 72 L 33 72" stroke="#f0a046" stroke-width="2" stroke-linecap="round" fill="none" />
-        <path d="M 40 66 L 40 72 M 37 72 L 43 72" stroke="#f0a046" stroke-width="2" stroke-linecap="round" fill="none" />
-      </svg>
+      <svg class="parrot" id="parrot" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
     </button>
   </div>
   <script>
+    // Pixel-art parrot — chubby, colorful, 16x16 grid at 4px each
+    (function () {
+      const PAL = {
+        R: '#d94b3a', O: '#f08a3a', Y: '#f0c33a',
+        G: '#3d8a52', g: '#5aa86c', B: '#3a72d0', b: '#5b8de0',
+        T: '#4cb5c7', K: '#1a1f26', W: '#fafafa', P: '#e0739d'
+      };
+      const GRID = [
+        '......RR........',
+        '.....RRRR.......',
+        '....RRRRRR......',
+        '...RRRRRRRR.....',
+        '..RRRRRRRRRR....',
+        '.RRRRRWWRRRRR...',
+        'YRRRRRWKRRRRRB..',
+        'YYRRRRWWRRRRBBB.',
+        'YRRRRRRRRRRBBBBB',
+        '.RGGGGGGGGGBBBBB',
+        '.GgggYYYgggGBBBT',
+        '.GggYYYYYggGGBBT',
+        '.GgYYPYPYYggGTBB',
+        '.GggYYYYYgggGTTB',
+        '..GgggggggggGTT.',
+        '...OO....OO.....'
+      ];
+      const svg = document.getElementById('parrot');
+      const SVG_NS = 'http://www.w3.org/2000/svg';
+      GRID.forEach((row, y) => {
+        for (let x = 0; x < row.length; x++) {
+          const c = row[x];
+          if (!PAL[c]) continue;
+          const r = document.createElementNS(SVG_NS, 'rect');
+          r.setAttribute('x', x * 4);
+          r.setAttribute('y', y * 4);
+          r.setAttribute('width', 4);
+          r.setAttribute('height', 4);
+          r.setAttribute('fill', PAL[c]);
+          if (c === 'W' && y === 5) r.setAttribute('class', 'blink');
+          if (c === 'K' && y === 6) r.setAttribute('class', 'blink');
+          svg.appendChild(r);
+        }
+      });
+    })();
+
     (function () {
       const tips = [
         "Stuck on a problem? Try telling me the first step you'd take — even a guess is a start.",
