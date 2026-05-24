@@ -428,6 +428,119 @@
   footer a { color: inherit; text-decoration: none; }
   footer a:hover { color: var(--ink); }
 
+  /* Helper modal */
+  .helper-modal {
+    border: none;
+    border-radius: var(--r-lg);
+    padding: 0;
+    background: var(--surface);
+    box-shadow: var(--shadow-card), 0 30px 80px -20px rgba(0, 0, 0, 0.2);
+    max-width: 520px;
+    width: calc(100% - 2rem);
+    max-height: 82vh;
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .helper-modal[open] { display: flex; flex-direction: column; }
+  .helper-modal::backdrop {
+    background: rgba(15, 17, 21, 0.45);
+    backdrop-filter: blur(4px);
+  }
+  .helper-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.125rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .helper-head .who {
+    display: flex; align-items: center; gap: 0.625rem;
+  }
+  .helper-head .who-avatar {
+    width: 28px; height: 28px; border-radius: 9px;
+    background: var(--accent);
+    position: relative;
+  }
+  .helper-head .who-avatar::before, .helper-head .who-avatar::after {
+    content: ""; width: 4px; height: 4px; border-radius: 999px;
+    background: #fafafa; position: absolute; top: 10px;
+  }
+  .helper-head .who-avatar::before { left: 8px; }
+  .helper-head .who-avatar::after { right: 8px; }
+  .helper-head strong {
+    font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em;
+    display: block;
+  }
+  .helper-head .sub {
+    font-size: 0.75rem; color: var(--ink-mute);
+  }
+  .helper-close {
+    background: var(--bg); border: 1px solid var(--line);
+    width: 32px; height: 32px; border-radius: 999px;
+    font-size: 1.125rem; line-height: 1; cursor: pointer;
+    color: var(--ink-soft);
+    display: grid; place-items: center;
+    transition: background 0.2s;
+  }
+  .helper-close:hover { background: var(--accent-soft); color: var(--ink); }
+  .helper-chat {
+    flex: 1 1 auto; overflow-y: auto;
+    padding: 1.5rem;
+    display: flex; flex-direction: column;
+    background: var(--bg);
+    min-height: 280px;
+  }
+  .helper-chat .msg { animation: msg-in 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .helper-input-bar {
+    display: flex; gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .helper-input-bar input {
+    flex: 1;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.625rem 1rem;
+    font: inherit; font-size: 0.9375rem;
+    background: var(--bg); color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  .helper-input-bar input:focus {
+    outline: none; border-color: var(--accent);
+    background: var(--surface);
+  }
+  .helper-input-bar button {
+    background: var(--ink); color: #fafafa;
+    border: 0; border-radius: 999px;
+    padding: 0.625rem 1.25rem;
+    font: inherit; font-size: 0.9375rem; font-weight: 500;
+    cursor: pointer; transition: transform 0.12s ease;
+  }
+  .helper-input-bar button:hover { transform: translateY(-1px); }
+  .helper-input-bar button:active { transform: translateY(0) scale(0.96); }
+  .helper-suggestions {
+    display: flex; gap: 0.375rem; flex-wrap: wrap;
+    padding: 0.75rem 1.5rem 0;
+    background: var(--surface);
+  }
+  .helper-suggestions .chip {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.3125rem 0.75rem;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: 'Geist Mono', monospace;
+    transition: background 0.2s;
+  }
+  .helper-suggestions .chip:hover { background: var(--accent-soft); color: var(--ink); }
+
   /* Mascot — Poly the parrot */
   .mascot {
     position: fixed;
@@ -554,7 +667,7 @@
     <a href="#how">How it works</a>
     <a href="#features">Features</a>
   </div>
-  <a href="#start" class="nav-cta">Open Pebble</a>
+  <a href="#" data-open-helper class="nav-cta">Open Pebble</a>
 </nav>
 
 <main class="wrap">
@@ -565,7 +678,7 @@
       <h1>Math homework that <em>thinks with them</em>, not for them.</h1>
       <p class="lede">Pebble is a small, patient tutor that asks better questions before it gives any answer. Kids stop copying. They start understanding.</p>
       <div class="cta-row">
-        <a href="#start" class="btn btn-primary">Try a problem</a>
+        <a href="#" data-open-helper class="btn btn-primary">Try a problem</a>
         <a href="#how" class="btn btn-ghost">See how it works</a>
       </div>
     </div>
@@ -710,12 +823,38 @@
       <h2>Sit down with Pebble for one problem.</h2>
       <p>No account. No download. Type one math problem and see what a hint instead of an answer feels like.</p>
       <div class="cta-row">
-        <a href="#" class="btn btn-primary">Try one now</a>
+        <a href="#" data-open-helper class="btn btn-primary">Try one now</a>
         <a href="#" class="btn btn-ghost">Read the research</a>
       </div>
     </div>
     <div></div>
   </section>
+
+  <!-- Helper modal -->
+  <dialog class="helper-modal" id="helper">
+    <div class="helper-head">
+      <div class="who">
+        <span class="who-avatar" aria-hidden="true"></span>
+        <div>
+          <strong>Poly</strong>
+          <span class="sub">hints first, never just the answer</span>
+        </div>
+      </div>
+      <button class="helper-close" id="helper-close" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="helper-chat" id="helper-chat"></div>
+    <div class="helper-suggestions" id="helper-suggestions">
+      <button class="chip" data-fill="12 + 8">12 + 8</button>
+      <button class="chip" data-fill="64 - 27">64 - 27</button>
+      <button class="chip" data-fill="7 x 6">7 x 6</button>
+      <button class="chip" data-fill="42 / 6">42 / 6</button>
+      <button class="chip" data-fill="2/3 + 1/6">2/3 + 1/6</button>
+    </div>
+    <form class="helper-input-bar" id="helper-form">
+      <input type="text" id="helper-input" placeholder="Type a math problem…" autocomplete="off" />
+      <button type="submit">Send</button>
+    </form>
+  </dialog>
 
   <!-- Mascot -->
   <div class="mascot" id="mascot">
@@ -751,6 +890,224 @@
     </button>
   </div>
   <script>
+    // ─── Homework helper: parses real math problems, gives hints, checks answers ───
+    (function () {
+      const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+      const lcm = (a, b) => (a * b) / gcd(a, b);
+
+      function simplify(n, d) {
+        const g = gcd(Math.abs(n), Math.abs(d)) || 1;
+        return { n: n / g, d: d / g };
+      }
+
+      function parseProblem(raw) {
+        const s = raw.toLowerCase().replace(/[×x*]/g, '*').replace(/÷/g, '/').replace(/\s+/g, '');
+        // fraction op fraction
+        let m = s.match(/^(\d+)\/(\d+)([+\-*])(\d+)\/(\d+)$/);
+        if (m) return { type: 'frac', op: m[3], a: { n: +m[1], d: +m[2] }, b: { n: +m[4], d: +m[5] } };
+        // integer op integer
+        m = s.match(/^(\d+)([+\-*\/])(\d+)$/);
+        if (m) return { type: 'int', op: m[2], a: +m[1], b: +m[3] };
+        return null;
+      }
+
+      function compute(p) {
+        if (p.type === 'int') {
+          return p.op === '+' ? p.a + p.b
+               : p.op === '-' ? p.a - p.b
+               : p.op === '*' ? p.a * p.b
+               : p.a / p.b;
+        }
+        if (p.type === 'frac') {
+          if (p.op === '+' || p.op === '-') {
+            const cd = lcm(p.a.d, p.b.d);
+            const an = p.a.n * (cd / p.a.d);
+            const bn = p.b.n * (cd / p.b.d);
+            return simplify(p.op === '+' ? an + bn : an - bn, cd);
+          }
+          if (p.op === '*') return simplify(p.a.n * p.b.n, p.a.d * p.b.d);
+        }
+      }
+
+      function formatAnswer(p, ans) {
+        if (p.type === 'frac') return `${ans.n}/${ans.d}`;
+        if (p.op === '/' && !Number.isInteger(ans)) {
+          // express as quotient + remainder
+          const q = Math.floor(p.a / p.b);
+          const r = p.a - q * p.b;
+          return r === 0 ? String(q) : `${q} remainder ${r}`;
+        }
+        return String(ans);
+      }
+
+      function checkStudent(text, p) {
+        const c = text.toLowerCase().replace(/\s+/g, '');
+        const actual = compute(p);
+        if (p.type === 'frac') {
+          const m = c.match(/^(\d+)\/(\d+)$/);
+          if (!m) return false;
+          const s = simplify(+m[1], +m[2]);
+          return s.n === actual.n && s.d === actual.d;
+        }
+        if (p.op === '/' && !Number.isInteger(actual)) {
+          const m = c.match(/^(\d+)(?:r|remainder|rem)(\d+)$/);
+          if (m) {
+            const q = Math.floor(p.a / p.b);
+            const r = p.a - q * p.b;
+            return +m[1] === q && +m[2] === r;
+          }
+        }
+        const n = parseFloat(c);
+        return !isNaN(n) && Math.abs(n - actual) < 0.001;
+      }
+
+      function buildFlow(p) {
+        const verbs = { '+': 'add', '-': 'subtract', '*': 'multiply', '/': 'divide' };
+        const symWords = { '+': 'plus', '-': 'minus', '*': 'times', '/': 'divided by' };
+        if (p.type === 'int') {
+          const flow = [
+            `Okay — ${p.a} ${symWords[p.op]} ${p.b}. Before we work it out, what do you think the very first step is?`,
+            `Nice start. We're going to ${verbs[p.op]} ${p.a} and ${p.b}. Take your time.`,
+          ];
+          if (p.op === '+' && p.b > 9) {
+            flow.push(`Try breaking ${p.b} into pieces that are easier to add. What do you get?`);
+          } else if (p.op === '-' && p.a > p.b * 2) {
+            flow.push(`Count up from ${p.b} to ${p.a} if that helps. What's your answer?`);
+          } else if (p.op === '*') {
+            flow.push(`Think of ${p.a} groups of ${p.b}. What's the total?`);
+          } else if (p.op === '/') {
+            flow.push(`Ask yourself: ${p.b} times what gives ${p.a}? What do you get?`);
+          } else {
+            flow.push(`What's your answer?`);
+          }
+          return flow;
+        }
+        if (p.type === 'frac') {
+          if (p.op === '+' || p.op === '-') {
+            const verb = p.op === '+' ? 'add' : 'subtract';
+            if (p.a.d === p.b.d) {
+              return [
+                `Fractions! First look at the bottom numbers — what do you notice?`,
+                `Right — both bottoms are ${p.a.d}. So we just ${verb} the tops.`,
+                `What's ${p.a.n} ${p.op} ${p.b.n} over ${p.a.d}? Write it like "a/b".`,
+              ];
+            }
+            const cd = lcm(p.a.d, p.b.d);
+            const an = p.a.n * (cd / p.a.d);
+            const bn = p.b.n * (cd / p.b.d);
+            return [
+              `Adding fractions — what do the bottom numbers need to be before we can ${verb}?`,
+              `Exactly — the same. The smallest number both ${p.a.d} and ${p.b.d} divide into is ${cd}.`,
+              `So ${p.a.n}/${p.a.d} becomes ${an}/${cd}, and ${p.b.n}/${p.b.d} becomes ${bn}/${cd}.`,
+              `Now ${verb} the tops over ${cd}. What do you get? (write it as a/b)`,
+            ];
+          }
+          if (p.op === '*') {
+            return [
+              `Multiplying fractions — easier than you'd think. What do you do with the top numbers?`,
+              `Right — multiply them. And the bottoms get multiplied too.`,
+              `Try it: (${p.a.n} × ${p.b.n}) over (${p.a.d} × ${p.b.d}). What's your answer? (a/b form)`,
+            ];
+          }
+        }
+        return [`Let's work through this one step at a time.`];
+      }
+
+      const state = { stage: 'idle', problem: null, flow: null, step: 0 };
+      let modal, chat, form, input, sugg;
+
+      function send(text, who) {
+        const div = document.createElement('div');
+        div.className = 'msg ' + (who === 'bot' ? 'msg-bot' : 'msg-user');
+        if (who === 'user') div.classList.add('mono');
+        div.textContent = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      function polyLater(text, delay = 450) {
+        setTimeout(() => send(text, 'bot'), delay);
+      }
+
+      function greet() {
+        chat.innerHTML = '';
+        send("Hi! I'm Poly. Type a math problem and we'll work through it together — I give hints, not answers. Try one of the chips below or type your own.", 'bot');
+      }
+
+      function handle(userText) {
+        send(userText, 'user');
+        if (state.stage === 'idle' || state.stage === 'done') {
+          const p = parseProblem(userText);
+          if (!p) {
+            polyLater("Hmm, I don't quite see a math problem there. Try something like 12 + 8 or 2/3 + 1/6.");
+            return;
+          }
+          state.problem = p;
+          state.flow = buildFlow(p);
+          state.step = 0;
+          state.stage = 'walking';
+          polyLater(state.flow[0]);
+        } else if (state.stage === 'walking') {
+          state.step++;
+          if (state.step < state.flow.length) {
+            polyLater(state.flow[state.step]);
+            if (state.step === state.flow.length - 1) state.stage = 'awaiting-answer';
+          }
+        } else if (state.stage === 'awaiting-answer') {
+          const right = checkStudent(userText, state.problem);
+          const ans = formatAnswer(state.problem, compute(state.problem));
+          if (right) {
+            polyLater(`Yes! ${ans} — and you got there yourself. Want to try another?`);
+          } else {
+            polyLater(`Close — the answer is ${ans}. The thinking matters more than the answer. Want to try another?`);
+          }
+          state.stage = 'done';
+        }
+      }
+
+      function open() {
+        if (!modal) return;
+        if (typeof modal.showModal === 'function') modal.showModal();
+        else modal.setAttribute('open', '');
+        if (state.stage === 'idle' && !chat.children.length) greet();
+        setTimeout(() => input && input.focus(), 50);
+      }
+      function close() {
+        if (typeof modal.close === 'function') modal.close();
+        else modal.removeAttribute('open');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        modal = document.getElementById('helper');
+        chat = document.getElementById('helper-chat');
+        form = document.getElementById('helper-form');
+        input = document.getElementById('helper-input');
+        sugg = document.getElementById('helper-suggestions');
+        if (!modal) return;
+
+        document.querySelectorAll('[data-open-helper]').forEach(el => {
+          el.addEventListener('click', e => { e.preventDefault(); open(); });
+        });
+        document.getElementById('helper-close').addEventListener('click', close);
+        modal.addEventListener('click', e => { if (e.target === modal) close(); });
+
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+          const v = input.value.trim();
+          if (!v) return;
+          input.value = '';
+          handle(v);
+        });
+
+        sugg.addEventListener('click', e => {
+          const b = e.target.closest('[data-fill]');
+          if (!b) return;
+          input.value = b.dataset.fill;
+          input.focus();
+        });
+      });
+    })();
+
     (function () {
       const tips = [
         "Stuck on a problem? Try telling me the first step you'd take — even a guess is a start.",
