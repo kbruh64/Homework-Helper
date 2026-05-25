@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Measurement — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Measurement</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Measurement.</h1>
+    <p>Length, mass, and capacity — the standard units and when to use them. Estimating before measuring builds number sense.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"measurement","title":"Measurement","grade":"Grade 3","questions":[{"q":"What unit measures the length of a pencil?","a":["cm","centimeters","centimetres"],"hints":["Small object — use a small unit."]},{"q":"What unit measures the distance between cities?","a":["km","kilometers","kilometres"],"hints":["Big distance — use a big unit."]},{"q":"How many cm are in 1 m?","a":"100","hints":["Meter to centimeter — multiply by 100."]},{"q":"How many g are in 1 kg?","a":"1000","hints":["Kilo means thousand."]},{"q":"How many mL are in 1 L?","a":"1000","hints":["Liter to milliliter — multiply by 1000."]},{"q":"Which is bigger: 1 L or 500 mL?","a":"1 L","hints":["1 L is 1000 mL."]},{"q":"Which is heavier: 1 kg or 500 g?","a":"1 kg","hints":["1 kg is 1000 g."]},{"q":"Estimate the mass of an apple in grams (closest to 150, 1500, or 15)?","a":"150","hints":["Apples are light, but not feather-light."]},{"q":"Estimate the length of a doorway in meters (closest to 0.2, 2, or 20)?","a":"2","hints":["Doors are about as tall as a tall adult."]},{"q":"How many cm in 3 m?","a":"300","hints":["Multiply 3 by 100."]},{"q":"How many g in 5 kg?","a":"5000","hints":["Multiply 5 by 1000."]},{"q":"How many mL in 2 L?","a":"2000","hints":["Multiply 2 by 1000."]},{"q":"What unit measures the mass of a backpack?","a":["kg","kilograms"],"hints":["Heavier items use kg."]},{"q":"What unit measures water in a glass?","a":["mL","milliliters","millilitres"],"hints":["Small amounts of liquid."]},{"q":"Which is shorter: 50 cm or 1 m?","a":"50 cm","hints":["1 m is 100 cm."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

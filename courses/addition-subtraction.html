@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Addition & Subtraction — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Addition & Subtraction</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Addition & Subtraction.</h1>
+    <p>Adding and subtracting within 1,000, with regrouping and word problems. The goal is fluency, not speed.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"addition-subtraction","title":"Addition & Subtraction","grade":"Grade 3","questions":[{"q":"497 + 166","a":"663","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"121 + 300","a":"421","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"647 + 265","a":"912","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"153 + 159","a":"312","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"328 + 119","a":"447","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"111 + 252","a":"363","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"394 + 156","a":"550","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"653 + 70","a":"723","hints":["Add ones first, then tens, then hundreds.","Remember to carry when a column passes 9."]},{"q":"731 − 207","a":"524","hints":["Line up the place values.","Borrow from the next column if you need to."]},{"q":"589 − 363","a":"226","hints":["Line up the place values.","Borrow from the next column if you need to."]},{"q":"612 − 330","a":"282","hints":["Line up the place values.","Borrow from the next column if you need to."]},{"q":"445 − 277","a":"168","hints":["Line up the place values.","Borrow from the next column if you need to."]},{"q":"732 − 235","a":"497","hints":["Line up the place values.","Borrow from the next column if you need to."]},{"q":"787 − 160","a":"627","hints":["Line up the place values.","Borrow from the next column if you need to."]},{"q":"570 − 181","a":"389","hints":["Line up the place values.","Borrow from the next column if you need to."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Factors & Multiples — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Factors & Multiples</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Factors & Multiples.</h1>
+    <p>Factors divide evenly into a number. Multiples are what you get by multiplying. Prime numbers are the ones with only two factors.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"factors-multiples","title":"Factors & Multiples","grade":"Grade 4","questions":[{"q":"Is 12 a multiple of 3?","a":"yes","hints":["3 × 4 = 12."]},{"q":"Is 17 prime?","a":"yes","hints":["Try dividing by 2, 3, 5, 7."]},{"q":"Is 21 prime?","a":"no","hints":["3 × 7 = 21."]},{"q":"List factors of 6 (comma separated, low to high).","a":["1, 2, 3, 6","1,2,3,6"],"hints":["Numbers that divide it evenly."]},{"q":"List factors of 10 (comma separated, low to high).","a":["1, 2, 5, 10","1,2,5,10"],"hints":["1 and the number itself always count."]},{"q":"First five multiples of 4 (comma separated)?","a":["4, 8, 12, 16, 20","4,8,12,16,20"],"hints":["Start with 4, keep adding 4."]},{"q":"First five multiples of 7 (comma separated)?","a":["7, 14, 21, 28, 35","7,14,21,28,35"],"hints":["7 times 1, 2, 3, 4, 5."]},{"q":"Is 1 prime?","a":"no","hints":["A prime needs exactly two factors."]},{"q":"Smallest prime number?","a":"2","hints":["Only 1 and itself divide it."]},{"q":"Is 15 prime or composite?","a":"composite","hints":["3 × 5 = 15."]},{"q":"Is 11 prime or composite?","a":"prime","hints":["Try dividing by 2, 3, 5."]},{"q":"Common factor of 6 and 9?","a":"3","hints":["Both divide by what number?"]},{"q":"Common factor of 8 and 12?","a":"4","hints":["Highest number that divides both."]},{"q":"Is 25 a multiple of 5?","a":"yes","hints":["5 × 5 = 25."]},{"q":"How many factors does 16 have?","a":"5","hints":["1, 2, 4, 8, 16."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

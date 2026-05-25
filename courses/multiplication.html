@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Multiplication — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Multiplication</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Multiplication.</h1>
+    <p>Multiplication is a shortcut for adding equal groups. Once that clicks, the times tables are just memory.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"multiplication","title":"Multiplication","grade":"Grade 3","questions":[{"q":"2 × 10","a":"20","hints":["Think of 2 groups of 10.","Try skip-counting by 10."]},{"q":"4 × 7","a":"28","hints":["Think of 4 groups of 7.","Try skip-counting by 7."]},{"q":"10 × 4","a":"40","hints":["Think of 10 groups of 4.","Try skip-counting by 4."]},{"q":"5 × 6","a":"30","hints":["Think of 5 groups of 6.","Try skip-counting by 6."]},{"q":"3 × 3","a":"9","hints":["Think of 3 groups of 3.","Try skip-counting by 3."]},{"q":"3 × 10","a":"30","hints":["Think of 3 groups of 10.","Try skip-counting by 10."]},{"q":"6 × 2","a":"12","hints":["Think of 6 groups of 2.","Try skip-counting by 2."]},{"q":"6 × 9","a":"54","hints":["Think of 6 groups of 9.","Try skip-counting by 9."]},{"q":"2 × 3","a":"6","hints":["Think of 2 groups of 3.","Try skip-counting by 3."]},{"q":"8 × 9","a":"72","hints":["Think of 8 groups of 9.","Try skip-counting by 9."]},{"q":"9 × 2","a":"18","hints":["Think of 9 groups of 2.","Try skip-counting by 2."]},{"q":"8 × 10","a":"80","hints":["Think of 8 groups of 10.","Try skip-counting by 10."]},{"q":"4 × 0","a":"0","hints":["Anything times zero is zero."]},{"q":"9 × 1","a":"9","hints":["Anything times one stays itself."]},{"q":"7 × 10","a":"70","hints":["Multiplying by 10 — add a zero."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

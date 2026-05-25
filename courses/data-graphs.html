@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data & Graphs — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Data & Graphs</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Data & Graphs.</h1>
+    <p>Collecting data, drawing it as a chart, and reading what the chart says back. Bar graphs and pictographs are the workhorses.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"data-graphs","title":"Data & Graphs","grade":"Grade 3","questions":[{"q":"A pictograph: 4 stars for apples, each star = 5. How many apples?","a":"20","hints":["4 × 5."]},{"q":"A bar graph: dogs at 8, cats at 5. How many more dogs?","a":"3","hints":["8 minus 5."]},{"q":"A tally with 3 groups of 5 and 2 extra marks. Total?","a":"17","hints":["15 + 2."]},{"q":"A pictograph: 6 symbols, each = 10. Total?","a":"60","hints":["6 × 10."]},{"q":"On a bar graph, the bar for red reaches 12. The bar for blue reaches 7. Total red and blue?","a":"19","hints":["12 + 7."]},{"q":"Most common color in: red, blue, red, green, red, blue?","a":"red","hints":["Count each color."]},{"q":"A tally with 4 groups of 5. Total?","a":"20","hints":["4 × 5."]},{"q":"A bar graph: A is 9, B is 14, C is 6. Which is tallest?","a":"B","hints":["Highest number."]},{"q":"A pictograph: 2.5 symbols, each = 4. Total?","a":"10","hints":["2.5 × 4."]},{"q":"Total of 7, 3, 5, 4, 6?","a":"25","hints":["Add them all."]},{"q":"Smallest of 12, 7, 19, 3, 8?","a":"3","hints":["Look for the smallest number."]},{"q":"Largest of 6, 11, 4, 9, 2?","a":"11","hints":["Look for the biggest."]},{"q":"Difference between largest and smallest of 14, 8, 6, 20, 11?","a":"14","hints":["20 minus 6."]},{"q":"A bar graph: Monday 5, Tuesday 8. Total over 2 days?","a":"13","hints":["5 + 8."]},{"q":"A pictograph: 0.5 of a symbol where each = 10. Value?","a":"5","hints":["Half of 10."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

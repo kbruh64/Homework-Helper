@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Time — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Time</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Time.</h1>
+    <p>Reading clocks, knowing AM from PM, and figuring out how long something took. Elapsed time is the part most kids find tricky.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"time","title":"Time","grade":"Grade 3","questions":[{"q":"A movie starts at 2:00 and ends at 3:30. How long is it (in minutes)?","a":"90","hints":["1 hour 30 minutes."]},{"q":"A class is from 9:15 to 10:00. How long is it (in minutes)?","a":"45","hints":["From 9:15 to 10:00 — count up."]},{"q":"School starts at 8:30 AM. Recess is 2 hours later. What time?","a":["10:30","10:30 am"],"hints":["Add 2 hours to 8:30."]},{"q":"It is 7:48. How many minutes until 8:00?","a":"12","hints":["Count up from 48 to 60."]},{"q":"How many minutes are in 2 hours?","a":"120","hints":["60 × 2."]},{"q":"How many minutes are in half an hour?","a":"30","hints":["Half of 60."]},{"q":"How many seconds in a minute?","a":"60","hints":["Same number as minutes in an hour."]},{"q":"Is 11:00 AM morning or evening?","a":"morning","hints":["AM is before noon."]},{"q":"Is 7:00 PM morning or evening?","a":"evening","hints":["PM is after noon."]},{"q":"From 3:00 to 5:00 is how many hours?","a":"2","hints":["5 minus 3."]},{"q":"From 10:20 to 10:50 is how many minutes?","a":"30","hints":["50 minus 20."]},{"q":"From 2:45 to 3:00 is how many minutes?","a":"15","hints":["Count up from 45 to 60."]},{"q":"A 90 minute movie. How long in hours and minutes (write like 1h30)?","a":["1h30","1 hour 30 minutes","1:30"],"hints":["90 = 60 + 30."]},{"q":"A bus leaves at 6:15 PM. You arrive at 5:50 PM. How long until it leaves (in minutes)?","a":"25","hints":["From 5:50 to 6:15."]},{"q":"What time is 1 hour after 11:45?","a":["12:45","12:45 pm"],"hints":["Add an hour — the hour goes up by 1."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

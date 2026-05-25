@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Multi-Digit Addition & Subtraction — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Multi-Digit Addition & Subtraction</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Multi-Digit Addition & Subtraction.</h1>
+    <p>Working with numbers up to six digits. Same algorithm, more columns — line them up by place value and trust the process.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"multi-digit-add-sub","title":"Multi-Digit Addition & Subtraction","grade":"Grade 4","questions":[{"q":"6,795 + 1,871","a":"8666","hints":["Line up by place value."]},{"q":"2,427 + 3,445","a":"5872","hints":["Line up by place value."]},{"q":"1,396 + 700","a":"2096","hints":["Line up by place value."]},{"q":"5,990 + 3,433","a":"9423","hints":["Line up by place value."]},{"q":"4,483 + 2,379","a":"6862","hints":["Line up by place value."]},{"q":"2,119 + 2,397","a":"4516","hints":["Line up by place value."]},{"q":"7,213 + 3,360","a":"10573","hints":["Line up by place value."]},{"q":"4,998 + 2,554","a":"7552","hints":["Line up by place value."]},{"q":"6,355 − 2,046","a":"4309","hints":["Borrow when you need to."]},{"q":"5,503 − 2,361","a":"3142","hints":["Borrow when you need to."]},{"q":"5,932 − 3,569","a":"2363","hints":["Borrow when you need to."]},{"q":"7,852 − 3,334","a":"4518","hints":["Borrow when you need to."]},{"q":"6,809 − 1,086","a":"5723","hints":["Borrow when you need to."]},{"q":"5,248 − 3,552","a":"1696","hints":["Borrow when you need to."]},{"q":"5,990 − 3,960","a":"2030","hints":["Borrow when you need to."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

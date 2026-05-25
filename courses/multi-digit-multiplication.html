@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Multi-Digit Multiplication — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Multi-Digit Multiplication</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Multi-Digit Multiplication.</h1>
+    <p>Multiplying 2, 3, and 4-digit numbers. The standard algorithm and the area model both work — pick the one that helps you see it.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"multi-digit-multiplication","title":"Multi-Digit Multiplication","grade":"Grade 4","questions":[{"q":"83 × 6","a":"498","hints":["Multiply each digit, then add."]},{"q":"50 × 4","a":"200","hints":["Multiply each digit, then add."]},{"q":"13 × 7","a":"91","hints":["Multiply each digit, then add."]},{"q":"13 × 3","a":"39","hints":["Multiply each digit, then add."]},{"q":"38 × 9","a":"342","hints":["Multiply each digit, then add."]},{"q":"54 × 5","a":"270","hints":["Multiply each digit, then add."]},{"q":"88 × 6","a":"528","hints":["Multiply each digit, then add."]},{"q":"85 × 7","a":"595","hints":["Multiply each digit, then add."]},{"q":"26 × 26","a":"676","hints":["Use the area model or standard algorithm."]},{"q":"16 × 29","a":"464","hints":["Use the area model or standard algorithm."]},{"q":"13 × 17","a":"221","hints":["Use the area model or standard algorithm."]},{"q":"22 × 20","a":"440","hints":["Use the area model or standard algorithm."]},{"q":"18 × 13","a":"234","hints":["Use the area model or standard algorithm."]},{"q":"24 × 20","a":"480","hints":["Use the area model or standard algorithm."]},{"q":"12 × 14","a":"168","hints":["Use the area model or standard algorithm."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

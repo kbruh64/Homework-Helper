@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Long Division — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Long Division</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Long Division.</h1>
+    <p>Dividing big numbers by a single-digit divisor. Four steps repeated: divide, multiply, subtract, bring down.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"long-division","title":"Long Division","grade":"Grade 4","questions":[{"q":"609 ÷ 7","a":"87","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"156 ÷ 3","a":"52","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"144 ÷ 9","a":"16","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"42 ÷ 3","a":"14","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"330 ÷ 5","a":"66","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"472 ÷ 8","a":"59","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"265 ÷ 5","a":"53","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"350 ÷ 5","a":"70","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"144 ÷ 6","a":"24","hints":["Use the four-step cycle: divide, multiply, subtract, bring down."]},{"q":"159 ÷ 7 (write as \"q remainder r\")","a":["22 remainder 5","22r5","22 r 5"],"hints":["Find the largest whole number first."]},{"q":"89 ÷ 4 (write as \"q remainder r\")","a":["22 remainder 1","22r1","22 r 1"],"hints":["Find the largest whole number first."]},{"q":"269 ÷ 6 (write as \"q remainder r\")","a":["44 remainder 5","44r5","44 r 5"],"hints":["Find the largest whole number first."]},{"q":"119 ÷ 3 (write as \"q remainder r\")","a":["39 remainder 2","39r2","39 r 2"],"hints":["Find the largest whole number first."]},{"q":"51 ÷ 4 (write as \"q remainder r\")","a":["12 remainder 3","12r3","12 r 3"],"hints":["Find the largest whole number first."]},{"q":"116 ÷ 7 (write as \"q remainder r\")","a":["16 remainder 4","16r4","16 r 4"],"hints":["Find the largest whole number first."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

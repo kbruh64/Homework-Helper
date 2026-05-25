@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Patterns — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Patterns</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Patterns.</h1>
+    <p>Numbers and shapes that repeat by a rule. The trick is figuring out the rule from a few terms — then using it to predict what comes next.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"patterns","title":"Patterns","grade":"Grade 3","questions":[{"q":"Next in: 3, 6, 9, 12, ?","a":"15","hints":["Rule is +3."]},{"q":"Next in: 2, 4, 8, 16, ?","a":"32","hints":["Rule is ×2."]},{"q":"Next in: 5, 10, 15, 20, ?","a":"25","hints":["Rule is +5."]},{"q":"Next in: 1, 4, 7, 10, ?","a":"13","hints":["Rule is +3."]},{"q":"Next in: 100, 90, 80, 70, ?","a":"60","hints":["Rule is −10."]},{"q":"Rule is +4. After 7, what is next?","a":"11","hints":["7 + 4."]},{"q":"Rule is ×3. After 4, what is next?","a":"12","hints":["4 × 3."]},{"q":"Rule is −2. After 18, what is next?","a":"16","hints":["18 − 2."]},{"q":"Next in: 1, 2, 4, 7, 11, ?","a":"16","hints":["Differences grow by 1."]},{"q":"Next in: 50, 45, 40, 35, ?","a":"30","hints":["Rule is −5."]},{"q":"Next in: A, B, A, B, A, ?","a":"B","hints":["Pattern alternates."]},{"q":"Next in: 11, 22, 33, 44, ?","a":"55","hints":["Rule is +11."]},{"q":"Rule: add 6. Output for 9?","a":"15","hints":["9 + 6."]},{"q":"Rule: subtract 3. Output for 20?","a":"17","hints":["20 − 3."]},{"q":"Next in: 0, 5, 10, 15, ?","a":"20","hints":["Rule is +5."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

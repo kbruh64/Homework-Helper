@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Money — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Money</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Money.</h1>
+    <p>Coins, bills, totals, and making change. Money is just decimals dressed up — but the practical version comes first.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"money","title":"Money","grade":"Grade 3","questions":[{"q":"How much is 3 quarters? (in cents)","a":"75","hints":["A quarter is 25¢."]},{"q":"How much is 4 dimes? (in cents)","a":"40","hints":["A dime is 10¢."]},{"q":"How much is 7 nickels? (in cents)","a":"35","hints":["A nickel is 5¢."]},{"q":"How much is 2 quarters + 3 dimes? (in cents)","a":"80","hints":["50 + 30."]},{"q":"A toy costs $4.65. You pay $5.00. Change? (in dollars, like 0.35)","a":["0.35","$0.35","35"],"hints":["$5 minus $4.65."]},{"q":"A book is $1.75. You have $2.00. Change in cents?","a":"25","hints":["$2 minus $1.75."]},{"q":"How many quarters make $1?","a":"4","hints":["Each is 25¢. 4 × 25 = 100."]},{"q":"How many dimes make $1?","a":"10","hints":["Each is 10¢."]},{"q":"How many cents in $2.50?","a":"250","hints":["Multiply by 100."]},{"q":"$3 + $1.50 = ? (in dollars)","a":["4.50","4.5","$4.50"],"hints":["Add the dollars and the cents."]},{"q":"$5 − $2.75 = ? (in dollars)","a":["2.25","$2.25"],"hints":["Subtract carefully."]},{"q":"A pack of pencils is $1.20. Two packs cost?","a":["2.40","$2.40"],"hints":["Double the price."]},{"q":"Three quarters and one dime — total cents?","a":"85","hints":["75 + 10."]},{"q":"A juice is $2.30. You have a $5. Change in dollars?","a":["2.70","$2.70"],"hints":["$5 minus $2.30."]},{"q":"You have 5 dimes and 3 nickels. Total cents?","a":"65","hints":["50 + 15."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fractions — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Fractions</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Fractions.</h1>
+    <p>A fraction is a way to name part of a whole. The bottom number is how many pieces it is cut into; the top is how many you have.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"fractions","title":"Fractions","grade":"Grade 3","questions":[{"q":"Which is larger: 1/2 or 1/4?","a":"1/2","hints":["Fewer pieces means each one is bigger."]},{"q":"Which is larger: 1/3 or 1/6?","a":"1/3","hints":["Smaller bottom number = bigger piece."]},{"q":"Is 2/4 the same as 1/2?","a":["yes","1/2"],"hints":["Try simplifying 2/4."]},{"q":"Is 3/6 equal to 1/2?","a":["yes","1/2"],"hints":["Both numbers divide by 3."]},{"q":"What is the numerator in 3/8?","a":"3","hints":["Top number is the numerator."]},{"q":"What is the denominator in 5/9?","a":"9","hints":["Bottom number is the denominator."]},{"q":"Write 1/2 as an equivalent fraction with denominator 6.","a":"3/6","hints":["Multiply top and bottom by 3."]},{"q":"Write 1/4 as an equivalent fraction with denominator 8.","a":"2/8","hints":["Multiply top and bottom by 2."]},{"q":"Which is larger: 3/5 or 2/5?","a":"3/5","hints":["Same bottom — compare tops."]},{"q":"Which is smaller: 5/8 or 7/8?","a":"5/8","hints":["Same bottom — smaller top wins."]},{"q":"What fraction is shaded if 3 of 4 equal parts are colored?","a":"3/4","hints":["Top: shaded. Bottom: total parts."]},{"q":"What fraction is shaded if 2 of 6 equal parts are colored?","a":"2/6","hints":["Two shaded out of six total."]},{"q":"Is 1/3 bigger or smaller than 1/2?","a":"smaller","hints":["Halves are bigger than thirds."]},{"q":"How many fourths make a whole?","a":"4","hints":["1/4 + 1/4 + 1/4 + 1/4 = 1."]},{"q":"How many eighths make a whole?","a":"8","hints":["Eight pieces of size 1/8."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

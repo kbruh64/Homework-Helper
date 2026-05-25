@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data & Line Plots — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Data & Line Plots</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Data & Line Plots.</h1>
+    <p>Reading and creating data displays — including line plots that show fractional values. Asking what the data actually says is the real skill.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"data-line-plots","title":"Data & Line Plots","grade":"Grade 4","questions":[{"q":"A line plot: 3 Xs at 1/4, 2 Xs at 1/2. Total students?","a":"5","hints":["3 + 2."]},{"q":"Largest value: 4, 7, 2, 9, 5?","a":"9","hints":["Look for the biggest."]},{"q":"Smallest value: 4, 7, 2, 9, 5?","a":"2","hints":["Look for the smallest."]},{"q":"Range of 4, 7, 2, 9, 5? (largest minus smallest)","a":"7","hints":["9 minus 2."]},{"q":"Most common in: 3, 5, 5, 7, 5, 9?","a":"5","hints":["Count each one."]},{"q":"Sum of 2, 4, 6, 8, 10?","a":"30","hints":["Add them up."]},{"q":"A bar graph: soccer 14, basketball 9, tennis 6. Total kids?","a":"29","hints":["14 + 9 + 6."]},{"q":"On a bar graph, the difference between bars at 18 and 11?","a":"7","hints":["18 − 11."]},{"q":"Average of 4, 6, 8 (mean)?","a":"6","hints":["Add them, divide by 3."]},{"q":"Mean of 5, 10, 15?","a":"10","hints":["Sum is 30, divide by 3."]},{"q":"A line plot with values 1/4, 1/2, 1/2, 3/4 — how many data points?","a":"4","hints":["Count the Xs."]},{"q":"Mode of 2, 3, 3, 5, 7, 3?","a":"3","hints":["Most frequent."]},{"q":"Median of 1, 3, 5, 7, 9?","a":"5","hints":["Middle number when ordered."]},{"q":"Total of: red 4, blue 7, green 3?","a":"14","hints":["Add all three."]},{"q":"On a pictograph, 3 symbols where each = 6. Value?","a":"18","hints":["3 × 6."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

@@ -540,6 +540,483 @@ const grade4 = [
   },
 ];
 
+// ─── QUESTION BANKS ─────────────────────────────────────────────────────────
+// Seeded PRNG so question banks are stable across builds
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const randInt = (rng, lo, hi) => Math.floor(rng() * (hi - lo + 1)) + lo;
+const gcdN = (a, b) => b === 0 ? a : gcdN(b, a % b);
+
+const banks = {
+  'place-value': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 7; i++) {
+      const n = randInt(rng, 100, 999);
+      const digits = String(n).split('').map(Number);
+      const pos = randInt(rng, 0, 2);
+      const placeVal = digits[pos] * Math.pow(10, 2 - pos);
+      qs.push({ q: `What is the value of the ${digits[pos]} in ${n}?`, a: String(placeVal),
+        hints: ['Find which place that digit is in.', 'Hundreds, tens, or ones — what column?'] });
+    }
+    for (let i = 0; i < 4; i++) {
+      const n = randInt(rng, 100, 999);
+      const round = Math.round(n / 10) * 10;
+      qs.push({ q: `Round ${n} to the nearest 10.`, a: String(round),
+        hints: ['Look at the ones digit.', 'If it is 5 or more, round up.'] });
+    }
+    for (let i = 0; i < 4; i++) {
+      const n = randInt(rng, 150, 950);
+      const round = Math.round(n / 100) * 100;
+      qs.push({ q: `Round ${n} to the nearest 100.`, a: String(round),
+        hints: ['Look at the tens digit.', 'If it is 5 or more, round up.'] });
+    }
+    return qs;
+  },
+
+  'addition-subtraction': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 8; i++) {
+      const a = randInt(rng, 100, 800);
+      const b = randInt(rng, 50, 350);
+      qs.push({ q: `${a} + ${b}`, a: String(a + b),
+        hints: ['Add ones first, then tens, then hundreds.', 'Remember to carry when a column passes 9.'] });
+    }
+    for (let i = 0; i < 7; i++) {
+      const a = randInt(rng, 400, 900);
+      const b = randInt(rng, 100, 380);
+      qs.push({ q: `${a} − ${b}`, a: String(a - b),
+        hints: ['Line up the place values.', 'Borrow from the next column if you need to.'] });
+    }
+    return qs;
+  },
+
+  multiplication: (rng) => {
+    const qs = [];
+    for (let i = 0; i < 12; i++) {
+      const a = randInt(rng, 2, 10);
+      const b = randInt(rng, 2, 10);
+      qs.push({ q: `${a} × ${b}`, a: String(a * b),
+        hints: [`Think of ${a} groups of ${b}.`, `Try skip-counting by ${b}.`] });
+    }
+    qs.push({ q: '4 × 0', a: '0', hints: ['Anything times zero is zero.'] });
+    qs.push({ q: '9 × 1', a: '9', hints: ['Anything times one stays itself.'] });
+    qs.push({ q: '7 × 10', a: '70', hints: ['Multiplying by 10 — add a zero.'] });
+    return qs;
+  },
+
+  division: (rng) => {
+    const qs = [];
+    for (let i = 0; i < 11; i++) {
+      const b = randInt(rng, 2, 9);
+      const ans = randInt(rng, 2, 10);
+      qs.push({ q: `${b * ans} ÷ ${b}`, a: String(ans),
+        hints: [`${b} times what gives ${b * ans}?`, 'Use the times tables you know.'] });
+    }
+    qs.push({ q: '0 ÷ 5', a: '0', hints: ['Zero shared is still zero.'] });
+    qs.push({ q: '8 ÷ 1', a: '8', hints: ['Divided by 1 — same as itself.'] });
+    qs.push({ q: '40 ÷ 8', a: '5', hints: ['What is 8 × 5?'] });
+    qs.push({ q: '12 ÷ 4', a: '3', hints: ['How many 4s make 12?'] });
+    return qs;
+  },
+
+  fractions: (rng) => {
+    return [
+      { q: 'Which is larger: 1/2 or 1/4?', a: '1/2', hints: ['Fewer pieces means each one is bigger.'] },
+      { q: 'Which is larger: 1/3 or 1/6?', a: '1/3', hints: ['Smaller bottom number = bigger piece.'] },
+      { q: 'Is 2/4 the same as 1/2?', a: ['yes', '1/2'], hints: ['Try simplifying 2/4.'] },
+      { q: 'Is 3/6 equal to 1/2?', a: ['yes', '1/2'], hints: ['Both numbers divide by 3.'] },
+      { q: 'What is the numerator in 3/8?', a: '3', hints: ['Top number is the numerator.'] },
+      { q: 'What is the denominator in 5/9?', a: '9', hints: ['Bottom number is the denominator.'] },
+      { q: 'Write 1/2 as an equivalent fraction with denominator 6.', a: '3/6', hints: ['Multiply top and bottom by 3.'] },
+      { q: 'Write 1/4 as an equivalent fraction with denominator 8.', a: '2/8', hints: ['Multiply top and bottom by 2.'] },
+      { q: 'Which is larger: 3/5 or 2/5?', a: '3/5', hints: ['Same bottom — compare tops.'] },
+      { q: 'Which is smaller: 5/8 or 7/8?', a: '5/8', hints: ['Same bottom — smaller top wins.'] },
+      { q: 'What fraction is shaded if 3 of 4 equal parts are colored?', a: '3/4', hints: ['Top: shaded. Bottom: total parts.'] },
+      { q: 'What fraction is shaded if 2 of 6 equal parts are colored?', a: '2/6', hints: ['Two shaded out of six total.'] },
+      { q: 'Is 1/3 bigger or smaller than 1/2?', a: 'smaller', hints: ['Halves are bigger than thirds.'] },
+      { q: 'How many fourths make a whole?', a: '4', hints: ['1/4 + 1/4 + 1/4 + 1/4 = 1.'] },
+      { q: 'How many eighths make a whole?', a: '8', hints: ['Eight pieces of size 1/8.'] },
+    ];
+  },
+
+  measurement: () => [
+    { q: 'What unit measures the length of a pencil?', a: ['cm', 'centimeters', 'centimetres'], hints: ['Small object — use a small unit.'] },
+    { q: 'What unit measures the distance between cities?', a: ['km', 'kilometers', 'kilometres'], hints: ['Big distance — use a big unit.'] },
+    { q: 'How many cm are in 1 m?', a: '100', hints: ['Meter to centimeter — multiply by 100.'] },
+    { q: 'How many g are in 1 kg?', a: '1000', hints: ['Kilo means thousand.'] },
+    { q: 'How many mL are in 1 L?', a: '1000', hints: ['Liter to milliliter — multiply by 1000.'] },
+    { q: 'Which is bigger: 1 L or 500 mL?', a: '1 L', hints: ['1 L is 1000 mL.'] },
+    { q: 'Which is heavier: 1 kg or 500 g?', a: '1 kg', hints: ['1 kg is 1000 g.'] },
+    { q: 'Estimate the mass of an apple in grams (closest to 150, 1500, or 15)?', a: '150', hints: ['Apples are light, but not feather-light.'] },
+    { q: 'Estimate the length of a doorway in meters (closest to 0.2, 2, or 20)?', a: '2', hints: ['Doors are about as tall as a tall adult.'] },
+    { q: 'How many cm in 3 m?', a: '300', hints: ['Multiply 3 by 100.'] },
+    { q: 'How many g in 5 kg?', a: '5000', hints: ['Multiply 5 by 1000.'] },
+    { q: 'How many mL in 2 L?', a: '2000', hints: ['Multiply 2 by 1000.'] },
+    { q: 'What unit measures the mass of a backpack?', a: ['kg', 'kilograms'], hints: ['Heavier items use kg.'] },
+    { q: 'What unit measures water in a glass?', a: ['mL', 'milliliters', 'millilitres'], hints: ['Small amounts of liquid.'] },
+    { q: 'Which is shorter: 50 cm or 1 m?', a: '50 cm', hints: ['1 m is 100 cm.'] },
+  ],
+
+  time: () => [
+    { q: 'A movie starts at 2:00 and ends at 3:30. How long is it (in minutes)?', a: '90', hints: ['1 hour 30 minutes.'] },
+    { q: 'A class is from 9:15 to 10:00. How long is it (in minutes)?', a: '45', hints: ['From 9:15 to 10:00 — count up.'] },
+    { q: 'School starts at 8:30 AM. Recess is 2 hours later. What time?', a: ['10:30', '10:30 am'], hints: ['Add 2 hours to 8:30.'] },
+    { q: 'It is 7:48. How many minutes until 8:00?', a: '12', hints: ['Count up from 48 to 60.'] },
+    { q: 'How many minutes are in 2 hours?', a: '120', hints: ['60 × 2.'] },
+    { q: 'How many minutes are in half an hour?', a: '30', hints: ['Half of 60.'] },
+    { q: 'How many seconds in a minute?', a: '60', hints: ['Same number as minutes in an hour.'] },
+    { q: 'Is 11:00 AM morning or evening?', a: 'morning', hints: ['AM is before noon.'] },
+    { q: 'Is 7:00 PM morning or evening?', a: 'evening', hints: ['PM is after noon.'] },
+    { q: 'From 3:00 to 5:00 is how many hours?', a: '2', hints: ['5 minus 3.'] },
+    { q: 'From 10:20 to 10:50 is how many minutes?', a: '30', hints: ['50 minus 20.'] },
+    { q: 'From 2:45 to 3:00 is how many minutes?', a: '15', hints: ['Count up from 45 to 60.'] },
+    { q: 'A 90 minute movie. How long in hours and minutes (write like 1h30)?', a: ['1h30', '1 hour 30 minutes', '1:30'], hints: ['90 = 60 + 30.'] },
+    { q: 'A bus leaves at 6:15 PM. You arrive at 5:50 PM. How long until it leaves (in minutes)?', a: '25', hints: ['From 5:50 to 6:15.'] },
+    { q: 'What time is 1 hour after 11:45?', a: ['12:45', '12:45 pm'], hints: ['Add an hour — the hour goes up by 1.'] },
+  ],
+
+  money: () => [
+    { q: 'How much is 3 quarters? (in cents)', a: '75', hints: ['A quarter is 25¢.'] },
+    { q: 'How much is 4 dimes? (in cents)', a: '40', hints: ['A dime is 10¢.'] },
+    { q: 'How much is 7 nickels? (in cents)', a: '35', hints: ['A nickel is 5¢.'] },
+    { q: 'How much is 2 quarters + 3 dimes? (in cents)', a: '80', hints: ['50 + 30.'] },
+    { q: 'A toy costs $4.65. You pay $5.00. Change? (in dollars, like 0.35)', a: ['0.35', '$0.35', '35'], hints: ['$5 minus $4.65.'] },
+    { q: 'A book is $1.75. You have $2.00. Change in cents?', a: '25', hints: ['$2 minus $1.75.'] },
+    { q: 'How many quarters make $1?', a: '4', hints: ['Each is 25¢. 4 × 25 = 100.'] },
+    { q: 'How many dimes make $1?', a: '10', hints: ['Each is 10¢.'] },
+    { q: 'How many cents in $2.50?', a: '250', hints: ['Multiply by 100.'] },
+    { q: '$3 + $1.50 = ? (in dollars)', a: ['4.50', '4.5', '$4.50'], hints: ['Add the dollars and the cents.'] },
+    { q: '$5 − $2.75 = ? (in dollars)', a: ['2.25', '$2.25'], hints: ['Subtract carefully.'] },
+    { q: 'A pack of pencils is $1.20. Two packs cost?', a: ['2.40', '$2.40'], hints: ['Double the price.'] },
+    { q: 'Three quarters and one dime — total cents?', a: '85', hints: ['75 + 10.'] },
+    { q: 'A juice is $2.30. You have a $5. Change in dollars?', a: ['2.70', '$2.70'], hints: ['$5 minus $2.30.'] },
+    { q: 'You have 5 dimes and 3 nickels. Total cents?', a: '65', hints: ['50 + 15.'] },
+  ],
+
+  geometry: () => [
+    { q: 'How many sides does a triangle have?', a: '3', hints: ['Tri means three.'] },
+    { q: 'How many sides does a hexagon have?', a: '6', hints: ['Hex means six.'] },
+    { q: 'How many sides does a pentagon have?', a: '5', hints: ['Penta means five.'] },
+    { q: 'How many corners does a square have?', a: '4', hints: ['Same as the number of sides.'] },
+    { q: 'How many faces does a cube have?', a: '6', hints: ['Top, bottom, and four sides.'] },
+    { q: 'How many edges does a cube have?', a: '12', hints: ['Four on top, four on bottom, four going up.'] },
+    { q: 'How many vertices does a cube have?', a: '8', hints: ['Four corners on top, four on bottom.'] },
+    { q: 'A shape with all sides equal and 4 right angles is a?', a: 'square', hints: ['It is a special rectangle.'] },
+    { q: 'A 3D shape that rolls smoothly with no edges is a?', a: 'sphere', hints: ['Like a ball.'] },
+    { q: 'How many lines of symmetry does a square have?', a: '4', hints: ['Two diagonals plus the two midlines.'] },
+    { q: 'How many lines of symmetry does a circle have?', a: ['infinite', 'many', 'unlimited'], hints: ['Any line through the center works.'] },
+    { q: 'A flat shape with 4 sides where opposite sides are equal is a?', a: ['rectangle', 'parallelogram'], hints: ['Has 4 right angles if it is the most common type.'] },
+    { q: 'How many faces does a cylinder have?', a: '3', hints: ['Top circle, bottom circle, and the curved side.'] },
+    { q: 'A 3D shape that comes to a point with a circle base is a?', a: 'cone', hints: ['Like an ice-cream cone.'] },
+    { q: 'How many sides does an octagon have?', a: '8', hints: ['Octo means eight.'] },
+  ],
+
+  'area-perimeter': () => [
+    { q: 'Perimeter of a rectangle with sides 4 and 6?', a: '20', hints: ['Add all four sides.', '4 + 6 + 4 + 6.'] },
+    { q: 'Area of a rectangle with sides 4 and 6?', a: '24', hints: ['Length times width.'] },
+    { q: 'Perimeter of a square with side 7?', a: '28', hints: ['4 × 7.'] },
+    { q: 'Area of a square with side 7?', a: '49', hints: ['7 × 7.'] },
+    { q: 'Perimeter of a rectangle 8 by 3?', a: '22', hints: ['2 × (8 + 3).'] },
+    { q: 'Area of a rectangle 8 by 3?', a: '24', hints: ['8 × 3.'] },
+    { q: 'A square garden has side 5 m. Area in square meters?', a: '25', hints: ['5 × 5.'] },
+    { q: 'A square garden has side 5 m. Perimeter in meters?', a: '20', hints: ['4 × 5.'] },
+    { q: 'Perimeter of a triangle with sides 3, 4, 5?', a: '12', hints: ['Add all three sides.'] },
+    { q: 'Perimeter of a hexagon with all sides 4?', a: '24', hints: ['6 × 4.'] },
+    { q: 'Area of a 10 by 2 rectangle?', a: '20', hints: ['10 × 2.'] },
+    { q: 'Perimeter of a 10 by 2 rectangle?', a: '24', hints: ['2 × (10 + 2).'] },
+    { q: 'Area of a 6 by 6 square?', a: '36', hints: ['6 × 6.'] },
+    { q: 'Perimeter of a rectangle 9 by 1?', a: '20', hints: ['2 × (9 + 1).'] },
+    { q: 'A book cover is 20 cm by 15 cm. Area in sq cm?', a: '300', hints: ['20 × 15.'] },
+  ],
+
+  'data-graphs': () => [
+    { q: 'A pictograph: 4 stars for apples, each star = 5. How many apples?', a: '20', hints: ['4 × 5.'] },
+    { q: 'A bar graph: dogs at 8, cats at 5. How many more dogs?', a: '3', hints: ['8 minus 5.'] },
+    { q: 'A tally with 3 groups of 5 and 2 extra marks. Total?', a: '17', hints: ['15 + 2.'] },
+    { q: 'A pictograph: 6 symbols, each = 10. Total?', a: '60', hints: ['6 × 10.'] },
+    { q: 'On a bar graph, the bar for red reaches 12. The bar for blue reaches 7. Total red and blue?', a: '19', hints: ['12 + 7.'] },
+    { q: 'Most common color in: red, blue, red, green, red, blue?', a: 'red', hints: ['Count each color.'] },
+    { q: 'A tally with 4 groups of 5. Total?', a: '20', hints: ['4 × 5.'] },
+    { q: 'A bar graph: A is 9, B is 14, C is 6. Which is tallest?', a: 'B', hints: ['Highest number.'] },
+    { q: 'A pictograph: 2.5 symbols, each = 4. Total?', a: '10', hints: ['2.5 × 4.'] },
+    { q: 'Total of 7, 3, 5, 4, 6?', a: '25', hints: ['Add them all.'] },
+    { q: 'Smallest of 12, 7, 19, 3, 8?', a: '3', hints: ['Look for the smallest number.'] },
+    { q: 'Largest of 6, 11, 4, 9, 2?', a: '11', hints: ['Look for the biggest.'] },
+    { q: 'Difference between largest and smallest of 14, 8, 6, 20, 11?', a: '14', hints: ['20 minus 6.'] },
+    { q: 'A bar graph: Monday 5, Tuesday 8. Total over 2 days?', a: '13', hints: ['5 + 8.'] },
+    { q: 'A pictograph: 0.5 of a symbol where each = 10. Value?', a: '5', hints: ['Half of 10.'] },
+  ],
+
+  patterns: () => [
+    { q: 'Next in: 3, 6, 9, 12, ?', a: '15', hints: ['Rule is +3.'] },
+    { q: 'Next in: 2, 4, 8, 16, ?', a: '32', hints: ['Rule is ×2.'] },
+    { q: 'Next in: 5, 10, 15, 20, ?', a: '25', hints: ['Rule is +5.'] },
+    { q: 'Next in: 1, 4, 7, 10, ?', a: '13', hints: ['Rule is +3.'] },
+    { q: 'Next in: 100, 90, 80, 70, ?', a: '60', hints: ['Rule is −10.'] },
+    { q: 'Rule is +4. After 7, what is next?', a: '11', hints: ['7 + 4.'] },
+    { q: 'Rule is ×3. After 4, what is next?', a: '12', hints: ['4 × 3.'] },
+    { q: 'Rule is −2. After 18, what is next?', a: '16', hints: ['18 − 2.'] },
+    { q: 'Next in: 1, 2, 4, 7, 11, ?', a: '16', hints: ['Differences grow by 1.'] },
+    { q: 'Next in: 50, 45, 40, 35, ?', a: '30', hints: ['Rule is −5.'] },
+    { q: 'Next in: A, B, A, B, A, ?', a: 'B', hints: ['Pattern alternates.'] },
+    { q: 'Next in: 11, 22, 33, 44, ?', a: '55', hints: ['Rule is +11.'] },
+    { q: 'Rule: add 6. Output for 9?', a: '15', hints: ['9 + 6.'] },
+    { q: 'Rule: subtract 3. Output for 20?', a: '17', hints: ['20 − 3.'] },
+    { q: 'Next in: 0, 5, 10, 15, ?', a: '20', hints: ['Rule is +5.'] },
+  ],
+
+  // Grade 4 banks
+  'place-value-large': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 6; i++) {
+      const n = randInt(rng, 10000, 99999);
+      const round = Math.round(n / 1000) * 1000;
+      qs.push({ q: `Round ${n.toLocaleString()} to the nearest 1,000.`, a: String(round),
+        hints: ['Look at the hundreds digit.'] });
+    }
+    for (let i = 0; i < 5; i++) {
+      const n = randInt(rng, 1000, 9999);
+      const digits = String(n).split('').map(Number);
+      const pos = randInt(rng, 0, 3);
+      const placeVal = digits[pos] * Math.pow(10, 3 - pos);
+      qs.push({ q: `What is the value of the ${digits[pos]} in ${n.toLocaleString()}?`, a: String(placeVal),
+        hints: ['Which place is that digit in?'] });
+    }
+    qs.push({ q: 'Which is larger: 14,302 or 14,032?', a: '14,302', hints: ['Compare from the left.'] });
+    qs.push({ q: 'Which is larger: 28,000 or 28,900?', a: '28,900', hints: ['Hundreds digit decides it.'] });
+    qs.push({ q: 'Write 32,500 in expanded form (use + and spaces, like 30000 + 2000 + 500).', a: ['30000 + 2000 + 500', '30,000 + 2,000 + 500'], hints: ['Break each place value out.'] });
+    qs.push({ q: 'What is 10,000 + 5,000 + 200 + 7?', a: '15207', hints: ['Just add them up.'] });
+    return qs;
+  },
+
+  'multi-digit-add-sub': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 8; i++) {
+      const a = randInt(rng, 1000, 8000);
+      const b = randInt(rng, 500, 3500);
+      qs.push({ q: `${a.toLocaleString()} + ${b.toLocaleString()}`, a: String(a + b),
+        hints: ['Line up by place value.'] });
+    }
+    for (let i = 0; i < 7; i++) {
+      const a = randInt(rng, 5000, 9000);
+      const b = randInt(rng, 1000, 4000);
+      qs.push({ q: `${a.toLocaleString()} − ${b.toLocaleString()}`, a: String(a - b),
+        hints: ['Borrow when you need to.'] });
+    }
+    return qs;
+  },
+
+  'multi-digit-multiplication': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 8; i++) {
+      const a = randInt(rng, 12, 99);
+      const b = randInt(rng, 2, 9);
+      qs.push({ q: `${a} × ${b}`, a: String(a * b), hints: ['Multiply each digit, then add.'] });
+    }
+    for (let i = 0; i < 7; i++) {
+      const a = randInt(rng, 11, 30);
+      const b = randInt(rng, 11, 30);
+      qs.push({ q: `${a} × ${b}`, a: String(a * b), hints: ['Use the area model or standard algorithm.'] });
+    }
+    return qs;
+  },
+
+  'long-division': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 9; i++) {
+      const b = randInt(rng, 2, 9);
+      const ans = randInt(rng, 11, 99);
+      qs.push({ q: `${b * ans} ÷ ${b}`, a: String(ans), hints: ['Use the four-step cycle: divide, multiply, subtract, bring down.'] });
+    }
+    for (let i = 0; i < 6; i++) {
+      const b = randInt(rng, 3, 8);
+      const ans = randInt(rng, 11, 50);
+      const rem = randInt(rng, 1, b - 1);
+      const n = b * ans + rem;
+      qs.push({ q: `${n} ÷ ${b} (write as "q remainder r")`, a: [`${ans} remainder ${rem}`, `${ans}r${rem}`, `${ans} r ${rem}`], hints: ['Find the largest whole number first.'] });
+    }
+    return qs;
+  },
+
+  'factors-multiples': () => [
+    { q: 'Is 12 a multiple of 3?', a: 'yes', hints: ['3 × 4 = 12.'] },
+    { q: 'Is 17 prime?', a: 'yes', hints: ['Try dividing by 2, 3, 5, 7.'] },
+    { q: 'Is 21 prime?', a: 'no', hints: ['3 × 7 = 21.'] },
+    { q: 'List factors of 6 (comma separated, low to high).', a: ['1, 2, 3, 6', '1,2,3,6'], hints: ['Numbers that divide it evenly.'] },
+    { q: 'List factors of 10 (comma separated, low to high).', a: ['1, 2, 5, 10', '1,2,5,10'], hints: ['1 and the number itself always count.'] },
+    { q: 'First five multiples of 4 (comma separated)?', a: ['4, 8, 12, 16, 20', '4,8,12,16,20'], hints: ['Start with 4, keep adding 4.'] },
+    { q: 'First five multiples of 7 (comma separated)?', a: ['7, 14, 21, 28, 35', '7,14,21,28,35'], hints: ['7 times 1, 2, 3, 4, 5.'] },
+    { q: 'Is 1 prime?', a: 'no', hints: ['A prime needs exactly two factors.'] },
+    { q: 'Smallest prime number?', a: '2', hints: ['Only 1 and itself divide it.'] },
+    { q: 'Is 15 prime or composite?', a: 'composite', hints: ['3 × 5 = 15.'] },
+    { q: 'Is 11 prime or composite?', a: 'prime', hints: ['Try dividing by 2, 3, 5.'] },
+    { q: 'Common factor of 6 and 9?', a: '3', hints: ['Both divide by what number?'] },
+    { q: 'Common factor of 8 and 12?', a: '4', hints: ['Highest number that divides both.'] },
+    { q: 'Is 25 a multiple of 5?', a: 'yes', hints: ['5 × 5 = 25.'] },
+    { q: 'How many factors does 16 have?', a: '5', hints: ['1, 2, 4, 8, 16.'] },
+  ],
+
+  'fractions-advanced': () => [
+    { q: '2/5 + 1/5 = ?', a: '3/5', hints: ['Same bottom — add the tops.'] },
+    { q: '3/8 + 2/8 = ?', a: '5/8', hints: ['Add the tops.'] },
+    { q: '5/6 − 1/6 = ?', a: ['4/6', '2/3'], hints: ['Subtract the tops.'] },
+    { q: '1/2 + 1/4 = ?', a: '3/4', hints: ['Convert 1/2 to 2/4.'] },
+    { q: '1/3 + 1/6 = ?', a: ['3/6', '1/2'], hints: ['Convert 1/3 to 2/6.'] },
+    { q: 'Which is larger: 2/3 or 3/4?', a: '3/4', hints: ['Compare with denominator 12.'] },
+    { q: '7/3 as a mixed number?', a: ['2 1/3', '2 and 1/3'], hints: ['How many whole threes fit?'] },
+    { q: '9/4 as a mixed number?', a: ['2 1/4', '2 and 1/4'], hints: ['9 divided by 4 is 2 remainder 1.'] },
+    { q: '2 × 1/4 = ?', a: ['2/4', '1/2'], hints: ['Two groups of 1/4.'] },
+    { q: '3 × 1/5 = ?', a: '3/5', hints: ['Three groups of 1/5.'] },
+    { q: '2/3 as a fraction with denominator 6?', a: '4/6', hints: ['Multiply top and bottom by 2.'] },
+    { q: '1 1/2 as an improper fraction?', a: '3/2', hints: ['2/2 + 1/2.'] },
+    { q: '2 1/4 as an improper fraction?', a: '9/4', hints: ['8/4 + 1/4.'] },
+    { q: '4/8 simplified?', a: '1/2', hints: ['Both divide by 4.'] },
+    { q: '6/9 simplified?', a: '2/3', hints: ['Both divide by 3.'] },
+  ],
+
+  decimals: () => [
+    { q: 'Write 0.5 as a fraction.', a: ['1/2', '5/10'], hints: ['Five tenths.'] },
+    { q: 'Write 0.25 as a fraction.', a: ['1/4', '25/100'], hints: ['Twenty-five hundredths.'] },
+    { q: 'Write 3/4 as a decimal.', a: '0.75', hints: ['Three quarters.'] },
+    { q: 'Write 1/2 as a decimal.', a: '0.5', hints: ['Half.'] },
+    { q: 'Which is larger: 0.3 or 0.27?', a: '0.3', hints: ['0.3 is 0.30.'] },
+    { q: 'Which is larger: 0.5 or 0.45?', a: '0.5', hints: ['Compare tenths first.'] },
+    { q: '0.4 + 0.3 = ?', a: '0.7', hints: ['Add the tenths.'] },
+    { q: '0.8 − 0.5 = ?', a: '0.3', hints: ['Subtract the tenths.'] },
+    { q: '1.5 + 0.5 = ?', a: ['2', '2.0'], hints: ['Half plus half is one.'] },
+    { q: '2.4 − 1.2 = ?', a: ['1.2'], hints: ['Subtract whole and decimal parts.'] },
+    { q: 'Round 0.47 to the nearest tenth.', a: '0.5', hints: ['Look at the hundredths.'] },
+    { q: 'Round 0.32 to the nearest tenth.', a: '0.3', hints: ['Hundredths digit is 2 — round down.'] },
+    { q: '0.1 + 0.9 = ?', a: ['1', '1.0'], hints: ['One whole.'] },
+    { q: 'What is 0.6 as a fraction?', a: ['6/10', '3/5'], hints: ['Six tenths.'] },
+    { q: '0.9 − 0.4 = ?', a: '0.5', hints: ['Nine tenths minus four tenths.'] },
+  ],
+
+  'measurement-conversions': () => [
+    { q: 'How many cm in 2.5 m?', a: '250', hints: ['Multiply by 100.'] },
+    { q: 'How many m in 350 cm?', a: ['3.5', '3.50'], hints: ['Divide by 100.'] },
+    { q: 'How many g in 3.2 kg?', a: '3200', hints: ['Multiply by 1000.'] },
+    { q: 'How many kg in 2500 g?', a: ['2.5', '2.50'], hints: ['Divide by 1000.'] },
+    { q: 'How many mL in 1.5 L?', a: '1500', hints: ['Multiply by 1000.'] },
+    { q: 'How many L in 750 mL?', a: ['0.75', '.75'], hints: ['Divide by 1000.'] },
+    { q: 'A 90° angle is called?', a: ['right', 'right angle'], hints: ['Like the corner of a square.'] },
+    { q: 'An angle less than 90° is called?', a: ['acute', 'acute angle'], hints: ['"A cute little angle."'] },
+    { q: 'An angle between 90° and 180° is called?', a: ['obtuse', 'obtuse angle'], hints: ['Bigger than a right angle.'] },
+    { q: 'A 180° angle is called?', a: ['straight', 'straight angle'], hints: ['Forms a straight line.'] },
+    { q: 'How many cm in 7 m?', a: '700', hints: ['7 × 100.'] },
+    { q: 'How many minutes in 3 hours?', a: '180', hints: ['3 × 60.'] },
+    { q: 'How many g in 4.5 kg?', a: '4500', hints: ['4.5 × 1000.'] },
+    { q: '500 mL + 250 mL = ? mL', a: '750', hints: ['Just add.'] },
+    { q: '2 m + 30 cm in cm?', a: '230', hints: ['Convert m to cm first.'] },
+  ],
+
+  'time-elapsed': () => [
+    { q: 'From 10:45 AM to 1:20 PM, how long? (write as "h m" like "2h 35")', a: ['2h 35', '2 hours 35 minutes', '2:35'], hints: ['Count hours, then minutes.'] },
+    { q: 'How many minutes in 3 hours?', a: '180', hints: ['3 × 60.'] },
+    { q: 'A movie is 105 minutes. How long in hours and minutes (like "1h 45")?', a: ['1h 45', '1 hour 45 minutes', '1:45'], hints: ['105 = 60 + 45.'] },
+    { q: 'From 8:00 AM to 12:00 PM, how many hours?', a: '4', hints: ['Just count from 8 to 12.'] },
+    { q: 'From 6:30 to 7:00, how many minutes?', a: '30', hints: ['Count from 30 to 60.'] },
+    { q: 'How many seconds in 5 minutes?', a: '300', hints: ['5 × 60.'] },
+    { q: 'How many hours in 2 days?', a: '48', hints: ['2 × 24.'] },
+    { q: 'From 11:30 AM to 1:15 PM, in minutes?', a: '105', hints: ['1 hour 45 minutes = 105 minutes.'] },
+    { q: 'A class runs 50 minutes. Starts at 9:20. Ends at?', a: ['10:10', '10:10 am'], hints: ['9:20 + 50 minutes.'] },
+    { q: 'How many minutes in 1.5 hours?', a: '90', hints: ['60 + 30.'] },
+    { q: 'A 2-hour movie starts at 5:30 PM. Ends at?', a: ['7:30', '7:30 pm'], hints: ['Add 2 hours.'] },
+    { q: '180 seconds is how many minutes?', a: '3', hints: ['180 ÷ 60.'] },
+    { q: 'From 3:50 PM to 4:10 PM, in minutes?', a: '20', hints: ['Count from 50 to 70.'] },
+    { q: 'A nap from 1:15 PM to 2:45 PM. How long (like "1h 30")?', a: ['1h 30', '1 hour 30 minutes', '1:30'], hints: ['1 hour 30 minutes.'] },
+    { q: 'How many days in 72 hours?', a: '3', hints: ['72 ÷ 24.'] },
+  ],
+
+  'geometry-lines-angles': () => [
+    { q: 'Two lines that never cross are?', a: 'parallel', hints: ['They stay the same distance apart.'] },
+    { q: 'Two lines that meet at 90° are?', a: 'perpendicular', hints: ['They form right angles.'] },
+    { q: 'A triangle with three equal sides is?', a: 'equilateral', hints: ['"Equi" means equal.'] },
+    { q: 'A triangle with two equal sides is?', a: 'isosceles', hints: ['Iso means same.'] },
+    { q: 'A triangle with all sides different is?', a: 'scalene', hints: ['No matching sides.'] },
+    { q: 'A triangle with one 90° angle is?', a: 'right', hints: ['Has one right angle.'] },
+    { q: 'A triangle with all angles less than 90° is?', a: 'acute', hints: ['All three are acute.'] },
+    { q: 'A triangle with one obtuse angle is?', a: 'obtuse', hints: ['One angle is over 90°.'] },
+    { q: 'How many sides does a quadrilateral have?', a: '4', hints: ['Quad means four.'] },
+    { q: 'A 4-sided shape with opposite sides parallel is a?', a: ['parallelogram'], hints: ['"Para" — parallel.'] },
+    { q: 'A rectangle with all sides equal is a?', a: 'square', hints: ['Special rectangle.'] },
+    { q: 'A four-sided shape with exactly one pair of parallel sides is a?', a: 'trapezoid', hints: ['Like a slanted rectangle.'] },
+    { q: 'A line that goes on forever both ways is a?', a: 'line', hints: ['Different from a ray.'] },
+    { q: 'A line with one endpoint is a?', a: 'ray', hints: ['Like a beam of light.'] },
+    { q: 'A piece of a line with two endpoints is a?', a: ['line segment', 'segment'], hints: ['Has a start and end.'] },
+  ],
+
+  'area-perimeter-advanced': (rng) => {
+    const qs = [];
+    for (let i = 0; i < 6; i++) {
+      const l = randInt(rng, 5, 15);
+      const w = randInt(rng, 2, 10);
+      qs.push({ q: `Area of a ${l} × ${w} rectangle?`, a: String(l * w), hints: ['Length × width.'] });
+    }
+    for (let i = 0; i < 5; i++) {
+      const l = randInt(rng, 4, 14);
+      const w = randInt(rng, 2, 9);
+      qs.push({ q: `Perimeter of a ${l} × ${w} rectangle?`, a: String(2 * (l + w)), hints: ['2 × (l + w).'] });
+    }
+    qs.push({ q: 'A garden is 12 m by 5 m. Fence needed (perimeter)?', a: '34', hints: ['2 × (12 + 5).'] });
+    qs.push({ q: 'A garden is 12 m by 5 m. Carpet needed (area)?', a: '60', hints: ['12 × 5.'] });
+    qs.push({ q: 'An L-shape: 4×3 rectangle next to 2×5 rectangle. Total area?', a: '22', hints: ['12 + 10.'] });
+    qs.push({ q: 'A square has area 36. Side length?', a: '6', hints: ['6 × 6 = 36.'] });
+    return qs;
+  },
+
+  'data-line-plots': () => [
+    { q: 'A line plot: 3 Xs at 1/4, 2 Xs at 1/2. Total students?', a: '5', hints: ['3 + 2.'] },
+    { q: 'Largest value: 4, 7, 2, 9, 5?', a: '9', hints: ['Look for the biggest.'] },
+    { q: 'Smallest value: 4, 7, 2, 9, 5?', a: '2', hints: ['Look for the smallest.'] },
+    { q: 'Range of 4, 7, 2, 9, 5? (largest minus smallest)', a: '7', hints: ['9 minus 2.'] },
+    { q: 'Most common in: 3, 5, 5, 7, 5, 9?', a: '5', hints: ['Count each one.'] },
+    { q: 'Sum of 2, 4, 6, 8, 10?', a: '30', hints: ['Add them up.'] },
+    { q: 'A bar graph: soccer 14, basketball 9, tennis 6. Total kids?', a: '29', hints: ['14 + 9 + 6.'] },
+    { q: 'On a bar graph, the difference between bars at 18 and 11?', a: '7', hints: ['18 − 11.'] },
+    { q: 'Average of 4, 6, 8 (mean)?', a: '6', hints: ['Add them, divide by 3.'] },
+    { q: 'Mean of 5, 10, 15?', a: '10', hints: ['Sum is 30, divide by 3.'] },
+    { q: 'A line plot with values 1/4, 1/2, 1/2, 3/4 — how many data points?', a: '4', hints: ['Count the Xs.'] },
+    { q: 'Mode of 2, 3, 3, 5, 7, 3?', a: '3', hints: ['Most frequent.'] },
+    { q: 'Median of 1, 3, 5, 7, 9?', a: '5', hints: ['Middle number when ordered.'] },
+    { q: 'Total of: red 4, blue 7, green 3?', a: '14', hints: ['Add all three.'] },
+    { q: 'On a pictograph, 3 symbols where each = 6. Value?', a: '18', hints: ['3 × 6.'] },
+  ],
+
+  'patterns-rules': () => [
+    { q: 'Rule: ×3. First five terms starting from 2?', a: ['2, 6, 18, 54, 162', '2,6,18,54,162'], hints: ['Multiply each by 3.'] },
+    { q: 'Rule: +4. Output for 9?', a: '13', hints: ['9 + 4.'] },
+    { q: 'Rule: −5. Output for 22?', a: '17', hints: ['22 − 5.'] },
+    { q: '8 × ? = 56. Find ?', a: '7', hints: ['7 × 8 = 56.'] },
+    { q: '? × 6 = 42. Find ?', a: '7', hints: ['7 × 6 = 42.'] },
+    { q: '? ÷ 4 = 9. Find ?', a: '36', hints: ['9 × 4 = 36.'] },
+    { q: 'Input/output: 3→7, 5→9, 8→12. Rule?', a: ['add 4', '+4'], hints: ['Output is input + something.'] },
+    { q: 'Input/output: 2→6, 4→12, 5→15. Rule?', a: ['times 3', '×3', '*3'], hints: ['Output is input × something.'] },
+    { q: 'Next in: 1, 3, 6, 10, 15, ?', a: '21', hints: ['Differences grow by 1 each time.'] },
+    { q: 'Next in: 80, 70, 60, 50, ?', a: '40', hints: ['Rule is −10.'] },
+    { q: 'Rule: ×5. Output for 6?', a: '30', hints: ['6 × 5.'] },
+    { q: 'Rule: ÷2. Output for 24?', a: '12', hints: ['24 ÷ 2.'] },
+    { q: '24 = ? × 6. Find ?', a: '4', hints: ['What times 6 is 24?'] },
+    { q: '50 = 5 × ?. Find ?', a: '10', hints: ['5 × 10.'] },
+    { q: 'Next in: 100, 200, 400, 800, ?', a: '1600', hints: ['Doubles each step.'] },
+  ],
+};
+
+function buildQuestionsFor(slug, gradeIndex) {
+  const fn = banks[slug];
+  if (!fn) return [];
+  // Seed deterministically per slug
+  const seed = slug.split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 17);
+  const rng = mulberry32(seed >>> 0);
+  return fn(rng).slice(0, 15);
+}
+
 // ─── PAGE TEMPLATES ────────────────────────────────────────────────────────
 const pageHead = (title) => `<!DOCTYPE html>
 <html lang="en">
@@ -640,6 +1117,105 @@ ${FOOTER}
 </html>`;
 }
 
+function coursePage(t, gradeLabel, questions) {
+  const dataJson = JSON.stringify({ slug: t.slug, title: t.title, grade: gradeLabel, questions }, null, 0);
+  return `${pageHead(t.title + ' — Course')}
+${NAV('../styles.css', '../index.html', '../topics.html')}
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>${gradeLabel}</span><span class="sep">/</span>
+      <span>${t.title}</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> ${gradeLabel} &middot; ${questions.length} questions</span>
+    <h1>${t.title}.</h1>
+    <p>${t.blurb}</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+${FOOTER}
+<script>window.COURSE = ${dataJson};</script>
+<script src="../courses.js"></script>
+</body>
+</html>`;
+}
+
+function coursesIndex(courseList) {
+  const colHTML = (courses, label) => `
+    <div class="grade-col">
+      <div class="section-tag">${label}</div>
+      <h2>${label === 'GRADE 3' ? 'Foundations' : 'Building on the basics'}</h2>
+      <ul class="course-list">
+      ${courses.map((c, i) =>
+        `<li><a href="courses/${c.slug}.html"><span class="num">${String(i+1).padStart(2, '0')}</span><span>${c.title}</span><span class="meta">${c.count} q</span></a></li>`
+      ).join('\n      ')}
+      </ul>
+    </div>`;
+
+  const g3 = courseList.filter(c => c.grade === 'Grade 3');
+  const g4 = courseList.filter(c => c.grade === 'Grade 4');
+
+  return `${indexHead('Courses')}
+${NAV('styles.css', 'index.html', 'topics.html')}
+
+<main class="wrap">
+  <section class="topic-hero">
+    <div>
+      <span class="eyebrow"><span class="eyebrow-dot"></span> Courses &middot; 15 questions each</span>
+      <h1>Pick a course. Practice or test.</h1>
+    </div>
+    <p>Every course is fifteen questions on one topic. Choose <strong>Practice</strong> mode for hints along the way, or <strong>Assessment</strong> mode for a scored run.</p>
+  </section>
+
+  <section class="course-list-grid">
+    ${colHTML(g3, 'GRADE 3')}
+    ${colHTML(g4, 'GRADE 4')}
+  </section>
+</main>
+
+${FOOTER}
+</body>
+</html>`;
+}
+
 function topicsIndex() {
   const colHTML = (topics, label) => `
     <div class="grade-col">
@@ -686,4 +1262,17 @@ all.forEach((t, i) => {
   fs.writeFileSync(path.join(OUT_DIR, `${t.slug}.html`), html, 'utf8');
 });
 
-console.log(`Generated topics.html and ${all.length} topic pages.`);
+// Courses
+const COURSES_DIR = path.join(__dirname, 'courses');
+if (!fs.existsSync(COURSES_DIR)) fs.mkdirSync(COURSES_DIR, { recursive: true });
+const courseList = [];
+all.forEach((t) => {
+  const qs = buildQuestionsFor(t.slug);
+  if (!qs.length) return;
+  const html = coursePage(t, t.grade, qs);
+  fs.writeFileSync(path.join(COURSES_DIR, `${t.slug}.html`), html, 'utf8');
+  courseList.push({ slug: t.slug, title: t.title, grade: t.grade, count: qs.length });
+});
+fs.writeFileSync(path.join(__dirname, 'courses.html'), coursesIndex(courseList), 'utf8');
+
+console.log(`Generated topics.html, courses.html, ${all.length} topic pages, and ${courseList.length} course pages.`);

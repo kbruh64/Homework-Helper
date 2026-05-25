@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Elapsed Time — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Elapsed Time</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Elapsed Time.</h1>
+    <p>How long something lasted, especially across hours and AM/PM boundaries. A number line is the cleanest way to handle it.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"time-elapsed","title":"Elapsed Time","grade":"Grade 4","questions":[{"q":"From 10:45 AM to 1:20 PM, how long? (write as \"h m\" like \"2h 35\")","a":["2h 35","2 hours 35 minutes","2:35"],"hints":["Count hours, then minutes."]},{"q":"How many minutes in 3 hours?","a":"180","hints":["3 × 60."]},{"q":"A movie is 105 minutes. How long in hours and minutes (like \"1h 45\")?","a":["1h 45","1 hour 45 minutes","1:45"],"hints":["105 = 60 + 45."]},{"q":"From 8:00 AM to 12:00 PM, how many hours?","a":"4","hints":["Just count from 8 to 12."]},{"q":"From 6:30 to 7:00, how many minutes?","a":"30","hints":["Count from 30 to 60."]},{"q":"How many seconds in 5 minutes?","a":"300","hints":["5 × 60."]},{"q":"How many hours in 2 days?","a":"48","hints":["2 × 24."]},{"q":"From 11:30 AM to 1:15 PM, in minutes?","a":"105","hints":["1 hour 45 minutes = 105 minutes."]},{"q":"A class runs 50 minutes. Starts at 9:20. Ends at?","a":["10:10","10:10 am"],"hints":["9:20 + 50 minutes."]},{"q":"How many minutes in 1.5 hours?","a":"90","hints":["60 + 30."]},{"q":"A 2-hour movie starts at 5:30 PM. Ends at?","a":["7:30","7:30 pm"],"hints":["Add 2 hours."]},{"q":"180 seconds is how many minutes?","a":"3","hints":["180 ÷ 60."]},{"q":"From 3:50 PM to 4:10 PM, in minutes?","a":"20","hints":["Count from 50 to 70."]},{"q":"A nap from 1:15 PM to 2:45 PM. How long (like \"1h 30\")?","a":["1h 30","1 hour 30 minutes","1:30"],"hints":["1 hour 30 minutes."]},{"q":"How many days in 72 hours?","a":"3","hints":["72 ÷ 24."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

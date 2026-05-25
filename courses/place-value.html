@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Place Value — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 3</span><span class="sep">/</span>
+      <span>Place Value</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 3 &middot; 15 questions</span>
+    <h1>Place Value.</h1>
+    <p>Numbers up to 1,000 are made of hundreds, tens, and ones. Knowing where each digit lives is the start of every operation.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"place-value","title":"Place Value","grade":"Grade 3","questions":[{"q":"What is the value of the 6 in 106?","a":"6","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"What is the value of the 1 in 351?","a":"1","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"What is the value of the 7 in 297?","a":"7","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"What is the value of the 6 in 668?","a":"600","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"What is the value of the 1 in 193?","a":"100","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"What is the value of the 7 in 457?","a":"7","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"What is the value of the 8 in 888?","a":"80","hints":["Find which place that digit is in.","Hundreds, tens, or ones — what column?"]},{"q":"Round 197 to the nearest 10.","a":"200","hints":["Look at the ones digit.","If it is 5 or more, round up."]},{"q":"Round 712 to the nearest 10.","a":"710","hints":["Look at the ones digit.","If it is 5 or more, round up."]},{"q":"Round 189 to the nearest 10.","a":"190","hints":["Look at the ones digit.","If it is 5 or more, round up."]},{"q":"Round 171 to the nearest 10.","a":"170","hints":["Look at the ones digit.","If it is 5 or more, round up."]},{"q":"Round 680 to the nearest 100.","a":"700","hints":["Look at the tens digit.","If it is 5 or more, round up."]},{"q":"Round 166 to the nearest 100.","a":"200","hints":["Look at the tens digit.","If it is 5 or more, round up."]},{"q":"Round 322 to the nearest 100.","a":"300","hints":["Look at the tens digit.","If it is 5 or more, round up."]},{"q":"Round 652 to the nearest 100.","a":"700","hints":["Look at the tens digit.","If it is 5 or more, round up."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Place Value (to Millions) — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Place Value (to Millions)</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Place Value (to Millions).</h1>
+    <p>Reading and writing numbers up to one million, and understanding how each place is ten times the one to its right.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"place-value-large","title":"Place Value (to Millions)","grade":"Grade 4","questions":[{"q":"Round 16,822 to the nearest 1,000.","a":"17000","hints":["Look at the hundreds digit."]},{"q":"Round 45,740 to the nearest 1,000.","a":"46000","hints":["Look at the hundreds digit."]},{"q":"Round 33,342 to the nearest 1,000.","a":"33000","hints":["Look at the hundreds digit."]},{"q":"Round 78,592 to the nearest 1,000.","a":"79000","hints":["Look at the hundreds digit."]},{"q":"Round 93,733 to the nearest 1,000.","a":"94000","hints":["Look at the hundreds digit."]},{"q":"Round 14,734 to the nearest 1,000.","a":"15000","hints":["Look at the hundreds digit."]},{"q":"What is the value of the 6 in 7,670?","a":"600","hints":["Which place is that digit in?"]},{"q":"What is the value of the 7 in 7,057?","a":"7","hints":["Which place is that digit in?"]},{"q":"What is the value of the 5 in 1,358?","a":"50","hints":["Which place is that digit in?"]},{"q":"What is the value of the 8 in 8,822?","a":"8000","hints":["Which place is that digit in?"]},{"q":"What is the value of the 9 in 9,759?","a":"9000","hints":["Which place is that digit in?"]},{"q":"Which is larger: 14,302 or 14,032?","a":"14,302","hints":["Compare from the left."]},{"q":"Which is larger: 28,000 or 28,900?","a":"28,900","hints":["Hundreds digit decides it."]},{"q":"Write 32,500 in expanded form (use + and spaces, like 30000 + 2000 + 500).","a":["30000 + 2000 + 500","30,000 + 2,000 + 500"],"hints":["Break each place value out."]},{"q":"What is 10,000 + 5,000 + 200 + 7?","a":"15207","hints":["Just add them up."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Decimals — Course — Pebble</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a class="brand" href="../index.html">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <span>Pebble</span>
+  </a>
+  <div class="nav-links">
+    <a href="../topics.html">Topics</a>
+    <a href="../index.html#features">Features</a>
+    <a href="../index.html#how">How it works</a>
+  </div>
+  <a href="../index.html#start" class="nav-cta">Open Pebble</a>
+</nav>
+
+<main class="wrap">
+  <section class="course-hero">
+    <div class="crumbs">
+      <a href="../index.html">Home</a><span class="sep">/</span>
+      <a href="../courses.html">Courses</a><span class="sep">/</span>
+      <span>Grade 4</span><span class="sep">/</span>
+      <span>Decimals</span>
+    </div>
+    <span class="eyebrow"><span class="eyebrow-dot"></span> Grade 4 &middot; 15 questions</span>
+    <h1>Decimals.</h1>
+    <p>Decimals are fractions with denominators of 10 or 100. The decimal point is just a marker for where ones end.</p>
+  </section>
+
+  <section class="mode-bar">
+    <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
+      <button data-mode="practice" type="button" role="tab">Practice</button>
+      <button data-mode="assessment" type="button" role="tab">Assessment</button>
+    </div>
+    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+  </section>
+
+  <section id="screen-quiz">
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-prompt mono" id="q-prompt"></div>
+      <form class="q-form" id="q-form">
+        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
+        <button class="q-submit" id="q-submit" type="submit">Submit</button>
+        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+      </form>
+      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
+      <div class="q-feedback" id="q-feedback"></div>
+    </div>
+  </section>
+
+  <section id="screen-result" style="display:none;">
+    <div class="result-card">
+      <div class="section-tag">Course complete</div>
+      <h2>How it went.</h2>
+      <p class="lede" id="result-text"></p>
+      <div id="result-list"></div>
+      <div class="result-actions">
+        <button id="result-restart" type="button">Try again</button>
+        <a href="../courses.html">All courses</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Made for kids who deserve a patient helper.</div>
+  <div class="links">
+    <a href="#">Privacy</a>
+    <a href="#">For teachers</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+<script>window.COURSE = {"slug":"decimals","title":"Decimals","grade":"Grade 4","questions":[{"q":"Write 0.5 as a fraction.","a":["1/2","5/10"],"hints":["Five tenths."]},{"q":"Write 0.25 as a fraction.","a":["1/4","25/100"],"hints":["Twenty-five hundredths."]},{"q":"Write 3/4 as a decimal.","a":"0.75","hints":["Three quarters."]},{"q":"Write 1/2 as a decimal.","a":"0.5","hints":["Half."]},{"q":"Which is larger: 0.3 or 0.27?","a":"0.3","hints":["0.3 is 0.30."]},{"q":"Which is larger: 0.5 or 0.45?","a":"0.5","hints":["Compare tenths first."]},{"q":"0.4 + 0.3 = ?","a":"0.7","hints":["Add the tenths."]},{"q":"0.8 − 0.5 = ?","a":"0.3","hints":["Subtract the tenths."]},{"q":"1.5 + 0.5 = ?","a":["2","2.0"],"hints":["Half plus half is one."]},{"q":"2.4 − 1.2 = ?","a":["1.2"],"hints":["Subtract whole and decimal parts."]},{"q":"Round 0.47 to the nearest tenth.","a":"0.5","hints":["Look at the hundredths."]},{"q":"Round 0.32 to the nearest tenth.","a":"0.3","hints":["Hundredths digit is 2 — round down."]},{"q":"0.1 + 0.9 = ?","a":["1","1.0"],"hints":["One whole."]},{"q":"What is 0.6 as a fraction?","a":["6/10","3/5"],"hints":["Six tenths."]},{"q":"0.9 − 0.4 = ?","a":"0.5","hints":["Nine tenths minus four tenths."]}]};</script>
+<script src="../courses.js"></script>
+</body>
+</html>
