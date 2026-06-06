@@ -737,21 +737,21 @@
   }
   .mascot-btn:hover::before { opacity: 1; }
   .parrot {
-    width: 52px; height: 52px; display: block;
+    width: 48px; height: 48px; display: block;
+    color: var(--accent);
     animation: parrot-bob 3s ease-in-out infinite;
     transform-origin: 50% 85%;
   }
   @keyframes parrot-bob {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
     50% { transform: translateY(-3px) rotate(2deg); }
   }
-  .parrot .blink { transform-origin: 26px 24px; animation: blink 4.5s infinite; }
-  @keyframes blink {
-    0%, 94%, 100% { transform: scaleY(1); }
-    96% { transform: scaleY(0.1); }
-  }
+  /* Hero floating Poly — keeps brand accent */
+  .hero-poly { color: var(--accent); }
+  /* Big spotlight portrait — warmer tone against dark background */
+  .poly-portrait .big-parrot { color: var(--warm); }
   @media (prefers-reduced-motion: reduce) {
-    .parrot, .parrot .blink, .hero-mesh, .msg, [data-reveal], .hero-poly, .poly-portrait .big-parrot {
+    .parrot, .hero-mesh, .msg, [data-reveal], .hero-poly, .poly-portrait .big-parrot {
       animation: none !important;
       transition: none !important;
       transform: none !important;
@@ -778,18 +778,32 @@
 <!-- Reusable SVG defs -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Poly parrot symbol -->
+    <!-- Poly parrot — single silhouette, eye is a cutout (fill-rule evenodd), no overlapping shapes -->
     <symbol id="poly-svg" viewBox="0 0 64 64">
-      <path d="M 38 36 Q 56 46 54 58 Q 44 56 36 52 Z" fill="#2f6f4e" />
-      <ellipse cx="34" cy="40" rx="16" ry="18" fill="#3d8a62" />
-      <ellipse cx="30" cy="44" rx="8" ry="11" fill="#f3ead0" />
-      <path d="M 36 30 Q 48 34 46 48 Q 38 48 34 42 Z" fill="#2f6f4e" />
-      <circle cx="28" cy="24" r="13" fill="#3d8a62" />
-      <path d="M 16 24 Q 9 26 13 31 Q 18 30 20 27 Z" fill="#e8a23a" />
-      <circle class="blink" cx="26" cy="24" r="3" fill="#14171c" />
-      <circle cx="26.8" cy="22.8" r="0.9" fill="#fafafa" />
-      <path d="M 28 56 L 28 60 M 25.5 60 L 30.5 60" stroke="#e8a23a" stroke-width="1.6" stroke-linecap="round" fill="none" />
-      <path d="M 38 56 L 38 60 M 35.5 60 L 40.5 60" stroke="#e8a23a" stroke-width="1.6" stroke-linecap="round" fill="none" />
+      <path fill="currentColor" fill-rule="evenodd" d="
+        M 8 30
+        L 16 24
+        C 14 12 30 6 38 12
+        C 48 14 56 26 54 34
+        C 60 38 60 50 52 50
+        L 58 56
+        L 50 54
+        C 50 60 40 60 40 56
+        L 40 60
+        L 36 60
+        L 36 56
+        L 28 56
+        L 28 60
+        L 24 60
+        L 24 56
+        C 14 56 8 46 12 38
+        L 8 30 Z
+        M 28 22
+        m -2.5 0
+        a 2.5 2.5 0 1 0 5 0
+        a 2.5 2.5 0 1 0 -5 0
+        Z
+      " />
     </symbol>
     <!-- Mini Pebble avatar (head + dots) -->
     <symbol id="pebble-avatar" viewBox="0 0 32 32">
