@@ -244,8 +244,8 @@
   /* Floating Poly above hero scene */
   .hero-poly {
     position: absolute;
-    top: -56px; right: -8px;
-    width: 78px; height: 140px;
+    top: -64px; right: -4px;
+    width: 84px; height: 132px;
     z-index: 2;
     pointer-events: none;
     animation: float-y 5s ease-in-out infinite;
@@ -254,7 +254,7 @@
     0%, 100% { transform: translateY(0) rotate(-4deg); }
     50% { transform: translateY(-10px) rotate(4deg); }
   }
-  @media (max-width: 600px) { .hero-poly { width: 58px; height: 104px; top: -44px; } }
+  @media (max-width: 600px) { .hero-poly { width: 62px; height: 98px; top: -50px; } }
 
   /* ─── Stats strip ─── */
   .stats-strip {
@@ -737,7 +737,7 @@
   }
   .mascot-btn:hover::before { opacity: 1; }
   .parrot {
-    width: 36px; height: 64px; display: block;
+    width: 42px; height: 66px; display: block;
     color: var(--accent);
     animation: parrot-life 4s ease-in-out infinite;
     transform-origin: 50% 95%;
@@ -793,33 +793,39 @@
 <!-- Reusable SVG defs -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Poly parrot — single silhouette, eye + wing crescent as cutouts (fill-rule evenodd), no overlapping shapes -->
-    <symbol id="poly-svg" viewBox="0 0 100 180">
+    <!-- Poly parrot — traced from the macaw stencil reference. Single path; eye is a cutout (evenodd). -->
+    <symbol id="poly-svg" viewBox="0 0 300 470">
       <path fill="currentColor" fill-rule="evenodd" d="
-        M 46 8
-        L 32 0
-        L 40 16
-        C 18 20 8 40 12 62
-        C 6 95 16 130 24 156
-        L 14 174
-        C 28 174 38 160 40 142
-        L 42 158 L 42 168 L 47 168 L 47 158 L 48 130
-        L 56 130 L 56 158 L 56 168 L 61 168 L 61 158 L 58 130
-        C 70 124 78 95 76 68
-        C 76 48 74 36 70 30
-        L 82 28
-        L 90 34
-        L 78 38
-        L 64 32
-        C 56 20 50 8 46 8 Z
-        M 58 22
-        m -3 0
-        a 3 3 0 1 0 6 0
-        a 3 3 0 1 0 -6 0
+        M 150 60
+        C 120 40 70 48 50 85
+        C 28 125 30 175 55 205
+        C 70 222 88 232 108 236
+        C 95 245 84 260 80 280
+        C 72 320 78 360 92 392
+        C 70 388 50 380 38 372
+        C 48 388 70 400 92 402
+        C 96 415 100 425 104 432
+        C 110 420 112 405 110 390
+        C 122 410 138 428 152 438
+        C 150 420 142 400 130 384
+        C 150 396 168 402 184 400
+        C 172 388 152 380 134 376
+        C 118 350 110 318 116 286
+        C 120 262 132 244 150 232
+        C 175 220 200 240 210 200
+        C 220 165 212 130 200 110
+        L 230 120
+        C 246 128 258 140 256 152
+        C 254 162 240 166 226 160
+        L 240 172
+        C 226 178 208 174 196 162
+        C 188 150 180 100 150 60
         Z
-        M 30 50
-        C 22 90 28 130 35 135
-        C 28 100 36 60 30 50 Z
+        M 128 118
+        m -13 0
+        a 13 13 0 1 0 26 0
+        a 13 13 0 1 0 -26 0
+        Z
       " />
     </symbol>
     <!-- Mini Pebble avatar (head + dots) -->
