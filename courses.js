@@ -54,10 +54,16 @@
   function classify(text) {
     const t = text.toLowerCase().trim();
     if (!t) return 'empty';
-    if (/\b(stuck|don'?t know|idk|i dont know|no idea|give up|i can'?t|i cant)\b/.test(t)) return 'stuck';
-    if (/\b(hint|help|clue|tip)\b/.test(t)) return 'hint';
+    // "I'm stuck / give up" style
+    if (/\b(stuck|give up|i give up|i can'?t do (this|it)|i cant do (this|it)|too hard|this is hard|so hard|hard)\b/.test(t)) return 'stuck';
+    // "I don't get it / I'm confused / explain" (stems, no trailing \b so "confused"/"confusing" match)
+    if (/(don'?t get|dont get|don'?t understand|dont understand|confus|\blost\b|explain|i don'?t know how|i dont know how|\bhuh\b|makes no sense|no sense)/.test(t)) return 'confused';
+    // Direct help / hint asks
+    if (/\b(hint|help|clue|tip|show me|how do i|how do you|where do i start)\b/.test(t)) return 'hint';
+    // "idk / no idea" (plain not-knowing)
+    if (/\b(idk|no idea|i don'?t know|i dont know|dunno|not sure)\b/.test(t)) return 'confused';
     if (/\b(skip|next|pass|move on)\b/.test(t)) return 'skip';
-    if (/\?$/.test(t) || /^(what|how|why|huh|wait)\b/.test(t)) return 'question';
+    if (/\?$/.test(t) || /^(what|how|why|wait)\b/.test(t)) return 'question';
     if (/^(yes|yeah|yep|ok|okay|got it|i think so|ready|sure)\b/.test(t)) return 'affirm';
     return 'answer';
   }
@@ -81,6 +87,7 @@
     mode: 'practice',
     i: 0, correct: 0, attempts: 0, hintShown: 0,
     wrongs: [], awaiting: false, finished: false,
+    askedConfusing: false, // true after Poly asks "which part is tricky?"
   };
 
   let elStream, elInput, elForm, elSend, elProgress, elScore, elActions,
@@ -132,6 +139,7 @@
     const q = COURSE.questions[state.i];
     state.attempts = 0;
     state.hintShown = 0;
+    state.askedConfusing = false;
     state.awaiting = true;
     elProgress.textContent = `Question ${state.i + 1} of ${COURSE.questions.length}`;
     const lead = state.i === 0 ? "" : pick(movers) + " ";
@@ -187,7 +195,7 @@
 
     // Assessment mode: no hints, one shot, score it
     if (state.mode === 'assessment') {
-      if (kind === 'skip' || kind === 'stuck') {
+      if (kind === 'skip' || kind === 'stuck' || kind === 'confused') {
         state.wrongs.push({ i: state.i, expected: formatAnswer(q.a), user: '(skipped)' });
         polySay("No problem — we'll come back to that idea later.", 450);
         state.awaiting = false;
@@ -206,28 +214,51 @@
     }
 
     // Practice mode: conversational with hints
-    if (kind === 'stuck') {
-      polySay("That's okay — everyone gets stuck. Let me help.", 450);
-      return setTimeout(() => giveHint(q), 1100);
-    }
-    if (kind === 'hint') {
-      return giveHint(q);
-    }
+
+    // Skip is always honored immediately
     if (kind === 'skip') {
       polySay(`No worries. The answer was ${formatAnswer(q.a)} — we'll see it again.`, 450);
       state.wrongs.push({ i: state.i, expected: formatAnswer(q.a), user: '(skipped)' });
       state.awaiting = false;
       return setTimeout(() => { state.i++; state.i >= COURSE.questions.length ? finish() : askQuestion(); }, 1300);
     }
-    if (kind === 'question') {
-      polySay("Good question. Here's a nudge to get you going.", 450);
+
+    // If Poly already asked "which part is tricky?", read the kid's explanation here.
+    if (state.askedConfusing && kind !== 'answer') {
+      state.askedConfusing = false;
+      const replies = [
+        "Thanks for telling me — that helps. Let's take it one small piece at a time.",
+        "Got it. That part trips a lot of kids up. Here's a way in.",
+        "Okay, I hear you. Let's slow it right down.",
+      ];
+      polySay(pick(replies), 450);
       return setTimeout(() => giveHint(q), 1100);
     }
+
+    // A help request — ask what's confusing FIRST, then we'll hint on their reply.
+    if (kind === 'stuck' || kind === 'confused' || kind === 'hint' || kind === 'question') {
+      // First time on this question: ask what's tricky. After that, just hint.
+      if (!state.askedConfusing && state.hintShown === 0) {
+        state.askedConfusing = true;
+        const asks = [
+          "That's totally okay — this one can be tricky. Which part is confusing? You can just tell me, or say \"all of it.\"",
+          "No problem. What's the bit that's tricky — the start, a word, or what to do next?",
+          "Happens to everyone. Tell me what's tripping you up and we'll untangle it together.",
+        ];
+        return polySay(pick(asks), 450);
+      }
+      // Already talked it through once — go straight to the next hint.
+      const warm = ["Sure — here's another nudge.", "Let's look again.", "Okay, try this."];
+      polySay(pick(warm), 400);
+      return setTimeout(() => giveHint(q), 1000);
+    }
+
     if (kind === 'affirm') {
       return polySay("Great — so what's your answer?", 450);
     }
 
     // An actual answer attempt
+    state.askedConfusing = false;
     state.attempts++;
     if (checkAnswer(text, q.a)) {
       return correctAndAdvance(q);
