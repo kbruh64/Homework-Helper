@@ -244,8 +244,8 @@
   /* Floating Poly above hero scene */
   .hero-poly {
     position: absolute;
-    top: -60px; right: -6px;
-    width: 92px; height: 126px;
+    top: -68px; right: -2px;
+    width: 80px; height: 128px;
     z-index: 2;
     pointer-events: none;
     animation: float-y 5s ease-in-out infinite;
@@ -254,7 +254,7 @@
     0%, 100% { transform: translateY(0) rotate(-4deg); }
     50% { transform: translateY(-10px) rotate(4deg); }
   }
-  @media (max-width: 600px) { .hero-poly { width: 70px; height: 96px; top: -46px; } }
+  @media (max-width: 600px) { .hero-poly { width: 60px; height: 96px; top: -52px; } }
 
   /* ─── Stats strip ─── */
   .stats-strip {
@@ -802,7 +802,7 @@
   }
   .mascot-btn:hover::before { opacity: 1; }
   .parrot {
-    width: 48px; height: 66px; display: block;
+    width: 42px; height: 67px; display: block;
     color: var(--accent);
     animation: parrot-life 4s ease-in-out infinite;
     transform-origin: 50% 95%;
@@ -858,33 +858,36 @@
 <!-- Reusable SVG defs -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Poly — a proper macaw built from layered shapes. Tints to currentColor; accents stay fixed. -->
-    <symbol id="poly-svg" viewBox="0 0 160 220">
-      <!-- Long tail feathers (behind) -->
-      <path fill="currentColor" opacity="0.65" d="M70 120 C 58 160 52 196 64 214 C 70 200 74 168 82 134 Z" />
-      <path fill="currentColor" opacity="0.85" d="M82 122 C 78 162 80 196 92 214 C 96 196 92 162 92 132 Z" />
-      <!-- Body -->
-      <path fill="currentColor" d="M58 70 C 36 84 30 120 44 146 C 58 170 96 172 112 148 C 128 122 122 84 100 70 C 86 60 72 60 58 70 Z" />
-      <!-- Belly highlight -->
-      <path fill="#f3ead0" opacity="0.85" d="M66 96 C 56 110 56 138 70 150 C 82 158 96 152 98 138 C 100 118 88 96 78 92 C 73 91 69 92 66 96 Z" />
-      <!-- Wing -->
-      <path fill="currentColor" d="M96 78 C 116 84 122 116 110 144 C 100 150 90 146 86 134 C 92 116 90 96 88 84 C 90 80 93 78 96 78 Z" />
-      <!-- Wing feather lines -->
-      <path fill="none" stroke="#f3ead0" stroke-width="2" opacity="0.5" stroke-linecap="round" d="M99 92 C 106 104 106 122 100 136 M106 96 C 112 108 112 122 107 134" />
-      <!-- Head -->
-      <circle cx="74" cy="50" r="26" fill="currentColor" />
-      <!-- Face patch -->
-      <ellipse cx="64" cy="54" rx="10" ry="11" fill="#f3ead0" opacity="0.9" />
-      <!-- Eye -->
-      <circle cx="66" cy="48" r="5" fill="#14171c" />
-      <circle cx="67.6" cy="46" r="1.6" fill="#fafafa" />
-      <!-- Crest tuft -->
-      <path fill="currentColor" d="M78 26 C 80 16 88 12 92 18 C 86 18 82 22 82 30 Z" />
-      <!-- Big curved beak -->
-      <path fill="#e8a23a" d="M50 44 C 36 42 28 50 32 60 C 36 66 46 66 52 58 C 50 64 44 70 36 70 C 48 76 60 70 62 58 C 62 50 58 44 50 44 Z" />
-      <path fill="#d08a2a" d="M40 58 C 36 60 36 66 42 67 C 48 67 52 62 50 58 C 46 56 43 56 40 58 Z" />
-      <!-- Feet -->
-      <path fill="none" stroke="#e8a23a" stroke-width="3.5" stroke-linecap="round" d="M76 168 L76 188 M68 188 L84 188 M70 196 L82 196" />
+    <!-- Poly — single-color stencil macaw with a long curving tail. One path; eye is a cutout (evenodd). -->
+    <symbol id="poly-svg" viewBox="0 0 200 320">
+      <path fill="currentColor" fill-rule="evenodd" d="
+        M 96 36
+        C 60 30 34 56 34 96
+        C 34 128 50 150 74 160
+        C 64 176 60 198 64 222
+        C 70 256 86 286 108 306
+        C 112 296 110 280 102 262
+        C 116 286 134 300 150 300
+        C 144 282 128 266 108 252
+        C 96 232 90 206 96 182
+        C 100 162 112 148 130 138
+        C 152 128 168 132 170 122
+        C 172 112 158 108 144 110
+        C 152 100 156 88 150 80
+        C 146 96 134 104 120 100
+        C 134 92 142 78 138 66
+        L 154 72
+        L 166 82
+        L 150 84
+        L 134 74
+        C 124 56 116 40 96 36
+        Z
+        M 78 78
+        m -8 0
+        a 8 8 0 1 0 16 0
+        a 8 8 0 1 0 -16 0
+        Z
+      " />
     </symbol>
     <!-- Mini Pebble avatar (head + dots) -->
     <symbol id="pebble-avatar" viewBox="0 0 32 32">
