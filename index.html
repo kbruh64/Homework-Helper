@@ -628,6 +628,93 @@
   }
   .friend-status.away::before { background: var(--warm); box-shadow: 0 0 0 3px var(--warm-soft); }
 
+  /* ─── Your profile card ─── */
+  .profile-wrap {
+    display: grid; grid-template-columns: 1fr 1.1fr; gap: 2rem;
+    align-items: stretch;
+  }
+  @media (max-width: 800px) { .profile-wrap { grid-template-columns: 1fr; } }
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-diffuse);
+    display: flex; flex-direction: column;
+  }
+  .profile-preview {
+    display: flex; align-items: center; gap: 1rem;
+    padding-bottom: 1.5rem; margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .profile-avatar {
+    width: 72px; height: 72px; border-radius: 20px;
+    background: var(--accent-soft);
+    display: grid; place-items: center; flex-shrink: 0;
+    transition: background 0.3s var(--ease-out);
+  }
+  .profile-avatar svg { width: 52px; height: 48px; }
+  .profile-meta strong {
+    display: block; font-size: 1.125rem; font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .profile-meta span {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6875rem; color: var(--ink-mute);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .field-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6875rem; color: var(--ink-mute);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.625rem; display: block;
+  }
+  .name-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .name-input {
+    flex: 1; font: inherit; font-size: 0.9375rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px; padding: 0.625rem 1rem;
+    background: var(--bg); color: var(--ink);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .name-input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+  .name-feedback {
+    min-height: 1.1rem; font-size: 0.8125rem;
+    margin-bottom: 1.25rem; line-height: 1.4;
+    display: flex; align-items: flex-start; gap: 0.4rem;
+  }
+  .name-feedback.ok { color: var(--accent); }
+  .name-feedback.err { color: #b6452f; }
+  .name-feedback .nf-ico { flex-shrink: 0; }
+  .avatar-pick { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .swatch {
+    width: 38px; height: 38px; border-radius: 12px;
+    border: 2px solid transparent; cursor: pointer;
+    display: grid; place-items: center; padding: 0;
+    background: var(--bg);
+    transition: transform 0.15s var(--ease-out), border-color 0.2s;
+  }
+  .swatch svg { width: 26px; height: 24px; }
+  .swatch:hover { transform: translateY(-2px); }
+  .swatch.on { border-color: var(--ink); }
+  .profile-save {
+    margin-top: auto;
+    background: var(--ink); color: #fafafa;
+    border: 0; border-radius: 999px;
+    padding: 0.75rem 1.25rem;
+    font: inherit; font-size: 0.9375rem; font-weight: 500;
+    cursor: pointer; transition: transform 0.12s var(--ease-out), opacity 0.2s;
+    align-self: flex-start;
+  }
+  .profile-save:hover { transform: translateY(-1px); }
+  .profile-save:disabled { opacity: 0.45; cursor: default; transform: none; }
+  .profile-saved-note {
+    font-size: 0.8125rem; color: var(--accent);
+    margin-top: 0.75rem; opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .profile-saved-note.show { opacity: 1; }
+
   /* ─── How it works ─── */
   .steps { display: grid; gap: 0; border-top: 1px solid var(--line); }
   .step {
@@ -929,16 +1016,23 @@
     78% { transform: translateY(0) scale(0.99, 1.01); }
   }
   .hero-poly { color: var(--accent); }
-  /* Big portrait slime — warm against dark, slow gooey breathe */
+  /* Big portrait slime — slow gooey breathe + smooth color cycle */
   .poly-portrait .big-parrot {
-    color: var(--warm);
     width: 58% !important; height: auto !important;
-    animation: slime-breathe 3.6s ease-in-out infinite;
+    animation: slime-breathe 3.6s ease-in-out infinite, slime-hue 12s ease-in-out infinite;
     transform-origin: 50% 100%;
   }
   @keyframes slime-breathe {
     0%, 100% { transform: scale(1, 1); }
     50% { transform: translateY(-5px) scale(1.04, 0.95); }
+  }
+  /* Smoothly cross-fades through the friend palette */
+  @keyframes slime-hue {
+    0%   { color: #e8a23a; }
+    25%  { color: #c84a5e; }
+    50%  { color: #3a72d0; }
+    75%  { color: #4cb5c7; }
+    100% { color: #e8a23a; }
   }
   @media (prefers-reduced-motion: reduce) {
     .parrot, .hero-mesh, .msg, [data-reveal], .hero-poly, .poly-portrait .big-parrot, .play-tile, .friend-blob {
@@ -1249,13 +1343,61 @@
   <section class="section" id="friends">
     <div class="section-head">
       <div>
+        <div class="section-tag" data-reveal>Your profile</div>
+        <h2 data-reveal style="--delay: 80ms">Make yourself at home.</h2>
+      </div>
+      <p data-reveal style="--delay: 160ms">Pick a name and a slime to be your own. We keep names kind and safe — no personal info, no mean words.</p>
+    </div>
+
+    <div class="profile-wrap" data-reveal>
+      <!-- Live preview -->
+      <div class="profile-card">
+        <div class="profile-preview">
+          <span class="profile-avatar" id="pf-avatar"><svg viewBox="0 0 120 110" id="pf-avatar-svg" style="color:#2f6f4e"><use href="#poly-svg" /></svg></span>
+          <div class="profile-meta">
+            <strong id="pf-name-display">Your name</strong>
+            <span>your slime &middot; saved on this device</span>
+          </div>
+        </div>
+        <p style="margin:0;color:var(--ink-soft);font-size:0.875rem;line-height:1.55;">
+          This is how you&rsquo;ll show up next to Poly&rsquo;s crew. Change your name or colour any time — it stays saved right here in your browser.
+        </p>
+      </div>
+
+      <!-- Editor -->
+      <div class="profile-card">
+        <label class="field-label" for="pf-name-input">Display name</label>
+        <div class="name-row">
+          <input class="name-input" id="pf-name-input" type="text" maxlength="20" autocomplete="off" placeholder="e.g. MathWhiz, StarJumper…" />
+        </div>
+        <div class="name-feedback" id="pf-name-feedback"></div>
+
+        <label class="field-label">Pick your slime</label>
+        <div class="avatar-pick" id="pf-swatches"></div>
+
+        <button class="profile-save" id="pf-save" type="button" disabled>Save my profile</button>
+        <div class="profile-saved-note" id="pf-saved">Saved! You&rsquo;re in the crew.</div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:5rem;">
+      <div>
         <div class="section-tag" data-reveal>Poly&rsquo;s crew</div>
-        <h2 data-reveal style="--delay: 80ms">Meet the friends who help out.</h2>
+        <h2 data-reveal style="--delay: 80ms">You and the friends who help out.</h2>
       </div>
       <p data-reveal style="--delay: 160ms">Poly isn&rsquo;t alone. Each buddy is best at one kind of math — so whatever you&rsquo;re working on, someone&rsquo;s got your back.</p>
     </div>
 
     <div class="friends">
+      <!-- The kid's own card appears here when saved -->
+      <div class="friend" id="you-card" data-reveal style="display:none;">
+        <svg class="friend-blob" id="you-blob" viewBox="0 0 120 110" style="color:#2f6f4e" aria-hidden="true"><use href="#poly-svg" /></svg>
+        <h3 id="you-name">You</h3>
+        <p class="role">That&rsquo;s you</p>
+        <p>The newest member of the crew.</p>
+        <span class="friend-status">online</span>
+      </div>
+
       <div class="friend" data-reveal>
         <svg class="friend-blob" viewBox="0 0 120 110" style="color:#2f6f4e" aria-hidden="true"><use href="#poly-svg" /></svg>
         <h3>Poly</h3>
@@ -1374,7 +1516,7 @@
     <div data-reveal>
       <div class="section-tag">Meet Poly</div>
       <h2>The calm helper who never gives up on you.</h2>
-      <p>Poly is the friendly parrot who tags along through every session. She nudges with questions, celebrates small wins, and never tells you the answer outright — because she knows you can find it.</p>
+      <p>Poly is the friendly slime who tags along through every session. She nudges with questions, celebrates small wins, and never tells you the answer outright — because she knows you can find it.</p>
       <div class="poly-traits">
         <span class="poly-trait">Patient</span>
         <span class="poly-trait">Encouraging</span>
@@ -1553,7 +1695,7 @@
       <button id="mascot-close" type="button">Close</button>
     </div>
   </div>
-  <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Poly the parrot">
+  <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Poly the slime">
     <svg class="parrot" viewBox="0 0 120 110" aria-hidden="true"><use href="#poly-svg" /></svg>
   </button>
 </div>
@@ -1574,6 +1716,132 @@
       tile.style.setProperty('--my', (e.clientY - r.top) + 'px');
     });
   });
+
+  // ─── Profile + friends (display name, avatar, safety filter, localStorage) ───
+  (function () {
+    const COLORS = [
+      { id: 'green',  hex: '#2f6f4e' },
+      { id: 'amber',  hex: '#e8a23a' },
+      { id: 'berry',  hex: '#c84a5e' },
+      { id: 'blue',   hex: '#3a72d0' },
+      { id: 'teal',   hex: '#4cb5c7' },
+      { id: 'plum',   hex: '#8a5cc4' },
+      { id: 'coral',  hex: '#e0739d' },
+      { id: 'forest', hex: '#1f8a5a' },
+    ];
+
+    // ── Display-name safety filter ──
+    // Blocked words (kept compact; substring-matched so variants are caught).
+    const BAD = [
+      'fuck','shit','bitch','asshole','dick','piss','crap','bastard','damn','cunt',
+      'slut','whore','fag','retard','nigger','nigga','sex','porn','rape','kill','suicide',
+      'nazi','penis','vagina','boob','butt','poop','wtf','stfu','idiot','stupid','dumb','loser','hate',
+    ];
+    // Looks like personal info?
+    const RE_EMAIL  = /[a-z0-9._%+-]+@[a-z0-9.-]+/i;
+    const RE_PHONE  = /(\d[\s.-]?){7,}/;       // 7+ digits = phone-ish
+    const RE_URL    = /(https?:\/\/|www\.|\.com|\.net|\.org)/i;
+    const RE_ADDR   = /\b\d+\s+\w+\s+(st|street|ave|avenue|rd|road|blvd|lane|ln|drive|dr)\b/i;
+
+    function checkName(raw) {
+      const name = raw.trim();
+      if (!name) return { ok: false, msg: '' };
+      if (name.length < 2) return { ok: false, msg: 'A little longer, please — at least 2 letters.' };
+      if (name.length > 20) return { ok: false, msg: 'Keep it short — 20 letters or fewer.' };
+      if (!/^[\p{L}\p{N} _.'-]+$/u.test(name)) return { ok: false, msg: 'Letters and numbers only — no odd symbols or links.' };
+      const low = name.toLowerCase().replace(/[\s._'-]/g, '');
+      for (const w of BAD) {
+        if (low.includes(w)) return { ok: false, msg: 'Let’s keep names kind. Try a different one.' };
+      }
+      if (RE_EMAIL.test(name) || RE_URL.test(name)) return { ok: false, msg: 'No emails or links in your name — keep yourself private.' };
+      if (RE_PHONE.test(name)) return { ok: false, msg: 'That looks like a phone number — keep personal info out of your name.' };
+      if (RE_ADDR.test(name)) return { ok: false, msg: 'No addresses — keep where you live private.' };
+      return { ok: true, msg: 'Looks great!' };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const swatchBox = document.getElementById('pf-swatches');
+      const nameInput = document.getElementById('pf-name-input');
+      const feedback  = document.getElementById('pf-name-feedback');
+      const saveBtn   = document.getElementById('pf-save');
+      const savedNote = document.getElementById('pf-saved');
+      const pvAvatar  = document.getElementById('pf-avatar');
+      const pvSvg     = document.getElementById('pf-avatar-svg');
+      const pvName    = document.getElementById('pf-name-display');
+      const youCard   = document.getElementById('you-card');
+      const youBlob   = document.getElementById('you-blob');
+      const youName   = document.getElementById('you-name');
+      if (!swatchBox) return;
+
+      let chosen = COLORS[0].hex;
+
+      // Build swatches
+      COLORS.forEach((c, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'swatch' + (i === 0 ? ' on' : '');
+        b.dataset.hex = c.hex;
+        b.setAttribute('aria-label', c.id + ' slime');
+        b.innerHTML = `<svg viewBox="0 0 120 110" style="color:${c.hex}"><use href="#poly-svg"/></svg>`;
+        swatchBox.appendChild(b);
+      });
+
+      function setAvatarColor(hex) {
+        chosen = hex;
+        pvSvg.style.color = hex;
+        pvAvatar.style.background = hex + '22'; // soft tint behind preview
+        swatchBox.querySelectorAll('.swatch').forEach(s => s.classList.toggle('on', s.dataset.hex === hex));
+      }
+
+      function refresh() {
+        const res = checkName(nameInput.value);
+        pvName.textContent = nameInput.value.trim() || 'Your name';
+        if (!nameInput.value.trim()) {
+          feedback.textContent = '';
+          feedback.className = 'name-feedback';
+          saveBtn.disabled = true;
+          return;
+        }
+        feedback.innerHTML = `<span class="nf-ico">${res.ok ? '✓' : '✕'}</span><span>${res.msg}</span>`;
+        feedback.className = 'name-feedback ' + (res.ok ? 'ok' : 'err');
+        saveBtn.disabled = !res.ok;
+      }
+
+      function renderYou(profile) {
+        youName.textContent = profile.name;
+        youBlob.style.color = profile.color;
+        youCard.style.display = '';
+        youCard.classList.add('in');
+      }
+
+      // Load saved profile
+      try {
+        const saved = JSON.parse(localStorage.getItem('pebble_profile') || 'null');
+        if (saved && saved.name && saved.color) {
+          nameInput.value = saved.name;
+          setAvatarColor(saved.color);
+          renderYou(saved);
+        }
+      } catch (e) {}
+
+      swatchBox.addEventListener('click', e => {
+        const b = e.target.closest('.swatch');
+        if (b) { setAvatarColor(b.dataset.hex); savedNote.classList.remove('show'); }
+      });
+      nameInput.addEventListener('input', () => { savedNote.classList.remove('show'); refresh(); });
+
+      saveBtn.addEventListener('click', () => {
+        const res = checkName(nameInput.value);
+        if (!res.ok) return;
+        const profile = { name: nameInput.value.trim(), color: chosen };
+        try { localStorage.setItem('pebble_profile', JSON.stringify(profile)); } catch (e) {}
+        renderYou(profile);
+        savedNote.classList.add('show');
+      });
+
+      refresh();
+    });
+  })();
 
   // ─── Interactive math playground: parallax on mouse + scroll ───
   (function () {
