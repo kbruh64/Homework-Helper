@@ -244,17 +244,17 @@
   /* Floating Poly above hero scene */
   .hero-poly {
     position: absolute;
-    top: -36px; right: -16px;
-    width: 110px; height: 110px;
+    top: -56px; right: -8px;
+    width: 78px; height: 140px;
     z-index: 2;
     pointer-events: none;
     animation: float-y 5s ease-in-out infinite;
   }
   @keyframes float-y {
     0%, 100% { transform: translateY(0) rotate(-4deg); }
-    50% { transform: translateY(-8px) rotate(4deg); }
+    50% { transform: translateY(-10px) rotate(4deg); }
   }
-  @media (max-width: 600px) { .hero-poly { width: 84px; height: 84px; top: -28px; } }
+  @media (max-width: 600px) { .hero-poly { width: 58px; height: 104px; top: -44px; } }
 
   /* ─── Stats strip ─── */
   .stats-strip {
@@ -737,19 +737,34 @@
   }
   .mascot-btn:hover::before { opacity: 1; }
   .parrot {
-    width: 48px; height: 48px; display: block;
+    width: 36px; height: 64px; display: block;
     color: var(--accent);
-    animation: parrot-bob 3s ease-in-out infinite;
-    transform-origin: 50% 85%;
+    animation: parrot-life 4s ease-in-out infinite;
+    transform-origin: 50% 95%;
   }
-  @keyframes parrot-bob {
-    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
-    50% { transform: translateY(-3px) rotate(2deg); }
+  /* Composite life animation: bob, sway, occasional hop */
+  @keyframes parrot-life {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    20% { transform: translateY(-2px) rotate(1deg); }
+    40% { transform: translateY(0) rotate(-1deg); }
+    55% { transform: translateY(-5px) rotate(2deg) scaleY(1.04); }
+    62% { transform: translateY(0) rotate(0deg) scaleY(0.94); }
+    72% { transform: translateY(-1px) rotate(-1deg) scaleY(1); }
+    85% { transform: translateY(0) rotate(0deg); }
   }
-  /* Hero floating Poly — keeps brand accent */
+  /* Hero floating Poly — bigger, gentle float + sway */
   .hero-poly { color: var(--accent); }
-  /* Big spotlight portrait — warmer tone against dark background */
-  .poly-portrait .big-parrot { color: var(--warm); }
+  /* Big portrait — warm against dark, breathes gently */
+  .poly-portrait .big-parrot {
+    color: var(--warm);
+    width: 60% !important; height: auto !important;
+    animation: parrot-breathe 5s ease-in-out infinite;
+    transform-origin: 50% 95%;
+  }
+  @keyframes parrot-breathe {
+    0%, 100% { transform: translateY(0) scale(1) rotate(-1deg); }
+    50% { transform: translateY(-6px) scale(1.02) rotate(2deg); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .parrot, .hero-mesh, .msg, [data-reveal], .hero-poly, .poly-portrait .big-parrot {
       animation: none !important;
@@ -778,31 +793,33 @@
 <!-- Reusable SVG defs -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Poly parrot — single silhouette, eye is a cutout (fill-rule evenodd), no overlapping shapes -->
-    <symbol id="poly-svg" viewBox="0 0 64 64">
+    <!-- Poly parrot — single silhouette, eye + wing crescent as cutouts (fill-rule evenodd), no overlapping shapes -->
+    <symbol id="poly-svg" viewBox="0 0 100 180">
       <path fill="currentColor" fill-rule="evenodd" d="
-        M 8 30
-        L 16 24
-        C 14 12 30 6 38 12
-        C 48 14 56 26 54 34
-        C 60 38 60 50 52 50
-        L 58 56
-        L 50 54
-        C 50 60 40 60 40 56
-        L 40 60
-        L 36 60
-        L 36 56
-        L 28 56
-        L 28 60
-        L 24 60
-        L 24 56
-        C 14 56 8 46 12 38
-        L 8 30 Z
-        M 28 22
-        m -2.5 0
-        a 2.5 2.5 0 1 0 5 0
-        a 2.5 2.5 0 1 0 -5 0
+        M 46 8
+        L 32 0
+        L 40 16
+        C 18 20 8 40 12 62
+        C 6 95 16 130 24 156
+        L 14 174
+        C 28 174 38 160 40 142
+        L 42 158 L 42 168 L 47 168 L 47 158 L 48 130
+        L 56 130 L 56 158 L 56 168 L 61 168 L 61 158 L 58 130
+        C 70 124 78 95 76 68
+        C 76 48 74 36 70 30
+        L 82 28
+        L 90 34
+        L 78 38
+        L 64 32
+        C 56 20 50 8 46 8 Z
+        M 58 22
+        m -3 0
+        a 3 3 0 1 0 6 0
+        a 3 3 0 1 0 -6 0
         Z
+        M 30 50
+        C 22 90 28 130 35 135
+        C 28 100 36 60 30 50 Z
       " />
     </symbol>
     <!-- Mini Pebble avatar (head + dots) -->
