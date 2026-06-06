@@ -244,17 +244,17 @@
   /* Floating Poly above hero scene */
   .hero-poly {
     position: absolute;
-    top: -68px; right: -2px;
-    width: 80px; height: 128px;
+    top: -52px; right: 8px;
+    width: 104px; height: 96px;
     z-index: 2;
     pointer-events: none;
-    animation: float-y 5s ease-in-out infinite;
+    animation: float-y 4.5s ease-in-out infinite;
   }
   @keyframes float-y {
-    0%, 100% { transform: translateY(0) rotate(-4deg); }
-    50% { transform: translateY(-10px) rotate(4deg); }
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    50% { transform: translateY(-9px) scale(1.03, 0.97); }
   }
-  @media (max-width: 600px) { .hero-poly { width: 60px; height: 96px; top: -52px; } }
+  @media (max-width: 600px) { .hero-poly { width: 80px; height: 74px; top: -40px; } }
 
   /* ─── Stats strip ─── */
   .stats-strip {
@@ -802,33 +802,30 @@
   }
   .mascot-btn:hover::before { opacity: 1; }
   .parrot {
-    width: 42px; height: 67px; display: block;
+    width: 56px; height: 52px; display: block;
     color: var(--accent);
-    animation: parrot-life 4s ease-in-out infinite;
-    transform-origin: 50% 95%;
+    animation: slime-jiggle 2.6s ease-in-out infinite;
+    transform-origin: 50% 100%;
   }
-  /* Composite life animation: bob, sway, occasional hop */
-  @keyframes parrot-life {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    20% { transform: translateY(-2px) rotate(1deg); }
-    40% { transform: translateY(0) rotate(-1deg); }
-    55% { transform: translateY(-5px) rotate(2deg) scaleY(1.04); }
-    62% { transform: translateY(0) rotate(0deg) scaleY(0.94); }
-    72% { transform: translateY(-1px) rotate(-1deg) scaleY(1); }
-    85% { transform: translateY(0) rotate(0deg); }
+  /* Squishy slime jiggle: squash-and-stretch + occasional bounce */
+  @keyframes slime-jiggle {
+    0%, 100% { transform: translateY(0) scale(1, 1); }
+    25% { transform: translateY(0) scale(1.06, 0.94); }
+    45% { transform: translateY(-4px) scale(0.96, 1.05); }
+    60% { transform: translateY(0) scale(1.04, 0.96); }
+    78% { transform: translateY(0) scale(0.99, 1.01); }
   }
-  /* Hero floating Poly — bigger, gentle float + sway */
   .hero-poly { color: var(--accent); }
-  /* Big portrait — warm against dark, breathes gently */
+  /* Big portrait slime — warm against dark, slow gooey breathe */
   .poly-portrait .big-parrot {
     color: var(--warm);
-    width: 52% !important; height: auto !important;
-    animation: parrot-breathe 5s ease-in-out infinite;
-    transform-origin: 50% 95%;
+    width: 58% !important; height: auto !important;
+    animation: slime-breathe 3.6s ease-in-out infinite;
+    transform-origin: 50% 100%;
   }
-  @keyframes parrot-breathe {
-    0%, 100% { transform: translateY(0) scale(1) rotate(-1deg); }
-    50% { transform: translateY(-6px) scale(1.02) rotate(2deg); }
+  @keyframes slime-breathe {
+    0%, 100% { transform: scale(1, 1); }
+    50% { transform: translateY(-5px) scale(1.04, 0.95); }
   }
   @media (prefers-reduced-motion: reduce) {
     .parrot, .hero-mesh, .msg, [data-reveal], .hero-poly, .poly-portrait .big-parrot {
@@ -858,35 +855,33 @@
 <!-- Reusable SVG defs -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Poly — single-color stencil macaw, long curving tail. One continuous outline; only the eye is cut out. -->
-    <symbol id="poly-svg" viewBox="0 0 200 320">
-      <path fill="currentColor" fill-rule="evenodd" d="
-        M 70 64
-        C 50 78 44 104 56 126
-        C 62 138 74 146 88 148
-        C 78 168 74 196 80 224
-        C 88 262 108 296 132 314
-        C 130 300 122 284 112 268
-        C 124 286 140 298 156 300
-        C 150 282 134 268 118 256
-        C 104 240 96 218 98 196
-        C 100 172 112 156 130 148
-        C 148 140 162 142 164 132
-        C 166 122 152 118 138 120
-        C 148 110 152 96 146 86
-        L 162 90
-        L 174 100
-        L 158 102
-        L 142 92
-        C 140 78 132 66 118 62
-        C 110 50 92 52 70 64
-        Z
-        M 96 92
-        m -7 0
-        a 7 7 0 1 0 14 0
-        a 7 7 0 1 0 -14 0
-        Z
-      " />
+    <!-- Poly — a friendly blob slime. Rounded jiggly body, glossy highlight, two eyes + smile. -->
+    <symbol id="poly-svg" viewBox="0 0 120 110">
+      <!-- Body: wide rounded blob with a couple of drips on top -->
+      <path class="slime-body" fill="currentColor" d="
+        M 60 14
+        C 70 14 74 4 80 10
+        C 84 14 82 22 86 24
+        C 102 30 112 50 112 70
+        C 112 92 90 104 60 104
+        C 30 104 8 92 8 70
+        C 8 52 16 34 30 26
+        C 36 23 36 14 42 12
+        C 47 10 50 18 56 16
+        C 57 15 58 14 60 14
+        Z" />
+      <!-- Glossy highlight -->
+      <ellipse class="slime-shine" cx="38" cy="44" rx="11" ry="8" fill="#ffffff" opacity="0.28" />
+      <!-- Eyes -->
+      <ellipse cx="46" cy="58" rx="6" ry="8" fill="#14171c" />
+      <ellipse cx="74" cy="58" rx="6" ry="8" fill="#14171c" />
+      <circle cx="48" cy="55" r="2" fill="#fafafa" />
+      <circle cx="76" cy="55" r="2" fill="#fafafa" />
+      <!-- Smile -->
+      <path d="M 50 76 Q 60 86 70 76" fill="none" stroke="#14171c" stroke-width="3.5" stroke-linecap="round" />
+      <!-- Rosy cheeks -->
+      <ellipse cx="34" cy="72" rx="5" ry="3.5" fill="#e8a23a" opacity="0.4" />
+      <ellipse cx="86" cy="72" rx="5" ry="3.5" fill="#e8a23a" opacity="0.4" />
     </symbol>
     <!-- Mini Pebble avatar (head + dots) -->
     <symbol id="pebble-avatar" viewBox="0 0 32 32">
