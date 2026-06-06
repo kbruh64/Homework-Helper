@@ -3,14 +3,48 @@
 (function () {
   // ─── Answer checking ───
   const norm = (s) => String(s).toLowerCase().trim().replace(/\s+/g, '');
+
+  // Pull a fraction "a/b" out of text, if present
+  function asFraction(s) {
+    const m = norm(s).match(/(\d+)\/(\d+)/);
+    if (!m) return null;
+    return [parseInt(m[1], 10), parseInt(m[2], 10)];
+  }
+  const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+  function reduce([n, d]) {
+    if (d === 0) return [n, d];
+    const g = gcd(Math.abs(n), Math.abs(d)) || 1;
+    return [n / g, d / g];
+  }
+
+  // Pull the first number (incl. decimals/negatives) out of free text like "the answer is 24"
+  function asNumber(s) {
+    const m = norm(s).replace(/[, ]/g, '').match(/-?\d+(\.\d+)?(?!\/)/);
+    return m ? parseFloat(m[0]) : null;
+  }
+
   function checkAnswer(user, expected) {
-    const u = norm(user);
     const list = Array.isArray(expected) ? expected : [expected];
+    const uNorm = norm(user);
+    const uFrac = asFraction(user);
+    const uNum = uFrac ? null : asNumber(user); // don't treat "3/5" as the number 3
+
     return list.some(e => {
-      const n = norm(e);
-      if (u === n) return true;
-      const un = parseFloat(u), en = parseFloat(n);
-      if (!isNaN(un) && !isNaN(en) && Math.abs(un - en) < 0.0001) return true;
+      const eNorm = norm(e);
+      if (uNorm === eNorm) return true;                 // exact text match (e.g. "right angle")
+      if (uNorm.includes(eNorm) && eNorm.length > 1) return true; // "the answer is right angle"
+
+      // Fraction comparison — accept equivalent fractions (2/4 == 1/2)
+      const eFrac = asFraction(e);
+      if (uFrac && eFrac) {
+        const [un, ud] = reduce(uFrac), [en, ed] = reduce(eFrac);
+        if (un === en && ud === ed) return true;
+      }
+
+      // Numeric comparison (handles "24", "the answer is 24", "24.0")
+      const eNum = asNumber(e);
+      if (uNum !== null && eNum !== null && Math.abs(uNum - eNum) < 0.0001) return true;
+
       return false;
     });
   }
