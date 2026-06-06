@@ -93,7 +93,7 @@
 
   /* ─── Hero ─── */
   .hero {
-    display: grid; grid-template-columns: 1.3fr 1fr; gap: 4rem;
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 3.5rem;
     padding: 3rem 0 5rem; align-items: center;
     min-height: calc(100dvh - 100px); position: relative;
   }
@@ -180,7 +180,20 @@
   .btn:hover .btn-arrow { transform: translateX(3px); }
 
   /* Hero visual — scene + chat */
-  .hero-visual { position: relative; }
+  .hero-visual { position: relative; min-height: 360px; }
+  /* Soft backdrop panel so the visual column never reads as empty */
+  .hero-visual::before {
+    content: ""; position: absolute;
+    inset: -8% -6% -8% -10%;
+    border-radius: var(--r-lg);
+    background:
+      radial-gradient(circle at 30% 20%, rgba(47,111,78,0.10), transparent 55%),
+      radial-gradient(circle at 80% 85%, rgba(232,162,58,0.10), transparent 55%),
+      var(--bg-warm);
+    border: 1px solid var(--line);
+    z-index: 0;
+  }
+  .hero-visual > * { position: relative; z-index: 1; }
   .hero-scene {
     position: relative;
     border-radius: var(--r-lg);
@@ -928,7 +941,7 @@
 
     <div class="hero-visual" data-reveal style="--delay: 320ms">
       <!-- Floating Poly above the card -->
-      <svg class="hero-poly" viewBox="0 0 64 64" aria-hidden="true"><use href="#poly-svg" /></svg>
+      <svg class="hero-poly" viewBox="0 0 120 110" aria-hidden="true"><use href="#poly-svg" /></svg>
 
       <div class="hero-scene">
         <div class="chat-head">
@@ -1187,7 +1200,7 @@
       </div>
     </div>
     <div class="poly-portrait" data-reveal style="--delay: 100ms" aria-hidden="true">
-      <svg class="big-parrot" viewBox="0 0 64 64"><use href="#poly-svg" /></svg>
+      <svg class="big-parrot" viewBox="0 0 120 110"><use href="#poly-svg" /></svg>
     </div>
   </section>
 
@@ -1357,7 +1370,7 @@
     </div>
   </div>
   <button class="mascot-btn" id="mascot-btn" type="button" aria-label="Talk to Poly the parrot">
-    <svg class="parrot" viewBox="0 0 64 64" aria-hidden="true"><use href="#poly-svg" /></svg>
+    <svg class="parrot" viewBox="0 0 120 110" aria-hidden="true"><use href="#poly-svg" /></svg>
   </button>
 </div>
 
