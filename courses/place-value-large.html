@@ -42,20 +42,33 @@
       <button data-mode="practice" type="button" role="tab">Practice</button>
       <button data-mode="assessment" type="button" role="tab">Assessment</button>
     </div>
-    <div class="mode-meta">Practice gives hints &middot; Assessment scores at the end</div>
+    <div class="mode-meta" id="mode-meta">Poly chats and gives hints as you go</div>
   </section>
 
   <section id="screen-quiz">
-    <div class="quiz-card">
-      <div class="q-progress" id="q-progress"></div>
-      <div class="q-prompt mono" id="q-prompt"></div>
-      <form class="q-form" id="q-form">
-        <input class="q-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer…" />
-        <button class="q-submit" id="q-submit" type="submit">Submit</button>
-        <button class="q-next" id="q-next" type="button" style="display:none;">Next &rarr;</button>
+    <div class="chat-shell">
+      <div class="chat-shell-head">
+        <div class="csh-who">
+          <span class="csh-avatar" aria-hidden="true">
+            <svg viewBox="0 0 120 110" style="color:#2f6f4e"><use href="#poly-svg" /></svg>
+          </span>
+          <div>
+            <strong>Poly</strong>
+            <span class="csh-sub" id="csh-progress">Question 1 of 15</span>
+          </div>
+        </div>
+        <div class="csh-score" id="csh-score">0 right</div>
+      </div>
+      <div class="chat-shell-stream" id="chat-stream" aria-live="polite"></div>
+      <form class="chat-shell-bar" id="q-form">
+        <input class="chat-shell-input" id="q-input" autocomplete="off" inputmode="text" placeholder="Type your answer to Poly…" />
+        <button class="chat-shell-send" id="q-send" type="submit" aria-label="Send">&rarr;</button>
       </form>
-      <button class="q-hint" id="q-hint" type="button">Need a hint?</button>
-      <div class="q-feedback" id="q-feedback"></div>
+      <div class="chat-shell-actions" id="chat-actions">
+        <button class="csa-chip" data-act="hint" type="button">Need a hint</button>
+        <button class="csa-chip" data-act="stuck" type="button">I&rsquo;m stuck</button>
+        <button class="csa-chip" data-act="skip" type="button">Skip</button>
+      </div>
     </div>
   </section>
 
@@ -72,6 +85,21 @@
     </div>
   </section>
 </main>
+
+<!-- Poly slime symbol for the chat avatar -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="poly-svg" viewBox="0 0 120 110">
+      <path fill="currentColor" d="M 60 8 C 88 8 108 30 110 58 C 111 80 100 104 60 104 C 20 104 9 80 10 58 C 12 30 32 8 60 8 Z" />
+      <ellipse cx="38" cy="44" rx="11" ry="8" fill="#ffffff" opacity="0.28" />
+      <ellipse cx="46" cy="58" rx="6" ry="8" fill="#14171c" />
+      <ellipse cx="74" cy="58" rx="6" ry="8" fill="#14171c" />
+      <path d="M 50 76 Q 60 86 70 76" fill="none" stroke="#14171c" stroke-width="3.5" stroke-linecap="round" />
+      <ellipse cx="34" cy="72" rx="5" ry="3.5" fill="#e8a23a" opacity="0.4" />
+      <ellipse cx="86" cy="72" rx="5" ry="3.5" fill="#e8a23a" opacity="0.4" />
+    </symbol>
+  </defs>
+</svg>
 
 <footer>
   <div>Made for kids who deserve a patient helper.</div>
