@@ -244,8 +244,8 @@
   /* Floating Poly above hero scene */
   .hero-poly {
     position: absolute;
-    top: -64px; right: -4px;
-    width: 84px; height: 132px;
+    top: -60px; right: -6px;
+    width: 92px; height: 126px;
     z-index: 2;
     pointer-events: none;
     animation: float-y 5s ease-in-out infinite;
@@ -254,7 +254,7 @@
     0%, 100% { transform: translateY(0) rotate(-4deg); }
     50% { transform: translateY(-10px) rotate(4deg); }
   }
-  @media (max-width: 600px) { .hero-poly { width: 62px; height: 98px; top: -50px; } }
+  @media (max-width: 600px) { .hero-poly { width: 70px; height: 96px; top: -46px; } }
 
   /* ─── Stats strip ─── */
   .stats-strip {
@@ -448,6 +448,71 @@
   .mood p {
     color: var(--ink-soft); margin: 0 0 0;
     font-size: 0.875rem; line-height: 1.5;
+  }
+
+  /* ─── Courses grid ─── */
+  .course-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 900px) { .course-cards { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .course-cards { grid-template-columns: 1fr; } }
+  .course-card {
+    display: flex; flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 1.75rem;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: var(--shadow-diffuse);
+    position: relative; overflow: hidden;
+    min-height: 200px;
+    transition: transform 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+  }
+  .course-card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .course-card::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 3px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .course-card:hover::after { transform: scaleX(1); }
+  .course-card .cc-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .cc-grade {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.625rem; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.25rem 0.5rem; border-radius: 999px;
+  }
+  .cc-count {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6875rem; color: var(--ink-mute);
+  }
+  .course-card .cc-icon { width: 40px; height: 40px; margin-bottom: 1rem; color: var(--accent); }
+  .course-card h3 {
+    font-size: 1.0625rem; font-weight: 600;
+    letter-spacing: -0.015em; margin: 0 0 0.375rem;
+  }
+  .course-card p {
+    font-size: 0.8125rem; color: var(--ink-soft);
+    margin: 0 0 1rem; line-height: 1.5; flex: 1;
+  }
+  .cc-go {
+    font-size: 0.8125rem; font-weight: 500;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 0.375rem;
+  }
+  .cc-go-arrow { display: inline-block; transition: transform 0.2s var(--ease-out); }
+  .course-card:hover .cc-go-arrow { transform: translateX(3px); }
+  .courses-all {
+    display: flex; justify-content: center; margin-top: 2.5rem;
   }
 
   /* ─── How it works ─── */
@@ -737,7 +802,7 @@
   }
   .mascot-btn:hover::before { opacity: 1; }
   .parrot {
-    width: 42px; height: 66px; display: block;
+    width: 48px; height: 66px; display: block;
     color: var(--accent);
     animation: parrot-life 4s ease-in-out infinite;
     transform-origin: 50% 95%;
@@ -757,7 +822,7 @@
   /* Big portrait — warm against dark, breathes gently */
   .poly-portrait .big-parrot {
     color: var(--warm);
-    width: 60% !important; height: auto !important;
+    width: 52% !important; height: auto !important;
     animation: parrot-breathe 5s ease-in-out infinite;
     transform-origin: 50% 95%;
   }
@@ -793,40 +858,33 @@
 <!-- Reusable SVG defs -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <!-- Poly parrot — traced from the macaw stencil reference. Single path; eye is a cutout (evenodd). -->
-    <symbol id="poly-svg" viewBox="0 0 300 470">
-      <path fill="currentColor" fill-rule="evenodd" d="
-        M 150 60
-        C 120 40 70 48 50 85
-        C 28 125 30 175 55 205
-        C 70 222 88 232 108 236
-        C 95 245 84 260 80 280
-        C 72 320 78 360 92 392
-        C 70 388 50 380 38 372
-        C 48 388 70 400 92 402
-        C 96 415 100 425 104 432
-        C 110 420 112 405 110 390
-        C 122 410 138 428 152 438
-        C 150 420 142 400 130 384
-        C 150 396 168 402 184 400
-        C 172 388 152 380 134 376
-        C 118 350 110 318 116 286
-        C 120 262 132 244 150 232
-        C 175 220 200 240 210 200
-        C 220 165 212 130 200 110
-        L 230 120
-        C 246 128 258 140 256 152
-        C 254 162 240 166 226 160
-        L 240 172
-        C 226 178 208 174 196 162
-        C 188 150 180 100 150 60
-        Z
-        M 128 118
-        m -13 0
-        a 13 13 0 1 0 26 0
-        a 13 13 0 1 0 -26 0
-        Z
-      " />
+    <!-- Poly — a proper macaw built from layered shapes. Tints to currentColor; accents stay fixed. -->
+    <symbol id="poly-svg" viewBox="0 0 160 220">
+      <!-- Long tail feathers (behind) -->
+      <path fill="currentColor" opacity="0.65" d="M70 120 C 58 160 52 196 64 214 C 70 200 74 168 82 134 Z" />
+      <path fill="currentColor" opacity="0.85" d="M82 122 C 78 162 80 196 92 214 C 96 196 92 162 92 132 Z" />
+      <!-- Body -->
+      <path fill="currentColor" d="M58 70 C 36 84 30 120 44 146 C 58 170 96 172 112 148 C 128 122 122 84 100 70 C 86 60 72 60 58 70 Z" />
+      <!-- Belly highlight -->
+      <path fill="#f3ead0" opacity="0.85" d="M66 96 C 56 110 56 138 70 150 C 82 158 96 152 98 138 C 100 118 88 96 78 92 C 73 91 69 92 66 96 Z" />
+      <!-- Wing -->
+      <path fill="currentColor" d="M96 78 C 116 84 122 116 110 144 C 100 150 90 146 86 134 C 92 116 90 96 88 84 C 90 80 93 78 96 78 Z" />
+      <!-- Wing feather lines -->
+      <path fill="none" stroke="#f3ead0" stroke-width="2" opacity="0.5" stroke-linecap="round" d="M99 92 C 106 104 106 122 100 136 M106 96 C 112 108 112 122 107 134" />
+      <!-- Head -->
+      <circle cx="74" cy="50" r="26" fill="currentColor" />
+      <!-- Face patch -->
+      <ellipse cx="64" cy="54" rx="10" ry="11" fill="#f3ead0" opacity="0.9" />
+      <!-- Eye -->
+      <circle cx="66" cy="48" r="5" fill="#14171c" />
+      <circle cx="67.6" cy="46" r="1.6" fill="#fafafa" />
+      <!-- Crest tuft -->
+      <path fill="currentColor" d="M78 26 C 80 16 88 12 92 18 C 86 18 82 22 82 30 Z" />
+      <!-- Big curved beak -->
+      <path fill="#e8a23a" d="M50 44 C 36 42 28 50 32 60 C 36 66 46 66 52 58 C 50 64 44 70 36 70 C 48 76 60 70 62 58 C 62 50 58 44 50 44 Z" />
+      <path fill="#d08a2a" d="M40 58 C 36 60 36 66 42 67 C 48 67 52 62 50 58 C 46 56 43 56 40 58 Z" />
+      <!-- Feet -->
+      <path fill="none" stroke="#e8a23a" stroke-width="3.5" stroke-linecap="round" d="M76 168 L76 188 M68 188 L84 188 M70 196 L82 196" />
     </symbol>
     <!-- Mini Pebble avatar (head + dots) -->
     <symbol id="pebble-avatar" viewBox="0 0 32 32">
@@ -847,8 +905,8 @@
     <span>Pebble</span>
   </a>
   <div class="nav-links">
+    <a href="#courses">Courses</a>
     <a href="topics.html">Topics</a>
-    <a href="courses.html">Courses</a>
     <a href="#how">How it works</a>
     <a href="#poly">Meet Poly</a>
   </div>
@@ -873,8 +931,8 @@
       </h1>
       <p class="lede" data-reveal style="--delay: 160ms">A small, patient tutor that asks better questions before it gives any answer. Kids stop copying. They start understanding.</p>
       <div class="cta-row" data-reveal style="--delay: 240ms">
-        <a href="#" data-open-helper class="btn btn-primary">Try a problem <span class="btn-arrow">&rarr;</span></a>
-        <a href="#how" class="btn btn-ghost">See how it works</a>
+        <a href="#courses" class="btn btn-primary">Start a course <span class="btn-arrow">&rarr;</span></a>
+        <a href="#" data-open-helper class="btn btn-ghost">Try one problem</a>
       </div>
     </div>
 
@@ -1143,14 +1201,98 @@
     </div>
   </section>
 
+  <!-- COURSES -->
+  <section class="section" id="courses">
+    <div class="section-head">
+      <div>
+        <div class="section-tag" data-reveal>Start a course</div>
+        <h2 data-reveal style="--delay: 80ms">Fifteen questions. Two ways to run them.</h2>
+      </div>
+      <p data-reveal style="--delay: 160ms">Every course is one topic, fifteen questions deep. Pick <strong>Practice</strong> for hints as you go, or <strong>Assessment</strong> for a scored run at the end. No account, no download — just open one and start.</p>
+    </div>
+
+    <div class="course-cards">
+      <a class="course-card" href="courses/multiplication.html" data-reveal>
+        <div class="cc-top"><span class="cc-grade">Grade 3</span><span class="cc-count">15 questions</span></div>
+        <svg class="cc-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <path d="M12 12 L28 28 M28 12 L12 28" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <h3>Multiplication</h3>
+        <p>Times tables and equal groups, up to 10 × 10.</p>
+        <span class="cc-go">Start course <span class="cc-go-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="course-card" href="courses/fractions.html" data-reveal style="--delay: 70ms">
+        <div class="cc-top"><span class="cc-grade">Grade 3</span><span class="cc-count">15 questions</span></div>
+        <svg class="cc-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <line x1="10" y1="30" x2="30" y2="10" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+          <circle cx="13" cy="13" r="3" fill="currentColor" />
+          <circle cx="27" cy="27" r="3" fill="currentColor" />
+        </svg>
+        <h3>Fractions</h3>
+        <p>Equal parts, comparing, and equivalent fractions.</p>
+        <span class="cc-go">Start course <span class="cc-go-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="course-card" href="courses/long-division.html" data-reveal style="--delay: 140ms">
+        <div class="cc-top"><span class="cc-grade">Grade 4</span><span class="cc-count">15 questions</span></div>
+        <svg class="cc-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <circle cx="20" cy="11" r="2.5" fill="currentColor" />
+          <line x1="10" y1="20" x2="30" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+          <circle cx="20" cy="29" r="2.5" fill="currentColor" />
+        </svg>
+        <h3>Long Division</h3>
+        <p>Divide, multiply, subtract, bring down — with remainders.</p>
+        <span class="cc-go">Start course <span class="cc-go-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="course-card" href="courses/decimals.html" data-reveal>
+        <div class="cc-top"><span class="cc-grade">Grade 4</span><span class="cc-count">15 questions</span></div>
+        <svg class="cc-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <circle cx="13" cy="27" r="3" fill="currentColor" />
+          <text x="20" y="26" font-family="Geist Mono, monospace" font-weight="600" font-size="15" fill="currentColor">5</text>
+        </svg>
+        <h3>Decimals</h3>
+        <p>Tenths, hundredths, and how decimals link to fractions.</p>
+        <span class="cc-go">Start course <span class="cc-go-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="course-card" href="courses/geometry.html" data-reveal style="--delay: 70ms">
+        <div class="cc-top"><span class="cc-grade">Grade 3</span><span class="cc-count">15 questions</span></div>
+        <svg class="cc-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <path d="M20 8 L32 30 L8 30 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round" />
+        </svg>
+        <h3>Geometry</h3>
+        <p>Shapes, sides, faces, and lines of symmetry.</p>
+        <span class="cc-go">Start course <span class="cc-go-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="course-card" href="courses/fractions-advanced.html" data-reveal style="--delay: 140ms">
+        <div class="cc-top"><span class="cc-grade">Grade 4</span><span class="cc-count">15 questions</span></div>
+        <svg class="cc-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <line x1="10" y1="20" x2="30" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+          <text x="14" y="16" font-family="Geist Mono, monospace" font-weight="600" font-size="11" fill="currentColor">a</text>
+          <text x="14" y="34" font-family="Geist Mono, monospace" font-weight="600" font-size="11" fill="currentColor">b</text>
+        </svg>
+        <h3>Fractions, advanced</h3>
+        <p>Adding, subtracting, and mixed numbers.</p>
+        <span class="cc-go">Start course <span class="cc-go-arrow">&rarr;</span></span>
+      </a>
+    </div>
+
+    <div class="courses-all" data-reveal>
+      <a href="courses.html" class="btn btn-ghost">See all 25 courses <span class="btn-arrow">&rarr;</span></a>
+    </div>
+  </section>
+
   <!-- CLOSER -->
   <section class="closer" id="start" data-reveal>
     <div>
-      <h2>Sit down with Pebble for one problem.</h2>
+      <h2>Or just work through one problem together.</h2>
       <p>No account. No download. Type one math problem and feel what a hint instead of an answer feels like.</p>
       <div class="cta-row">
         <a href="#" data-open-helper class="btn btn-primary">Try one now <span class="btn-arrow">&rarr;</span></a>
-        <a href="topics.html" class="btn btn-ghost">Browse topics</a>
+        <a href="courses.html" class="btn btn-ghost">Browse courses</a>
       </div>
     </div>
     <div class="closer-illu" aria-hidden="true">
