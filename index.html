@@ -2352,17 +2352,20 @@
       // ─── Pro toggle wiring ───
       const proBtn = document.getElementById('pro-toggle');
       const subEl = document.getElementById('helper-sub');
-      // Ask the server whether a key is configured
+      // Ask the server whether a key is configured.
+      // If the status route is missing/unreachable, assume Pro MIGHT work and let /chat be the real test.
+      const onServer = location.protocol.startsWith('http') && location.hostname !== '';
+      pro.available = onServer; // optimistic default when served by a backend
       fetch('/api/status')
-        .then(r => r.json())
+        .then(r => r.ok ? r.json() : null)
         .then(d => {
-          pro.available = Boolean(d && d.pro);
+          if (d && typeof d.pro === 'boolean') pro.available = d.pro;
           if (!pro.available && proBtn) {
             proBtn.disabled = true;
             proBtn.title = 'Poly Pro needs the server running with a Mistral key';
           }
         })
-        .catch(() => { if (proBtn) { proBtn.disabled = true; pro.available = false; } });
+        .catch(() => { /* keep optimistic default; /chat will report if it truly cannot reach AI */ });
 
       if (proBtn) {
         proBtn.addEventListener('click', () => {
