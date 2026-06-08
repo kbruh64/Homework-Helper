@@ -90,8 +90,12 @@
     askedConfusing: false, // true after Poly asks "which part is tricky?"
   };
 
+  // Poly Pro (AI hints via the backend). Answer-checking stays rule-based for correct scoring.
+  const pro = { on: false, available: false };
+
   let elStream, elInput, elForm, elSend, elProgress, elScore, elActions,
-      elModeChips, elModeMeta, elScreenQuiz, elScreenResult, elResultText, elResultList, elRestart;
+      elModeChips, elModeMeta, elScreenQuiz, elScreenResult, elResultText, elResultList, elRestart,
+      elProToggle;
 
   // ─── Message rendering ───
   function bubble(text, who) {
@@ -178,11 +182,39 @@
   }
 
   function giveHint(q) {
+    if (pro.on) return giveProHint(q);
     if (q.hints && state.hintShown < q.hints.length) {
       polySay(q.hints[state.hintShown], 550);
       state.hintShown++;
     } else {
       polySay("Here's the move: think about what the question is really asking, step by step. What do you get?", 550);
+    }
+  }
+
+  // Ask Mistral for a hint about THIS question — never the answer. Answer is checked by code.
+  async function giveProHint(q) {
+    const typing = polyTyping();
+    const prompt =
+      `You are Poly, a kind math tutor for a grade 3-4 child. ` +
+      `The question is: "${q.q}". The correct answer is "${formatAnswer(q.a)}". ` +
+      `Give ONE short, friendly hint (1-2 simple sentences) that guides the child toward it. ` +
+      `Do NOT state the answer. Use kid-friendly words.`;
+    try {
+      const r = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] }),
+      });
+      typing.remove();
+      if (!r.ok) throw new Error('bad');
+      const data = await r.json();
+      bubble(data.reply || "Think about what the question is really asking. What's the first step?", 'poly');
+      state.hintShown++;
+    } catch (e) {
+      typing.remove();
+      // Fall back to the built-in hint so the child is never stuck
+      if (q.hints && state.hintShown < q.hints.length) { bubble(q.hints[state.hintShown], 'poly'); state.hintShown++; }
+      else bubble("Let's break it into small steps. What's the first thing you'd do?", 'poly');
     }
   }
 
@@ -372,6 +404,29 @@
       if (b) setMode(b.dataset.mode);
     });
     elRestart.addEventListener('click', () => setMode(state.mode));
+
+    // ─── Poly Pro toggle ───
+    elProToggle = document.getElementById('course-pro-toggle');
+    if (elProToggle) {
+      // Optimistic when served by a backend; /api/status refines it; /chat is the real test.
+      pro.available = location.protocol.startsWith('http') && location.hostname !== '';
+      fetch('/api/status')
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (d && typeof d.pro === 'boolean') pro.available = d.pro;
+          if (!pro.available) { elProToggle.disabled = true; elProToggle.title = 'Poly Pro needs the server running with a key'; }
+        })
+        .catch(() => { /* keep optimistic default */ });
+
+      elProToggle.addEventListener('click', () => {
+        if (!pro.available) return;
+        pro.on = !pro.on;
+        elProToggle.setAttribute('aria-checked', String(pro.on));
+        elModeMeta.textContent = pro.on
+          ? 'Poly Pro · AI hints (answers still checked exactly)'
+          : (state.mode === 'assessment' ? 'Assessment — no hints, scored at the end' : 'Poly chats and gives hints as you go');
+      });
+    }
 
     setMode('practice');
   });
