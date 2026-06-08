@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: pebble
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MISTRAL_API_KEY
+        sync: false          # set this secret in the Render dashboard, never in the repo
+      - key: MISTRAL_MODEL
+        value: mistral-small-latest

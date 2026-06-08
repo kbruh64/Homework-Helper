@@ -2345,8 +2345,43 @@
         const v = input.value.trim();
         if (!v) return;
         input.value = '';
-        handle(v);
+        if (pro.on) handlePro(v);
+        else handle(v);
       });
+
+      // ─── Pro toggle wiring ───
+      const proBtn = document.getElementById('pro-toggle');
+      const subEl = document.getElementById('helper-sub');
+      // Ask the server whether a key is configured
+      fetch('/api/status')
+        .then(r => r.json())
+        .then(d => {
+          pro.available = Boolean(d && d.pro);
+          if (!pro.available && proBtn) {
+            proBtn.disabled = true;
+            proBtn.title = 'Poly Pro needs the server running with a Mistral key';
+          }
+        })
+        .catch(() => { if (proBtn) { proBtn.disabled = true; pro.available = false; } });
+
+      if (proBtn) {
+        proBtn.addEventListener('click', () => {
+          if (!pro.available) return;
+          pro.on = !pro.on;
+          proBtn.setAttribute('aria-checked', String(pro.on));
+          if (pro.on) {
+            pro.history = [];
+            if (subEl) subEl.textContent = 'Poly Pro · powered by AI';
+            chat.innerHTML = '';
+            send("Hi! I'm Poly Pro. Ask me anything about your math homework and we'll figure it out together — I'll give hints, not answers. What are you working on?", 'bot');
+          } else {
+            if (subEl) subEl.textContent = 'hints first, never just the answer';
+            chat.innerHTML = '';
+            state.stage = 'idle';
+            greet();
+          }
+        });
+      }
       suggBox.addEventListener('click', e => {
         const b = e.target.closest('[data-fill]');
         if (!b) return;
