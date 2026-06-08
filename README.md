@@ -59,4 +59,4 @@ The pages in `topics/` and `courses/` are generated:
 ```
 npm run build
 ```
-Edit the question banks and content in `build-topics.js`, then re-run it.
+Edit the question banks and content in `build-topics.cjs`, then re-run it.
