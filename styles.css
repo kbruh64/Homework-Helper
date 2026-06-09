@@ -499,6 +499,95 @@ footer a:hover { color: var(--ink); }
   background: transparent; color: var(--ink); border: 1px solid var(--line-strong);
 }
 
+/* ─── Flashcards ─── */
+.flash-wrap { max-width: 640px; margin: 3rem auto; }
+.flash-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.flash-count { font-family: 'Geist Mono', monospace; font-size: 0.75rem; color: var(--ink-mute); }
+.flash-tally {
+  font-family: 'Geist Mono', monospace; font-size: 0.75rem; color: var(--accent);
+  background: var(--accent-soft); padding: 0.3125rem 0.625rem; border-radius: 999px;
+}
+.flashcard {
+  position: relative; width: 100%; min-height: 280px;
+  perspective: 1400px;
+}
+.flash-face {
+  position: absolute; inset: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 2.5rem;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+  backface-visibility: hidden;
+  transition: transform 0.5s var(--ease-out);
+}
+.flash-front { transform: rotateY(0deg); }
+.flash-back { transform: rotateY(180deg); }
+.flashcard.flipped .flash-front { transform: rotateY(-180deg); }
+.flashcard.flipped .flash-back { transform: rotateY(0deg); }
+.flash-label {
+  font-family: 'Geist Mono', monospace; font-size: 0.625rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute);
+  margin-bottom: 1rem;
+}
+.flash-q { font-size: clamp(1.5rem, 3.5vw, 2.25rem); font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+.flash-a { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 600; letter-spacing: -0.02em; margin: 0; color: var(--accent); }
+.flash-yours { margin: 0.75rem 0 0; font-size: 0.875rem; }
+.flash-yours.right { color: var(--accent); }
+.flash-yours.wrong { color: #b6452f; }
+.flash-inputbar { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+.flash-actions { display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: center; }
+.flash-good { border-color: rgba(47,111,78,0.3) !important; color: var(--accent) !important; }
+.flash-again { border-color: rgba(232,162,58,0.4) !important; color: #8a5a14 !important; }
+
+/* ─── Speed mode ─── */
+.speed-wrap { max-width: 640px; margin: 3rem auto; }
+.speed-start, .speed-play {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 2.5rem;
+}
+.speed-start h2 { margin: 0.25rem 0 0.75rem; }
+.speed-start .lede { color: var(--ink-soft); margin: 0 0 1.75rem; }
+.speed-go {
+  background: var(--ink); color: #fafafa; border: 0; border-radius: 999px;
+  padding: 0.875rem 1.5rem; font: inherit; font-size: 1rem; font-weight: 500;
+  cursor: pointer; transition: transform 0.12s var(--ease-out);
+}
+.speed-go:hover { transform: translateY(-1px); }
+.speed-hud {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 0.875rem;
+}
+.speed-clock {
+  font-family: 'Geist Mono', monospace; font-size: 2.5rem; font-weight: 500;
+  letter-spacing: -0.02em; line-height: 1; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.speed-clock.low { color: var(--berry, #c84a5e); }
+.speed-stats { font-size: 0.875rem; color: var(--ink-soft); }
+.speed-stats #speed-score { font-weight: 600; color: var(--ink); }
+.speed-streak { margin-left: 0.5rem; color: var(--warm); font-weight: 500; }
+.speed-bar { height: 6px; background: var(--bg); border-radius: 999px; overflow: hidden; margin-bottom: 1.5rem; }
+.speed-bar span {
+  display: block; height: 100%; width: 100%;
+  background: var(--accent); border-radius: 999px;
+  transform-origin: left; transition: transform 0.1s linear, background 0.3s;
+}
+.speed-q { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 600; letter-spacing: -0.02em; margin: 0 0 1.5rem; min-height: 2.5rem; }
+.speed-form { display: flex; gap: 0.5rem; }
+.speed-flash { min-height: 1.5rem; margin-top: 1rem; font-size: 0.9375rem; font-weight: 500; }
+.speed-flash.ok { color: var(--accent); }
+.speed-flash.no { color: #b6452f; }
+.speed-flash .bonus { color: var(--warm); }
+
 .grain {
   position: fixed; inset: 0; pointer-events: none;
   opacity: 0.025; z-index: 1;

@@ -95,7 +95,7 @@
 
   let elStream, elInput, elForm, elSend, elProgress, elScore, elActions,
       elModeChips, elModeMeta, elScreenQuiz, elScreenResult, elResultText, elResultList, elRestart,
-      elProToggle;
+      elProToggle, elScreenFlash, elScreenSpeed, elResultTag, elResultTitle;
 
   // ─── Message rendering ───
   function bubble(text, who) {
@@ -312,8 +312,9 @@
   // ─── Results ───
   function finish() {
     state.finished = true;
-    elScreenQuiz.style.display = 'none';
-    elScreenResult.style.display = '';
+    showScreen('result');
+    if (elResultTag) elResultTag.textContent = 'Course complete';
+    if (elResultTitle) elResultTitle.textContent = 'How it went.';
     const total = COURSE.questions.length;
     const pct = Math.round((state.correct / total) * 100);
     elResultText.textContent = state.mode === 'assessment'
@@ -357,14 +358,171 @@
     enableInput(true);
   }
 
+  function showScreen(name) {
+    const map = { quiz: elScreenQuiz, flash: elScreenFlash, speed: elScreenSpeed, result: elScreenResult };
+    Object.entries(map).forEach(([k, el]) => { if (el) el.style.display = (k === name) ? '' : 'none'; });
+  }
+
   function setMode(mode) {
     state.mode = mode;
     elModeChips.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
-    elModeMeta.textContent = mode === 'assessment'
-      ? 'Assessment — no hints, scored at the end'
-      : 'Poly chats and gives hints as you go';
-    if (elActions) elActions.style.display = mode === 'assessment' ? 'none' : '';
-    reset();
+    const metas = {
+      practice: 'Poly chats and gives hints as you go',
+      assessment: 'Assessment — no hints, scored at the end',
+      flashcards: 'Type your answer, flip to check, rate yourself',
+      speed: 'Race the clock — streaks add bonus time',
+    };
+    elModeMeta.textContent = metas[mode] || metas.practice;
+    if (elActions) elActions.style.display = (mode === 'practice') ? '' : 'none';
+    stopSpeed(); // clear any running timer when switching away
+
+    if (mode === 'flashcards') { showScreen('flash'); startFlash(); }
+    else if (mode === 'speed') { showScreen('speed'); startSpeed(); }
+    else { showScreen('quiz'); reset(); }
+  }
+
+  // ════════════════ FLASHCARDS (type → flip → rate) ════════════════
+  const flash = { order: [], pos: 0, got: 0, again: [], flipped: false };
+  let elFlashCard, elFlashQ, elFlashA, elFlashYours, elFlashCount, elFlashTally,
+      elFlashForm, elFlashInput, elFlashFlip, elFlashRate;
+
+  function startFlash() {
+    flash.order = COURSE.questions.map((_, i) => i);
+    flash.pos = 0; flash.got = 0; flash.again = []; flash.flipped = false;
+    renderFlash();
+  }
+  function renderFlash() {
+    const q = COURSE.questions[flash.order[flash.pos]];
+    elFlashCard.classList.remove('flipped');
+    flash.flipped = false;
+    elFlashQ.textContent = q.q;
+    elFlashA.textContent = formatAnswer(q.a);
+    elFlashYours.textContent = '';
+    elFlashYours.className = 'flash-yours';
+    elFlashCount.textContent = `Card ${flash.pos + 1} of ${flash.order.length}`;
+    elFlashTally.textContent = `${flash.got} got it`;
+    elFlashForm.style.display = '';
+    elFlashRate.style.display = 'none';
+    elFlashInput.value = '';
+    setTimeout(() => elFlashInput.focus(), 30);
+  }
+  function flipFlash() {
+    const q = COURSE.questions[flash.order[flash.pos]];
+    const typed = elFlashInput.value.trim();
+    if (typed) {
+      const right = checkAnswer(typed, q.a);
+      elFlashYours.textContent = right ? `You said "${typed}" — correct!` : `You said "${typed}".`;
+      elFlashYours.className = 'flash-yours ' + (right ? 'right' : 'wrong');
+    }
+    elFlashCard.classList.add('flipped');
+    flash.flipped = true;
+    elFlashForm.style.display = 'none';
+    elFlashRate.style.display = '';
+  }
+  function rateFlash(good) {
+    if (good) flash.got++;
+    else flash.again.push(flash.order[flash.pos]);
+    flash.pos++;
+    if (flash.pos >= flash.order.length) {
+      // requeue "review again" cards until cleared
+      if (flash.again.length) {
+        flash.order = flash.again; flash.again = []; flash.pos = 0;
+        renderFlash();
+      } else {
+        finishFlash();
+      }
+    } else {
+      renderFlash();
+    }
+  }
+  function finishFlash() {
+    showScreen('result');
+    elResultTag && (elResultTag.textContent = 'Flashcards done');
+    elResultTitle && (elResultTitle.textContent = 'Nice deck run.');
+    elResultText.textContent = `You marked ${flash.got} cards as "got it" and cleared every "review again." Spaced practice like this is what makes facts stick.`;
+    elResultList.innerHTML = '';
+  }
+
+  // ════════════════ SPEED (race the clock + streak bonus) ════════════════
+  const SPEED_START = 60, BONUS = 2;
+  const speed = { time: 0, score: 0, streak: 0, order: [], pos: 0, running: false, raf: 0, last: 0 };
+  let elSpeedStart, elSpeedPlay, elSpeedGo, elSpeedClock, elSpeedScore, elSpeedStreak,
+      elSpeedBar, elSpeedQ, elSpeedForm, elSpeedInput, elSpeedSend, elSpeedFlash;
+
+  function startSpeed() {
+    stopSpeed();
+    elSpeedStart.style.display = '';
+    elSpeedPlay.style.display = 'none';
+  }
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  function beginSpeed() {
+    speed.time = SPEED_START; speed.score = 0; speed.streak = 0;
+    speed.order = shuffle(COURSE.questions.map((_, i) => i)); speed.pos = 0;
+    speed.running = true; speed.last = performance.now();
+    elSpeedStart.style.display = 'none';
+    elSpeedPlay.style.display = '';
+    nextSpeedQ();
+    elSpeedFlash.textContent = '';
+    speed.raf = requestAnimationFrame(tickSpeed);
+    setTimeout(() => elSpeedInput.focus(), 30);
+  }
+  function tickSpeed(now) {
+    if (!speed.running) return;
+    const dt = (now - speed.last) / 1000; speed.last = now;
+    speed.time -= dt;
+    if (speed.time <= 0) { speed.time = 0; renderClock(); return endSpeed(); }
+    renderClock();
+    speed.raf = requestAnimationFrame(tickSpeed);
+  }
+  function renderClock() {
+    elSpeedClock.textContent = speed.time.toFixed(1);
+    elSpeedClock.classList.toggle('low', speed.time <= 10);
+    const frac = Math.max(0, Math.min(1, speed.time / SPEED_START));
+    elSpeedBar.style.transform = `scaleX(${frac})`;
+  }
+  function nextSpeedQ() {
+    if (speed.pos >= speed.order.length) speed.order = shuffle(speed.order); // loop if they're fast
+    speed.pos = speed.pos % speed.order.length;
+    const q = COURSE.questions[speed.order[speed.pos]];
+    elSpeedQ.textContent = q.q;
+    elSpeedInput.value = '';
+  }
+  function submitSpeed() {
+    if (!speed.running) return;
+    const v = elSpeedInput.value.trim();
+    if (!v) return;
+    const q = COURSE.questions[speed.order[speed.pos]];
+    if (checkAnswer(v, q.a)) {
+      speed.score++; speed.streak++;
+      speed.time += BONUS;
+      elSpeedFlash.innerHTML = `Yes! <span class="bonus">+${BONUS}s</span>`;
+      elSpeedFlash.className = 'speed-flash ok';
+      elSpeedScore.textContent = speed.score;
+      elSpeedStreak.textContent = speed.streak >= 3 ? `🔥 ${speed.streak} streak` : '';
+      renderClock();
+    } else {
+      speed.streak = 0;
+      elSpeedFlash.textContent = `It was ${formatAnswer(q.a)}.`;
+      elSpeedFlash.className = 'speed-flash no';
+      elSpeedStreak.textContent = '';
+    }
+    speed.pos++;
+    nextSpeedQ();
+    elSpeedInput.focus();
+  }
+  function endSpeed() {
+    stopSpeed();
+    showScreen('result');
+    elResultTag && (elResultTag.textContent = 'Time!');
+    elResultTitle && (elResultTitle.textContent = "Clock's up.");
+    elResultText.textContent = `You answered ${speed.score} right against the clock. ${speed.score >= 10 ? 'Lightning fast!' : speed.score >= 5 ? 'Solid run — go again and beat it.' : 'Keep at it — speed comes with practice.'}`;
+    elResultList.innerHTML = '';
+  }
+  function stopSpeed() {
+    speed.running = false;
+    if (speed.raf) cancelAnimationFrame(speed.raf);
+    speed.raf = 0;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -380,9 +538,38 @@
     elModeMeta = document.getElementById('mode-meta');
     elScreenQuiz = document.getElementById('screen-quiz');
     elScreenResult = document.getElementById('screen-result');
+    elScreenFlash = document.getElementById('screen-flash');
+    elScreenSpeed = document.getElementById('screen-speed');
     elResultText = document.getElementById('result-text');
     elResultList = document.getElementById('result-list');
+    elResultTag = document.getElementById('result-tag');
+    elResultTitle = document.getElementById('result-title');
     elRestart = document.getElementById('result-restart');
+
+    // Flashcard elements
+    elFlashCard = document.getElementById('flashcard');
+    elFlashQ = document.getElementById('flash-q');
+    elFlashA = document.getElementById('flash-a');
+    elFlashYours = document.getElementById('flash-yours');
+    elFlashCount = document.getElementById('flash-count');
+    elFlashTally = document.getElementById('flash-tally');
+    elFlashForm = document.getElementById('flash-form');
+    elFlashInput = document.getElementById('flash-input');
+    elFlashRate = document.getElementById('flash-rate');
+
+    // Speed elements
+    elSpeedStart = document.getElementById('speed-start');
+    elSpeedPlay = document.getElementById('speed-play');
+    elSpeedGo = document.getElementById('speed-go');
+    elSpeedClock = document.getElementById('speed-clock');
+    elSpeedScore = document.getElementById('speed-score');
+    elSpeedStreak = document.getElementById('speed-streak');
+    elSpeedBar = document.getElementById('speed-bar-fill');
+    elSpeedQ = document.getElementById('speed-q');
+    elSpeedForm = document.getElementById('speed-form');
+    elSpeedInput = document.getElementById('speed-input');
+    elSpeedSend = document.getElementById('speed-send');
+    elSpeedFlash = document.getElementById('speed-flash');
 
     elForm.addEventListener('submit', e => {
       e.preventDefault();
@@ -398,6 +585,17 @@
       const map = { hint: 'hint', stuck: "I'm stuck", skip: 'skip' };
       handle(map[b.dataset.act]);
     });
+
+    // Flashcard listeners
+    elFlashForm.addEventListener('submit', e => { e.preventDefault(); if (!flash.flipped) flipFlash(); });
+    elFlashRate.addEventListener('click', e => {
+      const b = e.target.closest('[data-rate]');
+      if (b) rateFlash(b.dataset.rate === 'good');
+    });
+
+    // Speed listeners
+    elSpeedGo.addEventListener('click', beginSpeed);
+    elSpeedForm.addEventListener('submit', e => { e.preventDefault(); submitSpeed(); });
 
     elModeChips.addEventListener('click', e => {
       const b = e.target.closest('[data-mode]');

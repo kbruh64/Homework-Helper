@@ -41,6 +41,8 @@
     <div class="mode-chips" id="mode-chips" role="tablist" aria-label="Course mode">
       <button data-mode="practice" type="button" role="tab">Practice</button>
       <button data-mode="assessment" type="button" role="tab">Assessment</button>
+      <button data-mode="flashcards" type="button" role="tab">Flashcards</button>
+      <button data-mode="speed" type="button" role="tab">Speed</button>
     </div>
     <div class="mode-bar-right">
       <button class="pro-toggle" id="course-pro-toggle" type="button" role="switch" aria-checked="false" title="Poly Pro uses AI for more flexible hints">
@@ -77,10 +79,68 @@
     </div>
   </section>
 
+  <!-- Flashcards -->
+  <section id="screen-flash" style="display:none;">
+    <div class="flash-wrap">
+      <div class="flash-top">
+        <span class="flash-count" id="flash-count">Card 1 of 15</span>
+        <span class="flash-tally" id="flash-tally">0 got it</span>
+      </div>
+      <div class="flashcard" id="flashcard">
+        <div class="flash-face flash-front">
+          <span class="flash-label">Question</span>
+          <p class="flash-q mono" id="flash-q"></p>
+        </div>
+        <div class="flash-face flash-back">
+          <span class="flash-label">Answer</span>
+          <p class="flash-a mono" id="flash-a"></p>
+          <p class="flash-yours" id="flash-yours"></p>
+        </div>
+      </div>
+      <form class="flash-inputbar" id="flash-form">
+        <input class="chat-shell-input" id="flash-input" autocomplete="off" placeholder="Type your answer, then flip…" />
+        <button class="chat-shell-send" id="flash-flip" type="submit" aria-label="Flip">Flip</button>
+      </form>
+      <div class="flash-actions" id="flash-rate" style="display:none;">
+        <button class="csa-chip flash-good" data-rate="good" type="button">Got it</button>
+        <button class="csa-chip flash-again" data-rate="again" type="button">Review again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speed -->
+  <section id="screen-speed" style="display:none;">
+    <div class="speed-wrap">
+      <div class="speed-start" id="speed-start">
+        <div class="section-tag">Speed mode</div>
+        <h2>Race the clock.</h2>
+        <p class="lede">60 seconds. Answer as many as you can — every right answer in a row adds <strong>+2 seconds</strong>. Ready?</p>
+        <button class="speed-go" id="speed-go" type="button">Start the clock &rarr;</button>
+      </div>
+
+      <div class="speed-play" id="speed-play" style="display:none;">
+        <div class="speed-hud">
+          <div class="speed-clock" id="speed-clock">60.0</div>
+          <div class="speed-stats">
+            <span id="speed-score">0</span> right
+            <span class="speed-streak" id="speed-streak"></span>
+          </div>
+        </div>
+        <div class="speed-bar"><span id="speed-bar-fill"></span></div>
+        <p class="speed-q mono" id="speed-q"></p>
+        <form class="speed-form" id="speed-form">
+          <input class="chat-shell-input" id="speed-input" autocomplete="off" inputmode="text" placeholder="Quick — type it!" />
+          <button class="chat-shell-send" id="speed-send" type="submit" aria-label="Send">&rarr;</button>
+        </form>
+        <div class="speed-flash" id="speed-flash"></div>
+      </div>
+    </div>
+  </section>
+
   <section id="screen-result" style="display:none;">
     <div class="result-card">
-      <div class="section-tag">Course complete</div>
-      <h2>How it went.</h2>
+      <div class="section-tag" id="result-tag">Course complete</div>
+      <h2 id="result-title">How it went.</h2>
       <p class="lede" id="result-text"></p>
       <div id="result-list"></div>
       <div class="result-actions">
