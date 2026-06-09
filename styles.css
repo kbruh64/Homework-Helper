@@ -511,25 +511,44 @@ footer a:hover { color: var(--ink); }
   background: var(--accent-soft); padding: 0.3125rem 0.625rem; border-radius: 999px;
 }
 .flashcard {
-  position: relative; width: 100%; min-height: 280px;
-  perspective: 1400px;
+  position: relative; width: 100%; height: 300px;
+  perspective: 1600px;
+  margin-bottom: 0.5rem;
 }
+.flash-inner {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-out);
+}
+.flashcard.flipped .flash-inner { transform: rotateY(180deg); }
 .flash-face {
   position: absolute; inset: 0;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 18px 40px -16px rgba(20,23,28,0.18), 0 2px 0 rgba(20,23,28,0.04);
   padding: 2.5rem;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   text-align: center;
   backface-visibility: hidden;
-  transition: transform 0.5s var(--ease-out);
+  -webkit-backface-visibility: hidden;
 }
 .flash-front { transform: rotateY(0deg); }
-.flash-back { transform: rotateY(180deg); }
-.flashcard.flipped .flash-front { transform: rotateY(-180deg); }
-.flashcard.flipped .flash-back { transform: rotateY(0deg); }
+.flash-back {
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(47,111,78,0.06), transparent 60%),
+    var(--surface);
+  border-color: rgba(47,111,78,0.2);
+}
+/* little corner index marks so it reads as a card */
+.flash-face::before, .flash-face::after {
+  content: ""; position: absolute;
+  width: 10px; height: 10px; border-radius: 999px;
+  background: var(--accent-soft);
+}
+.flash-face::before { top: 1.25rem; left: 1.25rem; }
+.flash-face::after { bottom: 1.25rem; right: 1.25rem; }
 .flash-label {
   font-family: 'Geist Mono', monospace; font-size: 0.625rem;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute);
@@ -563,24 +582,38 @@ footer a:hover { color: var(--ink); }
 }
 .speed-go:hover { transform: translateY(-1px); }
 .speed-hud {
-  display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 0.875rem;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.75rem;
 }
-.speed-clock {
-  font-family: 'Geist Mono', monospace; font-size: 2.5rem; font-weight: 500;
-  letter-spacing: -0.02em; line-height: 1; color: var(--ink);
+/* Circular stopwatch */
+.stopwatch { position: relative; width: 96px; height: 96px; flex-shrink: 0; }
+.stopwatch-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.sw-track { fill: none; stroke: var(--bg); stroke-width: 9; }
+.sw-prog {
+  fill: none; stroke: var(--accent); stroke-width: 9; stroke-linecap: round;
+  stroke-dasharray: 326.7;            /* 2*PI*52 */
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.1s linear, stroke 0.4s;
+}
+.stopwatch.low .sw-prog { stroke: #c84a5e; }
+.stopwatch.low { animation: sw-pulse 1s ease-in-out infinite; }
+@keyframes sw-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.stopwatch-num {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-family: 'Geist Mono', monospace; font-size: 1.75rem; font-weight: 500;
+  letter-spacing: -0.02em; color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
-.speed-clock.low { color: var(--berry, #c84a5e); }
-.speed-stats { font-size: 0.875rem; color: var(--ink-soft); }
-.speed-stats #speed-score { font-weight: 600; color: var(--ink); }
-.speed-streak { margin-left: 0.5rem; color: var(--warm); font-weight: 500; }
-.speed-bar { height: 6px; background: var(--bg); border-radius: 999px; overflow: hidden; margin-bottom: 1.5rem; }
-.speed-bar span {
-  display: block; height: 100%; width: 100%;
-  background: var(--accent); border-radius: 999px;
-  transform-origin: left; transition: transform 0.1s linear, background 0.3s;
-}
+.stopwatch.low .stopwatch-num { color: #c84a5e; }
+.speed-stats { text-align: right; }
+.speed-score-big { display: flex; align-items: baseline; gap: 0.375rem; justify-content: flex-end; }
+.speed-score-big #speed-score { font-size: 2rem; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; }
+.speed-score-lbl { font-size: 0.875rem; color: var(--ink-mute); }
+.speed-streak { display: block; margin-top: 0.25rem; color: var(--warm); font-weight: 500; font-size: 0.8125rem; min-height: 1.1rem; }
 .speed-q { font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 600; letter-spacing: -0.02em; margin: 0 0 1.5rem; min-height: 2.5rem; }
 .speed-form { display: flex; gap: 0.5rem; }
 .speed-flash { min-height: 1.5rem; margin-top: 1rem; font-size: 0.9375rem; font-weight: 500; }

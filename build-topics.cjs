@@ -1185,14 +1185,16 @@ ${NAV('../styles.css', '../index.html', '../topics.html')}
         <span class="flash-tally" id="flash-tally">0 got it</span>
       </div>
       <div class="flashcard" id="flashcard">
-        <div class="flash-face flash-front">
-          <span class="flash-label">Question</span>
-          <p class="flash-q mono" id="flash-q"></p>
-        </div>
-        <div class="flash-face flash-back">
-          <span class="flash-label">Answer</span>
-          <p class="flash-a mono" id="flash-a"></p>
-          <p class="flash-yours" id="flash-yours"></p>
+        <div class="flash-inner">
+          <div class="flash-face flash-front">
+            <span class="flash-label">Question</span>
+            <p class="flash-q mono" id="flash-q"></p>
+          </div>
+          <div class="flash-face flash-back">
+            <span class="flash-label">Answer</span>
+            <p class="flash-a mono" id="flash-a"></p>
+            <p class="flash-yours" id="flash-yours"></p>
+          </div>
         </div>
       </div>
       <form class="flash-inputbar" id="flash-form">
@@ -1218,13 +1220,18 @@ ${NAV('../styles.css', '../index.html', '../topics.html')}
 
       <div class="speed-play" id="speed-play" style="display:none;">
         <div class="speed-hud">
-          <div class="speed-clock" id="speed-clock">60.0</div>
+          <div class="stopwatch">
+            <svg viewBox="0 0 120 120" class="stopwatch-svg" aria-hidden="true">
+              <circle class="sw-track" cx="60" cy="60" r="52" />
+              <circle class="sw-prog" id="sw-prog" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="stopwatch-num" id="speed-clock">60</div>
+          </div>
           <div class="speed-stats">
-            <span id="speed-score">0</span> right
+            <div class="speed-score-big"><span id="speed-score">0</span><span class="speed-score-lbl">right</span></div>
             <span class="speed-streak" id="speed-streak"></span>
           </div>
         </div>
-        <div class="speed-bar"><span id="speed-bar-fill"></span></div>
         <p class="speed-q mono" id="speed-q"></p>
         <form class="speed-form" id="speed-form">
           <input class="chat-shell-input" id="speed-input" autocomplete="off" inputmode="text" placeholder="Quick — type it!" />

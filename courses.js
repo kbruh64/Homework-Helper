@@ -447,7 +447,7 @@
   const SPEED_START = 60, BONUS = 2;
   const speed = { time: 0, score: 0, streak: 0, order: [], pos: 0, running: false, raf: 0, last: 0 };
   let elSpeedStart, elSpeedPlay, elSpeedGo, elSpeedClock, elSpeedScore, elSpeedStreak,
-      elSpeedBar, elSpeedQ, elSpeedForm, elSpeedInput, elSpeedSend, elSpeedFlash;
+      elStopwatch, elSwProg, elSpeedQ, elSpeedForm, elSpeedInput, elSpeedSend, elSpeedFlash;
 
   function startSpeed() {
     stopSpeed();
@@ -476,10 +476,14 @@
     speed.raf = requestAnimationFrame(tickSpeed);
   }
   function renderClock() {
-    elSpeedClock.textContent = speed.time.toFixed(1);
-    elSpeedClock.classList.toggle('low', speed.time <= 10);
+    elSpeedClock.textContent = Math.ceil(speed.time);
+    const low = speed.time <= 10;
+    if (elStopwatch) elStopwatch.classList.toggle('low', low);
     const frac = Math.max(0, Math.min(1, speed.time / SPEED_START));
-    elSpeedBar.style.transform = `scaleX(${frac})`;
+    if (elSwProg) {
+      const C = 2 * Math.PI * 52; // 326.7
+      elSwProg.style.strokeDashoffset = (C * (1 - frac)).toFixed(1);
+    }
   }
   function nextSpeedQ() {
     if (speed.pos >= speed.order.length) speed.order = shuffle(speed.order); // loop if they're fast
@@ -564,7 +568,8 @@
     elSpeedClock = document.getElementById('speed-clock');
     elSpeedScore = document.getElementById('speed-score');
     elSpeedStreak = document.getElementById('speed-streak');
-    elSpeedBar = document.getElementById('speed-bar-fill');
+    elStopwatch = document.querySelector('.stopwatch');
+    elSwProg = document.getElementById('sw-prog');
     elSpeedQ = document.getElementById('speed-q');
     elSpeedForm = document.getElementById('speed-form');
     elSpeedInput = document.getElementById('speed-input');
@@ -588,6 +593,7 @@
 
     // Flashcard listeners
     elFlashForm.addEventListener('submit', e => { e.preventDefault(); if (!flash.flipped) flipFlash(); });
+    elFlashCard.addEventListener('click', () => { if (!flash.flipped) flipFlash(); }); // tap the card to flip
     elFlashRate.addEventListener('click', e => {
       const b = e.target.closest('[data-rate]');
       if (b) rateFlash(b.dataset.rate === 'good');
