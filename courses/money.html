@@ -86,26 +86,35 @@
         <span class="flash-count" id="flash-count">Card 1 of 15</span>
         <span class="flash-tally" id="flash-tally">0 got it</span>
       </div>
-      <div class="flashcard" id="flashcard">
-        <div class="flash-inner">
-          <div class="flash-face flash-front">
-            <span class="flash-label">Question</span>
-            <p class="flash-q mono" id="flash-q"></p>
-          </div>
-          <div class="flash-face flash-back">
-            <span class="flash-label">Answer</span>
-            <p class="flash-a mono" id="flash-a"></p>
-            <p class="flash-yours" id="flash-yours"></p>
+
+      <div class="flash-deck" id="flash-deck">
+        <!-- peeking cards behind the active one -->
+        <div class="flash-ghost flash-ghost-2" aria-hidden="true"></div>
+        <div class="flash-ghost flash-ghost-1" aria-hidden="true"></div>
+        <!-- the active, flippable card -->
+        <div class="flashcard" id="flashcard">
+          <div class="flash-inner">
+            <div class="flash-face flash-front">
+              <span class="flash-label">Question</span>
+              <p class="flash-q mono" id="flash-q"></p>
+              <span class="flash-hint-tap">tap to flip</span>
+            </div>
+            <div class="flash-face flash-back">
+              <span class="flash-label">Answer</span>
+              <p class="flash-a mono" id="flash-a"></p>
+              <p class="flash-yours" id="flash-yours"></p>
+            </div>
           </div>
         </div>
       </div>
+
       <form class="flash-inputbar" id="flash-form">
         <input class="chat-shell-input" id="flash-input" autocomplete="off" placeholder="Type your answer, then flip…" />
         <button class="chat-shell-send" id="flash-flip" type="submit" aria-label="Flip">Flip</button>
       </form>
       <div class="flash-actions" id="flash-rate" style="display:none;">
-        <button class="csa-chip flash-good" data-rate="good" type="button">Got it</button>
-        <button class="csa-chip flash-again" data-rate="again" type="button">Review again</button>
+        <button class="csa-chip flash-again" data-rate="again" type="button">&larr; Review again</button>
+        <button class="csa-chip flash-good" data-rate="good" type="button">Got it &rarr;</button>
       </div>
     </div>
   </section>

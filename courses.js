@@ -382,13 +382,15 @@
   }
 
   // ════════════════ FLASHCARDS (type → flip → rate) ════════════════
-  const flash = { order: [], pos: 0, got: 0, again: [], flipped: false };
+  const flash = { order: [], pos: 0, got: 0, again: [], flipped: false, animating: false };
   let elFlashCard, elFlashQ, elFlashA, elFlashYours, elFlashCount, elFlashTally,
-      elFlashForm, elFlashInput, elFlashFlip, elFlashRate;
+      elFlashForm, elFlashInput, elFlashFlip, elFlashRate, elFlashDeck;
 
   function startFlash() {
     flash.order = COURSE.questions.map((_, i) => i);
-    flash.pos = 0; flash.got = 0; flash.again = []; flash.flipped = false;
+    flash.pos = 0; flash.got = 0; flash.again = []; flash.flipped = false; flash.animating = false;
+    if (elFlashDeck) elFlashDeck.classList.remove('empty');
+    if (elFlashCard) elFlashCard.classList.remove('fly-right', 'fly-left', 'flipped');
     renderFlash();
   }
   function renderFlash() {
@@ -401,6 +403,8 @@
     elFlashYours.className = 'flash-yours';
     elFlashCount.textContent = `Card ${flash.pos + 1} of ${flash.order.length}`;
     elFlashTally.textContent = `${flash.got} got it`;
+    // Thin the peeking stack as we near the last card
+    if (elFlashDeck) elFlashDeck.classList.toggle('empty', flash.order.length - flash.pos <= 1);
     elFlashForm.style.display = '';
     elFlashRate.style.display = 'none';
     elFlashInput.value = '';
@@ -420,20 +424,31 @@
     elFlashRate.style.display = '';
   }
   function rateFlash(good) {
+    if (flash.animating) return;
+    flash.animating = true;
     if (good) flash.got++;
     else flash.again.push(flash.order[flash.pos]);
-    flash.pos++;
-    if (flash.pos >= flash.order.length) {
-      // requeue "review again" cards until cleared
-      if (flash.again.length) {
+
+    // Slide the current card away (right = got it, left = review)
+    elFlashCard.classList.add(good ? 'fly-right' : 'fly-left');
+    elFlashRate.style.display = 'none';
+
+    setTimeout(() => {
+      flash.pos++;
+      // Decide what's next
+      const moreInDeck = flash.pos < flash.order.length;
+      if (!moreInDeck && flash.again.length) {
         flash.order = flash.again; flash.again = []; flash.pos = 0;
-        renderFlash();
-      } else {
-        finishFlash();
+      } else if (!moreInDeck) {
+        return finishFlash();
       }
-    } else {
+      // Reset card and render the next one with a rise-in
+      elFlashCard.classList.remove('fly-right', 'fly-left', 'flipped');
+      flash.flipped = false;
       renderFlash();
-    }
+      elFlashCard.classList.add('rise-in');
+      setTimeout(() => { elFlashCard.classList.remove('rise-in'); flash.animating = false; }, 420);
+    }, 460);
   }
   function finishFlash() {
     showScreen('result');
@@ -551,6 +566,7 @@
     elRestart = document.getElementById('result-restart');
 
     // Flashcard elements
+    elFlashDeck = document.getElementById('flash-deck');
     elFlashCard = document.getElementById('flashcard');
     elFlashQ = document.getElementById('flash-q');
     elFlashA = document.getElementById('flash-a');
@@ -593,7 +609,7 @@
 
     // Flashcard listeners
     elFlashForm.addEventListener('submit', e => { e.preventDefault(); if (!flash.flipped) flipFlash(); });
-    elFlashCard.addEventListener('click', () => { if (!flash.flipped) flipFlash(); }); // tap the card to flip
+    elFlashCard.addEventListener('click', () => { if (!flash.flipped && !flash.animating) flipFlash(); }); // tap the card to flip
     elFlashRate.addEventListener('click', e => {
       const b = e.target.closest('[data-rate]');
       if (b) rateFlash(b.dataset.rate === 'good');
