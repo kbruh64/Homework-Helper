@@ -597,8 +597,16 @@
     box-shadow: var(--shadow-diffuse);
     transition: transform 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
     position: relative; overflow: hidden;
+    text-decoration: none; color: inherit; display: block;
   }
   .friend:hover { transform: translateY(-4px); border-color: var(--line-strong); }
+  .friend::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 3px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .friend:hover::after { transform: scaleX(1); }
   .friend-blob {
     width: 64px; height: 58px; margin: 0 auto 0.875rem;
     display: block;
@@ -627,6 +635,16 @@
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
   .friend-status.away::before { background: var(--warm); box-shadow: 0 0 0 3px var(--warm-soft); }
+  .friend-cta {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    margin-top: 0.875rem;
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--accent);
+  }
+  .friend-cta::after {
+    content: ""; display: inline-block;
+  }
+  .friend:hover .friend-cta { gap: 0.5rem; }
 
   /* ─── Your profile card ─── */
   .profile-wrap {
@@ -1421,45 +1439,45 @@
         <span class="friend-status">online</span>
       </div>
 
-      <div class="friend" data-reveal>
+      <a class="friend" href="#" data-open-helper data-reveal>
         <svg class="friend-blob" viewBox="0 0 120 110" style="color:#2f6f4e" aria-hidden="true"><use href="#poly-svg" /></svg>
         <h3>Poly</h3>
         <p class="role">The guide</p>
         <p>Asks the right question at the right time.</p>
-        <span class="friend-status">online</span>
-      </div>
+        <span class="friend-cta">Ask me a problem &rarr;</span>
+      </a>
 
-      <div class="friend" data-reveal style="--delay: 70ms">
+      <a class="friend" href="courses/multiplication.html" data-reveal style="--delay: 70ms">
         <svg class="friend-blob" viewBox="0 0 120 110" style="color:#e8a23a" aria-hidden="true"><use href="#poly-svg" /></svg>
         <h3>Sunny</h3>
         <p class="role">Times tables</p>
         <p>Turns multiplication into a quick game.</p>
-        <span class="friend-status">online</span>
-      </div>
+        <span class="friend-cta">Practice with me &rarr;</span>
+      </a>
 
-      <div class="friend" data-reveal style="--delay: 140ms">
+      <a class="friend" href="courses/fractions.html" data-reveal style="--delay: 140ms">
         <svg class="friend-blob" viewBox="0 0 120 110" style="color:#c84a5e" aria-hidden="true"><use href="#poly-svg" /></svg>
         <h3>Fig</h3>
         <p class="role">Fractions</p>
         <p>Slices everything into fair, equal parts.</p>
-        <span class="friend-status away">resting</span>
-      </div>
+        <span class="friend-cta">Practice with me &rarr;</span>
+      </a>
 
-      <div class="friend" data-reveal style="--delay: 210ms">
+      <a class="friend" href="courses/place-value.html" data-reveal style="--delay: 210ms">
         <svg class="friend-blob" viewBox="0 0 120 110" style="color:#3a72d0" aria-hidden="true"><use href="#poly-svg" /></svg>
         <h3>Dot</h3>
         <p class="role">Place value</p>
         <p>Loves big numbers and tidy columns.</p>
-        <span class="friend-status">online</span>
-      </div>
+        <span class="friend-cta">Practice with me &rarr;</span>
+      </a>
 
-      <div class="friend" data-reveal style="--delay: 280ms">
+      <a class="friend" href="courses/geometry.html" data-reveal style="--delay: 280ms">
         <svg class="friend-blob" viewBox="0 0 120 110" style="color:#4cb5c7" aria-hidden="true"><use href="#poly-svg" /></svg>
         <h3>Ada</h3>
         <p class="role">Shapes</p>
         <p>Sees triangles and symmetry everywhere.</p>
-        <span class="friend-status">online</span>
-      </div>
+        <span class="friend-cta">Practice with me &rarr;</span>
+      </a>
     </div>
   </section>
 
