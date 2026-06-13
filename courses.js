@@ -1,6 +1,33 @@
 // Conversational course engine — Poly talks, reads what the student types, and reacts.
-// Reads window.COURSE for the question bank. Two modes: practice (hints) and assessment (scored, no hints).
+// Reads window.COURSE for the question bank. Four modes: practice, assessment, flashcards, speed.
 (function () {
+  // ─── Confetti celebration ───
+  const REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function confetti(count) {
+    if (REDUCE) return;
+    const colors = ['#2f6f4e', '#e8a23a', '#c84a5e', '#3a72d0', '#4cb5c7'];
+    let layer = document.getElementById('confetti-layer');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.id = 'confetti-layer';
+      layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden';
+      document.body.appendChild(layer);
+    }
+    const n = count || 40;
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('div');
+      c.style.cssText = `position:absolute;top:-20px;width:9px;height:14px;border-radius:2px;left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};animation:confetti-fall ${(1.4+Math.random()*0.9).toFixed(2)}s cubic-bezier(0.25,0.6,0.4,1) ${(Math.random()*0.25).toFixed(2)}s forwards;transform:rotate(${Math.random()*360}deg)`;
+      layer.appendChild(c);
+      setTimeout(() => c.remove(), 2700);
+    }
+  }
+  // inject the keyframes once
+  (function () {
+    const s = document.createElement('style');
+    s.textContent = '@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}@keyframes score-pop{0%{transform:scale(1)}45%{transform:scale(1.3)}100%{transform:scale(1)}}.score-pop{display:inline-block;animation:score-pop 0.4s cubic-bezier(0.16,1,0.3,1)}';
+    document.head.appendChild(s);
+  })();
+
   // ─── Answer checking ───
   const norm = (s) => String(s).toLowerCase().trim().replace(/\s+/g, '');
 
@@ -307,6 +334,9 @@
 
   function updateScore() {
     elScore.textContent = `${state.correct} right`;
+    elScore.classList.remove('score-pop');
+    void elScore.offsetWidth;
+    elScore.classList.add('score-pop');
   }
 
   // ─── Results ───
@@ -320,6 +350,7 @@
     elResultText.textContent = state.mode === 'assessment'
       ? `You got ${state.correct} out of ${total} — that's ${pct}%.`
       : `You worked through all ${total} questions, ${state.correct} right on the first try. Every one made you a little sharper.`;
+    if (pct >= 70 || state.mode === 'practice') confetti(pct >= 90 ? 70 : 44);
     elResultList.innerHTML = '';
     if (state.wrongs.length) {
       const h = document.createElement('div');
@@ -456,6 +487,7 @@
     elResultTitle && (elResultTitle.textContent = 'Nice deck run.');
     elResultText.textContent = `You marked ${flash.got} cards as "got it" and cleared every "review again." Spaced practice like this is what makes facts stick.`;
     elResultList.innerHTML = '';
+    confetti(48);
   }
 
   // ════════════════ SPEED (race the clock + streak bonus) ════════════════
@@ -518,7 +550,9 @@
       elSpeedFlash.innerHTML = `Yes! <span class="bonus">+${BONUS}s</span>`;
       elSpeedFlash.className = 'speed-flash ok';
       elSpeedScore.textContent = speed.score;
+      elSpeedScore.classList.remove('score-pop'); void elSpeedScore.offsetWidth; elSpeedScore.classList.add('score-pop');
       elSpeedStreak.textContent = speed.streak >= 3 ? `🔥 ${speed.streak} streak` : '';
+      if (speed.streak === 5) confetti(24); // mini celebration for a hot streak
       renderClock();
     } else {
       speed.streak = 0;
@@ -537,6 +571,7 @@
     elResultTitle && (elResultTitle.textContent = "Clock's up.");
     elResultText.textContent = `You answered ${speed.score} right against the clock. ${speed.score >= 10 ? 'Lightning fast!' : speed.score >= 5 ? 'Solid run — go again and beat it.' : 'Keep at it — speed comes with practice.'}`;
     elResultList.innerHTML = '';
+    if (speed.score >= 5) confetti(speed.score >= 10 ? 70 : 44);
   }
   function stopSpeed() {
     speed.running = false;
