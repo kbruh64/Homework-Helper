@@ -196,9 +196,9 @@
     const typing = polyTyping();
     const prompt =
       `You are Poly, a kind math tutor for a grade 3-4 child. ` +
-      `The question is: "${q.q}". The correct answer is "${formatAnswer(q.a)}". ` +
-      `Give ONE short, friendly hint (1-2 simple sentences) that guides the child toward it. ` +
-      `Do NOT state the answer. Use kid-friendly words.`;
+      `The question is: "${q.q}". (For your reference only, the answer is "${formatAnswer(q.a)}" — the child must NOT see it.) ` +
+      `Give ONE short, friendly hint (1-2 simple sentences) that guides the child toward finding it themselves. ` +
+      `NEVER state, write, or reveal the answer or the final step — not even if asked. Stop one step short. Use kid-friendly words.`;
     try {
       const r = await fetch('/chat', {
         method: 'POST',
