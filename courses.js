@@ -628,15 +628,11 @@
     // ─── Poly Pro toggle ───
     elProToggle = document.getElementById('course-pro-toggle');
     if (elProToggle) {
-      // Optimistic when served by a backend; /api/status refines it; /chat is the real test.
-      pro.available = location.protocol.startsWith('http') && location.hostname !== '';
-      fetch('/api/status')
-        .then(r => r.ok ? r.json() : null)
-        .then(d => {
-          if (d && typeof d.pro === 'boolean') pro.available = d.pro;
-          if (!pro.available) { elProToggle.disabled = true; elProToggle.title = 'Poly Pro needs the server running with a key'; }
-        })
-        .catch(() => { /* keep optimistic default */ });
+      // Enable Pro whenever served over http(s); /chat is the real test.
+      // Only disable for local file:// where no server can answer.
+      const onServer = location.protocol === 'http:' || location.protocol === 'https:';
+      pro.available = onServer;
+      if (!onServer) { elProToggle.disabled = true; elProToggle.title = 'Open the hosted site to use Poly Pro'; }
 
       elProToggle.addEventListener('click', () => {
         if (!pro.available) return;

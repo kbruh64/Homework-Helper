@@ -2370,20 +2370,15 @@
       // ─── Pro toggle wiring ───
       const proBtn = document.getElementById('pro-toggle');
       const subEl = document.getElementById('helper-sub');
-      // Ask the server whether a key is configured.
-      // If the status route is missing/unreachable, assume Pro MIGHT work and let /chat be the real test.
-      const onServer = location.protocol.startsWith('http') && location.hostname !== '';
-      pro.available = onServer; // optimistic default when served by a backend
-      fetch('/api/status')
-        .then(r => r.ok ? r.json() : null)
-        .then(d => {
-          if (d && typeof d.pro === 'boolean') pro.available = d.pro;
-          if (!pro.available && proBtn) {
-            proBtn.disabled = true;
-            proBtn.title = 'Poly Pro needs the server running with a Mistral key';
-          }
-        })
-        .catch(() => { /* keep optimistic default; /chat will report if it truly cannot reach AI */ });
+      // Enable Pro whenever we're served over http(s) (i.e. by a backend).
+      // /chat is the real test — it returns a friendly error if there's truly no key.
+      // Only disable when opened as a local file:// (no server can answer).
+      const onServer = location.protocol === 'http:' || location.protocol === 'https:';
+      pro.available = onServer;
+      if (proBtn && !onServer) {
+        proBtn.disabled = true;
+        proBtn.title = 'Open the hosted site (or run the server) to use Poly Pro';
+      }
 
       if (proBtn) {
         proBtn.addEventListener('click', () => {
