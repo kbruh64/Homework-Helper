@@ -125,8 +125,16 @@
       <div class="speed-start" id="speed-start">
         <div class="section-tag">Speed mode</div>
         <h2>Race the clock.</h2>
-        <p class="lede">60 seconds. Answer as many as you can — every right answer in a row adds <strong>+2 seconds</strong>. Ready?</p>
+        <p class="lede">60 seconds on the clock. Answer as many as you can before time runs out. Your best score goes on the leaderboard.</p>
         <button class="speed-go" id="speed-go" type="button">Start the clock &rarr;</button>
+
+        <div class="leaderboard" id="lb-start">
+          <div class="lb-head">
+            <span class="lb-title">Place Value (to Millions) &mdash; Top scores</span>
+            <span class="lb-live" id="lb-live-start">live</span>
+          </div>
+          <ol class="lb-list" id="lb-list-start"><li class="lb-empty">Loading…</li></ol>
+        </div>
       </div>
 
       <div class="speed-play" id="speed-play" style="display:none;">
@@ -159,6 +167,15 @@
       <h2 id="result-title">How it went.</h2>
       <p class="lede" id="result-text"></p>
       <div id="result-list"></div>
+
+      <div class="leaderboard" id="lb-result" style="display:none;">
+        <div class="lb-head">
+          <span class="lb-title">Place Value (to Millions) &mdash; Top scores</span>
+          <span class="lb-live" id="lb-live-result">live</span>
+        </div>
+        <ol class="lb-list" id="lb-list-result"><li class="lb-empty">Loading…</li></ol>
+      </div>
+
       <div class="result-actions">
         <button id="result-restart" type="button">Try again</button>
         <a href="../courses.html">All courses</a>

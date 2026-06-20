@@ -401,11 +401,14 @@
       practice: 'Poly chats and gives hints as you go',
       assessment: 'Assessment — no hints, scored at the end',
       flashcards: 'Type your answer, flip to check, rate yourself',
-      speed: 'Race the clock — streaks add bonus time',
+      speed: '60-second race — top scores hit the leaderboard',
     };
     elModeMeta.textContent = metas[mode] || metas.practice;
     if (elActions) elActions.style.display = (mode === 'practice') ? '' : 'none';
     stopSpeed(); // clear any running timer when switching away
+    stopLBPoll();
+    const lbBox = document.getElementById('lb-result');
+    if (lbBox) lbBox.style.display = 'none';
 
     if (mode === 'flashcards') { showScreen('flash'); startFlash(); }
     else if (mode === 'speed') { showScreen('speed'); startSpeed(); }
@@ -490,20 +493,99 @@
     confetti(48);
   }
 
-  // ════════════════ SPEED (race the clock + streak bonus) ════════════════
-  const SPEED_START = 60, BONUS = 2;
+  // ════════════════ SPEED (fixed 60-second race) ════════════════
+  const SPEED_START = 60;
   const speed = { time: 0, score: 0, streak: 0, order: [], pos: 0, running: false, raf: 0, last: 0 };
   let elSpeedStart, elSpeedPlay, elSpeedGo, elSpeedClock, elSpeedScore, elSpeedStreak,
       elStopwatch, elSwProg, elSpeedQ, elSpeedForm, elSpeedInput, elSpeedSend, elSpeedFlash;
+
+  // ── Leaderboard (shared via backend; localStorage fallback) ──
+  const SUBJECT = (window.COURSE && window.COURSE.slug) || 'unknown';
+  const lb = { pollTimer: 0, lastScores: null };
+
+  function myName() {
+    try {
+      const p = JSON.parse(localStorage.getItem('pebble_profile') || 'null');
+      if (p && p.name) return p.name;
+    } catch {}
+    return 'Player';
+  }
+  function localKey() { return 'pebble_lb_' + SUBJECT; }
+  function readLocalLB() {
+    try { return JSON.parse(localStorage.getItem(localKey()) || '{}'); } catch { return {}; }
+  }
+  function writeLocalScore(name, score) {
+    const m = readLocalLB();
+    m[name] = Math.max(m[name] || 0, score);
+    try { localStorage.setItem(localKey(), JSON.stringify(m)); } catch {}
+  }
+  function localScores() {
+    return Object.entries(readLocalLB()).map(([name, score]) => ({ name, score }))
+      .sort((a, b) => b.score - a.score).slice(0, 10);
+  }
+
+  async function fetchScores() {
+    try {
+      const r = await fetch('/api/leaderboard?subject=' + encodeURIComponent(SUBJECT), { cache: 'no-store' });
+      if (r.ok) {
+        const d = await r.json();
+        if (d && d.configured && Array.isArray(d.scores)) {
+          // merge local best in case server is empty / offline players
+          const map = {};
+          d.scores.forEach(s => { map[s.name] = Math.max(map[s.name] || 0, s.score); });
+          return Object.entries(map).map(([name, score]) => ({ name, score })).sort((a, b) => b.score - a.score).slice(0, 10);
+        }
+      }
+    } catch {}
+    return localScores(); // fallback
+  }
+
+  function renderLB(listEl, scores, highlightName) {
+    if (!listEl) return;
+    if (!scores.length) { listEl.innerHTML = '<li class="lb-empty">No scores yet — be the first!</li>'; return; }
+    listEl.innerHTML = scores.map((s, i) => {
+      const me = highlightName && s.name === highlightName ? ' lb-me' : '';
+      return `<li class="lb-${i + 1}${me}"><span class="lb-rank">${i + 1}</span><span class="lb-name">${escapeHtml(s.name)}</span><span class="lb-score">${s.score}</span></li>`;
+    }).join('');
+  }
+  function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+  async function refreshLB(which, highlightName) {
+    const scores = await fetchScores();
+    if (which === 'start' || which === 'both') renderLB(document.getElementById('lb-list-start'), scores, highlightName);
+    if (which === 'result' || which === 'both') renderLB(document.getElementById('lb-list-result'), scores, highlightName);
+    return scores;
+  }
+
+  function startLBPoll(which, highlightName) {
+    stopLBPoll();
+    refreshLB(which, highlightName);
+    lb.pollTimer = setInterval(() => refreshLB(which, highlightName), 5000); // "real-time" 5s poll
+  }
+  function stopLBPoll() { if (lb.pollTimer) { clearInterval(lb.pollTimer); lb.pollTimer = 0; } }
+
+  async function postScore(score) {
+    const name = myName();
+    writeLocalScore(name, score); // always keep a local copy
+    try {
+      await fetch('/api/score', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subject: SUBJECT, name, score }),
+      });
+    } catch {}
+    return name;
+  }
 
   function startSpeed() {
     stopSpeed();
     elSpeedStart.style.display = '';
     elSpeedPlay.style.display = 'none';
+    startLBPoll('start', myName()); // show live leaderboard on the start screen
   }
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
   function beginSpeed() {
+    stopLBPoll();
     speed.time = SPEED_START; speed.score = 0; speed.streak = 0;
     speed.order = shuffle(COURSE.questions.map((_, i) => i)); speed.pos = 0;
     speed.running = true; speed.last = performance.now();
@@ -546,14 +628,12 @@
     const q = COURSE.questions[speed.order[speed.pos]];
     if (checkAnswer(v, q.a)) {
       speed.score++; speed.streak++;
-      speed.time += BONUS;
-      elSpeedFlash.innerHTML = `Yes! <span class="bonus">+${BONUS}s</span>`;
+      elSpeedFlash.textContent = 'Yes!';
       elSpeedFlash.className = 'speed-flash ok';
       elSpeedScore.textContent = speed.score;
       elSpeedScore.classList.remove('score-pop'); void elSpeedScore.offsetWidth; elSpeedScore.classList.add('score-pop');
       elSpeedStreak.textContent = speed.streak >= 3 ? `🔥 ${speed.streak} streak` : '';
       if (speed.streak === 5) confetti(24); // mini celebration for a hot streak
-      renderClock();
     } else {
       speed.streak = 0;
       elSpeedFlash.textContent = `It was ${formatAnswer(q.a)}.`;
@@ -564,7 +644,7 @@
     nextSpeedQ();
     elSpeedInput.focus();
   }
-  function endSpeed() {
+  async function endSpeed() {
     stopSpeed();
     showScreen('result');
     elResultTag && (elResultTag.textContent = 'Time!');
@@ -572,6 +652,12 @@
     elResultText.textContent = `You answered ${speed.score} right against the clock. ${speed.score >= 10 ? 'Lightning fast!' : speed.score >= 5 ? 'Solid run — go again and beat it.' : 'Keep at it — speed comes with practice.'}`;
     elResultList.innerHTML = '';
     if (speed.score >= 5) confetti(speed.score >= 10 ? 70 : 44);
+
+    // Post the score and show the live leaderboard
+    const lbBox = document.getElementById('lb-result');
+    if (lbBox) lbBox.style.display = '';
+    const name = await postScore(speed.score);
+    startLBPoll('result', name);
   }
   function stopSpeed() {
     speed.running = false;
