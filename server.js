@@ -22,28 +22,9 @@ app.get('/api/status', (req, res) => {
   res.json({ pro: Boolean(KEY) });
 });
 
-// ── Leaderboard (Upstash Redis REST; falls back to in-memory if unset) ──
-const KV_URL =
-  process.env.KV_REST_API_REDIS_URL ||
-  process.env.KV_REST_API_URL ||
-  process.env.UPSTASH_REDIS_REST_URL ||
-  process.env.REDIS_URL;
-const KV_TOKEN =
-  process.env.KV_REST_API_REDIS_TOKEN ||
-  process.env.KV_REST_API_TOKEN ||
-  process.env.UPSTASH_REDIS_REST_TOKEN;
-const kvOn = Boolean(KV_URL && KV_TOKEN);
-const memLB = {}; // fallback store: { subject: { name: bestScore } }
-
-async function kvCmd(args) {
-  const r = await fetch(KV_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(args),
-  });
-  if (!r.ok) throw new Error('kv ' + r.status);
-  return r.json();
-}
+// ── Leaderboard (Redis via shared helper; in-memory fallback if no Redis URL) ──
+import { lbTop, lbSubmit, kvConfigured } from './api/_kv.js';
+const memLB = {}; // fallback store when no Redis: { subject: { name: bestScore } }
 const cleanName = (raw) => {
   let n = String(raw || '').trim().slice(0, 20);
   if (!n || !/^[\p{L}\p{N} _.'-]+$/u.test(n)) return 'Player';
@@ -53,22 +34,16 @@ const cleanName = (raw) => {
 app.get('/api/leaderboard', async (req, res) => {
   const subject = String(req.query.subject || '').replace(/[^a-z0-9-]/gi, '').slice(0, 40);
   if (!subject) return res.status(400).json({ error: 'subject required' });
-  if (!kvOn) {
-    const m = memLB[subject] || {};
-    const scores = Object.entries(m).map(([name, score]) => ({ name, score })).sort((a, b) => b.score - a.score).slice(0, 10);
-    return res.json({ configured: true, scores });
-  }
   try {
-    const raw = await kvCmd(['ZREVRANGE', `lb:${subject}`, '0', '9', 'WITHSCORES']);
-    const arr = (raw && raw.result) || [];
-    const scores = [];
-    for (let i = 0; i < arr.length; i += 2) {
-      let name = arr[i]; try { name = JSON.parse(arr[i]).n || arr[i]; } catch {}
-      scores.push({ name, score: Number(arr[i + 1]) });
+    if (kvConfigured()) {
+      const scores = await lbTop(subject, 10);
+      res.set('Cache-Control', 'no-store');
+      return res.json({ configured: true, scores });
     }
-    res.set('Cache-Control', 'no-store');
-    res.json({ configured: true, scores });
-  } catch (e) { console.error(e); res.json({ configured: true, scores: [] }); }
+  } catch (e) { console.error(e); }
+  const m = memLB[subject] || {};
+  const scores = Object.entries(m).map(([name, score]) => ({ name, score })).sort((a, b) => b.score - a.score).slice(0, 10);
+  res.json({ configured: true, scores });
 });
 
 app.post('/api/score', async (req, res) => {
@@ -76,21 +51,12 @@ app.post('/api/score', async (req, res) => {
   const name = cleanName(req.body && req.body.name);
   const score = Math.max(0, Math.min(9999, Math.floor(Number(req.body && req.body.score) || 0)));
   if (!subject) return res.status(400).json({ error: 'subject required' });
-  if (!kvOn) {
-    memLB[subject] = memLB[subject] || {};
-    memLB[subject][name] = Math.max(memLB[subject][name] || 0, score);
-    return res.json({ configured: true });
-  }
   try {
-    const key = `lb:${subject}`, member = JSON.stringify({ n: name });
-    const cur = await kvCmd(['ZSCORE', key, member]);
-    const prev = cur && cur.result != null ? Number(cur.result) : -1;
-    if (score > prev) {
-      await kvCmd(['ZADD', key, String(score), member]);
-      await kvCmd(['ZREMRANGEBYRANK', key, '0', '-51']);
-    }
-    res.json({ configured: true });
-  } catch (e) { console.error(e); res.json({ configured: true }); }
+    if (kvConfigured()) { await lbSubmit(subject, name, score); return res.json({ configured: true }); }
+  } catch (e) { console.error(e); }
+  memLB[subject] = memLB[subject] || {};
+  memLB[subject][name] = Math.max(memLB[subject][name] || 0, score);
+  res.json({ configured: true });
 });
 
 // Poly's personality + safety rules. This keeps the AI hint-first and kid-appropriate.

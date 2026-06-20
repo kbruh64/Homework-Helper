@@ -1,30 +1,50 @@
-// Tiny Upstash Redis (REST) helper. Works on Vercel and Render.
-// Configure with env vars (Vercel KV / Upstash both provide these):
-//   KV_REST_API_URL   (or UPSTASH_REDIS_REST_URL)
-//   KV_REST_API_TOKEN (or UPSTASH_REDIS_REST_TOKEN)
-// Accept whatever name Vercel/Upstash created (the marketplace uses KV_REST_API_REDIS_*).
-const URL =
-  process.env.KV_REST_API_REDIS_URL ||
-  process.env.KV_REST_API_URL ||
-  process.env.UPSTASH_REDIS_REST_URL ||
-  process.env.REDIS_URL;
-const TOKEN =
-  process.env.KV_REST_API_REDIS_TOKEN ||
-  process.env.KV_REST_API_TOKEN ||
-  process.env.UPSTASH_REDIS_REST_TOKEN ||
-  process.env.KV_REST_API_REDIS_READ_ONLY_TOKEN;
+// Redis helper using the node-redis client (works with Vercel Marketplace Redis,
+// which provides a redis:// connection URL). Also accepts Upstash REST-style vars.
+import { createClient } from 'redis';
+
+const REDIS_URL =
+  process.env.REDIS_URL ||
+  process.env.KV_URL ||
+  process.env.KV_REST_API_REDIS_URL ||   // marketplace sometimes uses this name
+  process.env.UPSTASH_REDIS_URL;
 
 export function kvConfigured() {
-  return Boolean(URL && TOKEN);
+  return Boolean(REDIS_URL);
 }
 
-// Run a single Redis command, e.g. kvCmd(['ZADD','key','10','member'])
-export async function kvCmd(args) {
-  const r = await fetch(URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(args),
+let client = null;
+async function getClient() {
+  if (!REDIS_URL) return null;
+  if (client && client.isOpen) return client;
+  client = createClient({ url: REDIS_URL, socket: { reconnectStrategy: false } });
+  client.on('error', () => {}); // swallow; callers handle failures
+  if (!client.isOpen) await client.connect();
+  return client;
+}
+
+// Leaderboard ops — return plain values the API functions expect.
+export async function lbTop(subject, n = 10) {
+  const c = await getClient();
+  if (!c) return [];
+  const key = `lb:${subject}`;
+  // node-redis v4: zRangeWithScores + REV
+  const rows = await c.zRangeWithScores(key, 0, n - 1, { REV: true });
+  return rows.map(r => {
+    let name = r.value;
+    try { name = JSON.parse(r.value).n || r.value; } catch {}
+    return { name, score: Number(r.score) };
   });
-  if (!r.ok) throw new Error('kv ' + r.status);
-  return r.json();
+}
+
+export async function lbSubmit(subject, name, score) {
+  const c = await getClient();
+  if (!c) return;
+  const key = `lb:${subject}`;
+  const member = JSON.stringify({ n: name });
+  const prev = await c.zScore(key, member);
+  if (prev == null || score > Number(prev)) {
+    await c.zAdd(key, [{ score, value: member }]);
+    // keep top 50
+    await c.zRemRangeByRank(key, 0, -51);
+  }
 }
