@@ -23,8 +23,15 @@ app.get('/api/status', (req, res) => {
 });
 
 // ── Leaderboard (Upstash Redis REST; falls back to in-memory if unset) ──
-const KV_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-const KV_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const KV_URL =
+  process.env.KV_REST_API_REDIS_URL ||
+  process.env.KV_REST_API_URL ||
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.REDIS_URL;
+const KV_TOKEN =
+  process.env.KV_REST_API_REDIS_TOKEN ||
+  process.env.KV_REST_API_TOKEN ||
+  process.env.UPSTASH_REDIS_REST_TOKEN;
 const kvOn = Boolean(KV_URL && KV_TOKEN);
 const memLB = {}; // fallback store: { subject: { name: bestScore } }
 
